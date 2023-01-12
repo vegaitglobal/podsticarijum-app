@@ -11,4 +11,4 @@ services:
       - MailData__AppMailAddressFrom=podsticarijum@gmail.com
       - MailData__Host=smtp.gmail.com
       - MailData__Port=587
-   restart: always
+    restart: always
