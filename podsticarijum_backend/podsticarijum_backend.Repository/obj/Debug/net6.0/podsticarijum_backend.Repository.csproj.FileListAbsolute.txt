@@ -1,5 +1,0 @@
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend.Repository\obj\Debug\net6.0\podsticarijum_backend.Repository.csproj.AssemblyReference.cache
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend.Repository\obj\Debug\net6.0\podsticarijum_backend.Repository.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend.Repository\obj\Debug\net6.0\podsticarijum_backend.Repository.AssemblyInfoInputs.cache
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend.Repository\obj\Debug\net6.0\podsticarijum_backend.Repository.AssemblyInfo.cs
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend.Repository\obj\Debug\net6.0\podsticarijum_backend.Repository.csproj.CoreCompileInputs.cache
