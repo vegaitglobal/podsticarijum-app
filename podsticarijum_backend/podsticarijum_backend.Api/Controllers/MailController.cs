@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using podsticarijum_backend.Application;
 using podsticarijum_backend.DTO;
 
 namespace podsticarijum_backend.Api.Controllers

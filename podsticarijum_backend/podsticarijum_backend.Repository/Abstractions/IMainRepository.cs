@@ -13,7 +13,11 @@ public interface IMainRepository
 
     ValueTask<MainScreen> Get(long Id);
 
+    ValueTask<List<MainScreen>> GetActive();
+
     Task Update(MainScreen mainScreen);
+
+    Task Update(IEnumerable<MainScreen> mainScreens);
 
     Task<long> Insert(MainScreen mainScreen);
 }

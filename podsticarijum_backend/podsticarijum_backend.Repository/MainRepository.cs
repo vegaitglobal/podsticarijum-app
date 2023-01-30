@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
@@ -21,6 +22,9 @@ public class MainRepository : IMainRepository
         => await _podsticarijumContext.MainScreen.FindAsync(Id)
                                                  .ConfigureAwait(false);
 
+    public async ValueTask<List<MainScreen>> GetActive()
+        => await _podsticarijumContext.MainScreen.Where(ms => ms.Active == true).ToListAsync();
+
     public async Task<long> Insert(MainScreen mainScreen)
     {
         await _podsticarijumContext.AddAsync(mainScreen);
@@ -31,6 +35,14 @@ public class MainRepository : IMainRepository
     public async Task Update(MainScreen mainScreen)
     {
         _podsticarijumContext.Update(mainScreen);
+
         await _podsticarijumContext.SaveChangesAsync();
+    }
+
+    public async Task Update(IEnumerable<MainScreen> mainScreens)
+    {
+        _podsticarijumContext.UpdateRange(mainScreens);
+
+        await _podsticarijumContext.SaveChangesAsync().ConfigureAwait(false);
     }
 }

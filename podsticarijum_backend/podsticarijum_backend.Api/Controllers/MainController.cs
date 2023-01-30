@@ -39,7 +39,7 @@ namespace podsticarijum_backend.Api.Controllers
 
         //TODO: Proper validation of each field from the input Dto
         [HttpPost]
-        public async Task<ActionResult<MainScreenDto>> Create([FromRoute] MainScreenDto mainScreenDto)
+        public async Task<ActionResult<MainScreenDto>> Create([FromBody] MainScreenDto mainScreenDto)
         {
             if (mainScreenDtoInvalid(mainScreenDto))
             {
@@ -50,9 +50,16 @@ namespace podsticarijum_backend.Api.Controllers
 
             try
             {
+                List<MainScreen> activeMainScreens = await _mainRepository.GetActive().ConfigureAwait(false);
+                if (activeMainScreens.Count != 0)
+                {
+                    activeMainScreens.ForEach(ams => ams.Active = false);
+                    await _mainRepository.Update(activeMainScreens);
+                }
+
                 var insertedObjectId = await _mainRepository.Insert(entity).ConfigureAwait(false);
-                entity.Id = insertedObjectId;
-                return Ok(entity);
+                mainScreenDto.Id = insertedObjectId;
+                return Ok(mainScreenDto);
             }
             catch (Exception)
             {
@@ -67,7 +74,7 @@ namespace podsticarijum_backend.Api.Controllers
         /// <returns>204 if object is successfully updated.</returns>
         /// <returns>404 if no object to update.</returns>
         [HttpPut]
-        public async Task<ActionResult> Update([FromRoute] MainScreenDto mainScreenDto)
+        public async Task<ActionResult> Update([FromBody] MainScreenDto mainScreenDto)
         {
             MainScreen mainScreen = await _mainRepository.Get(mainScreenDto.Id);
             if (mainScreen == null)

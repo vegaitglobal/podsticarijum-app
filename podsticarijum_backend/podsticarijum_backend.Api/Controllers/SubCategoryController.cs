@@ -7,5 +7,6 @@ namespace podsticarijum_backend.Api.Controllers
     [ApiController]
     public class SubCategoryController : ControllerBase
     {
+
     }
 }
