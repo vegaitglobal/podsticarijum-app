@@ -31,10 +31,10 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-/obj
-/bin
+./podsticarijum_backend/obj
+./podsticarijum_backend/bin
 /.vscode
-/vs
+./podsticarijum_backend/vs
 
 # Symbolication related
 app.*.symbols

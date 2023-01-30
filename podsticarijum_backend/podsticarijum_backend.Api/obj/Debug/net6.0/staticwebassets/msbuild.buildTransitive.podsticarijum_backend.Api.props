@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\podsticarijum_backend.Api.props" />
-</Project>

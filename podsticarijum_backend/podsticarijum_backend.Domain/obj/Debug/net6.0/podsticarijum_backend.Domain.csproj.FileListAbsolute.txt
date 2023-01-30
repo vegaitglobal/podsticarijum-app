@@ -10,15 +10,3 @@ C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend.Domain\o
 C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend.Domain\obj\Debug\net6.0\refint\podsticarijum_backend.Domain.dll
 C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend.Domain\obj\Debug\net6.0\podsticarijum_backend.Domain.pdb
 C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend.Domain\obj\Debug\net6.0\ref\podsticarijum_backend.Domain.dll
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\bin\Debug\net6.0\podsticarijum_backend.Domain.deps.json
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\bin\Debug\net6.0\podsticarijum_backend.Domain.dll
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\bin\Debug\net6.0\podsticarijum_backend.Domain.pdb
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\obj\Debug\net6.0\podsticarijum_backend.Domain.csproj.AssemblyReference.cache
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\obj\Debug\net6.0\podsticarijum_backend.Domain.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\obj\Debug\net6.0\podsticarijum_backend.Domain.AssemblyInfoInputs.cache
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\obj\Debug\net6.0\podsticarijum_backend.Domain.AssemblyInfo.cs
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\obj\Debug\net6.0\podsticarijum_backend.Domain.csproj.CoreCompileInputs.cache
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\obj\Debug\net6.0\podsticarijum_backend.Domain.dll
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\obj\Debug\net6.0\refint\podsticarijum_backend.Domain.dll
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\obj\Debug\net6.0\podsticarijum_backend.Domain.pdb
-C:\Users\m.radevic\source\repos\podsticarijum-app\podsticarijum_backend\podsticarijum_backend.Domain\obj\Debug\net6.0\ref\podsticarijum_backend.Domain.dll
