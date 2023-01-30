@@ -34,7 +34,7 @@ migrate_working_dir/
 ./podsticarijum_backend/obj
 ./podsticarijum_backend/bin
 /.vscode
-./podsticarijum_backend/vs
+./podsticarijum_backend/.vs
 
 # Symbolication related
 app.*.symbols
