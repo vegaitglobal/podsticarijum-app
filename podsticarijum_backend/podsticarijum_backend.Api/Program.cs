@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using podsticarijum_backend;
 using podsticarijum_backend.DTO;
 using podsticarijum_backend.Repository;
-using podsticarijum_backend.Api.Options;
+using podsticarijum_backend.Application;
+using podsticarijum_backend.Application.Options;
+using podsticarijum_backend.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,37 +37,5 @@ app.UseRouting();
 //app.UseAuthorization();
 
 app.MapGet("/", () => { return Results.Ok("OK!"); });
-
-
-app.MapPost("/email", async (MailDto emailDto, IPodsticarijumMailService mailService) =>
-{
-    try
-    {
-        var expertMail = emailDto.ExpertMail ?? string.Empty;
-        var body = emailDto.Body ?? string.Empty;
-        var userMailAddress = emailDto.UserMailAddress ?? string.Empty;
-        var appPackageName = emailDto.AppPackageName ?? string.Empty;
-
-        body = body + $"\n Email poslat od strane {emailDto.UserMailAddress}";
-
-        mailService.Subject = userMailAddress;
-        mailService.AppPackageName = emailDto.AppPackageName;
-        mailService.Body = body;
-
-        ArgumentNullException.ThrowIfNull(mailService.AppPackageName);
-        ArgumentNullException.ThrowIfNull(mailService.Subject);
-        ArgumentNullException.ThrowIfNull(body);
-        ArgumentNullException.ThrowIfNull(userMailAddress);
-
-        await mailService.sendEmail(expertMail);
-        return Results.Ok();
-    }
-    catch (Exception ex)
-    {
-        Debug.WriteLine(ex.ToString());
-        return Results.BadRequest("There was an error");
-    }
-})
-.WithName("sendEmailEndpoint");
 
 app.Run();

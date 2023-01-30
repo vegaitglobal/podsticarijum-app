@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Options;
-using podsticarijum_backend.Api.Options;
+using podsticarijum_backend.Application;
+using podsticarijum_backend.Application.Options;
 
-namespace podsticarijum_backend;
+namespace podsticarijum_backend.Application.Services;
 
 public class PodsticarijumMailService : IPodsticarijumMailService
 {

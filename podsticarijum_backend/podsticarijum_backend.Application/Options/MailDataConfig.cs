@@ -1,4 +1,4 @@
-﻿namespace podsticarijum_backend.Api.Options;
+﻿namespace podsticarijum_backend.Application.Options;
 public class MailDataConfig
 {
     public string? AppMailAddressFrom { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace podsticarijum_backend;
+﻿namespace podsticarijum_backend.Application;
 
 public interface IPodsticarijumMailService
 {
