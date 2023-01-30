@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "podsticarijum_backend.Domain/1.0.0": {
+        "runtime": {
+          "podsticarijum_backend.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "podsticarijum_backend.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
