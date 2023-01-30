@@ -31,8 +31,15 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+
+bin
+obj
+packages
+
 ./podsticarijum_backend/obj
-./podsticarijum_backend/bin
+./podsticarijum_backend/bin`
+./podsticarijum_backend/*/obj
+./podsticarijum_backend/*/bin
 /.vscode
 ./podsticarijum_backend/.vs
 
