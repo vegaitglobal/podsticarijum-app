@@ -2,12 +2,8 @@
 
 public interface IPodsticarijumMailService
 {
-    Task sendEmail(string mailAddressTo);
+    Task sendEmail(string ToMailAddress, string subject, string body);
 
-    public string? Body { get; set; }
-    public string? Subject { get; set; }
-    public string? FromName { get; }
-    public string? ToName { get; }
-    public string? AppPackageName { get; set; }
+    public string AppPackageName { get; set; }
 }
 

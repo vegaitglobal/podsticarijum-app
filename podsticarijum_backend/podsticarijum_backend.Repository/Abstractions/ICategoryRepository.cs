@@ -9,13 +9,13 @@ namespace podsticarijum_backend.Repository.Abstractions;
 
 public interface ICategoryRepository
 {
+    Task<Category?> Get(long id, bool tracking = false);
 
-
-    Task<Category?> Get(long Id);
-
-    Task<List<Category>> GetActive();
+    Task<List<Category>> GetActive(bool tracking = false);
 
     Task Update(Category category);
+
+    Task Delete(Category category);
 
     Task<long> Insert(Category category);
 }

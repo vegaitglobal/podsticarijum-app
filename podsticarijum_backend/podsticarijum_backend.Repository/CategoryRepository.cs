@@ -13,12 +13,17 @@ public class CategoryRepository : ICategoryRepository
         _podsticarijumContext = podsticarijumContext;
     }
 
-    public async Task<Category?> Get(long Id)
-        => await _podsticarijumContext.Category.FindAsync(Id)
-                                         .ConfigureAwait(false);
+    public Task<Category?> Get(long id, bool tracking = false)
+    {
+        var query = _podsticarijumContext.Category.Where(c => c.Id == id);
+        return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
+    }
 
-    public async Task<List<Category>> GetActive()
-        => await _podsticarijumContext.Category.Where(c => c.Active == true).ToListAsync();
+    public Task<List<Category>> GetActive(bool tracking = false)
+    {
+        var query = _podsticarijumContext.Category.Where(c => c.Active == true);
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
+    }
 
     public async Task<long> Insert(Category category)
     {
@@ -32,4 +37,10 @@ public class CategoryRepository : ICategoryRepository
         _podsticarijumContext.Update(category);
         await _podsticarijumContext.SaveChangesAsync();
     }
+
+    public async Task Delete(Category category)
+    {
+        _podsticarijumContext.Remove(category);
+        await _podsticarijumContext.SaveChangesAsync();
+    }   
 }

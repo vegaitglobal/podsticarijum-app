@@ -1,11 +1,8 @@
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using podsticarijum_backend;
-using podsticarijum_backend.DTO;
 using podsticarijum_backend.Repository;
 using podsticarijum_backend.Application;
 using podsticarijum_backend.Application.Options;
 using podsticarijum_backend.Application.Services;
+using podsticarijum_backend.Repository.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +13,17 @@ builder.Services.Configure<MailDataConfig>(builder.Configuration.GetSection("Mai
 
 builder.Services.AddScoped<IPodsticarijumMailService, PodsticarijumMailService>();
 
+builder.Services.AddScoped<IMainRepository, MainRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+builder.Services.AddScoped<IExpertRepository, ExpertRepository>();
+
 builder.Services.AddDbContext<PodsticarijumContext>();
 
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -29,13 +35,21 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
-app.MapGet("/", () => { return Results.Ok("OK!"); });
+//app.UseAuthorization();
 
 app.Run();

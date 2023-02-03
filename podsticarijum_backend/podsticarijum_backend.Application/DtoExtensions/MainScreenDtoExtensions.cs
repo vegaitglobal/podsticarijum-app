@@ -10,11 +10,6 @@ namespace podsticarijum_backend.Application.DtoExtensions;
 
 public static class MainScreenDtoExtensions
 {
-    public static MainScreenDto FromDomainModel(this MainScreen entity)
-        => new MainScreenDto(content: entity.Content,
-                             buttonText: entity.ButtonText,
-                             active: entity.Active);
-
     public static MainScreen ToDomainModel(this MainScreenDto mainScreenDto)
         => new MainScreen(content: mainScreenDto.Content,
                           buttonText: mainScreenDto.ButtonText,

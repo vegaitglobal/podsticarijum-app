@@ -18,12 +18,17 @@ public class MainRepository : IMainRepository
         _podsticarijumContext = podsticarijumContext;
     }
 
-    public async ValueTask<MainScreen?> Get(long Id) 
-        => await _podsticarijumContext.MainScreen.FindAsync(Id)
-                                                 .ConfigureAwait(false);
-
-    public async ValueTask<List<MainScreen>> GetActive()
-        => await _podsticarijumContext.MainScreen.Where(ms => ms.Active == true).ToListAsync();
+    public async ValueTask<MainScreen?> Get(long id, bool tracking = false)
+    {
+        var query = _podsticarijumContext.MainScreen.Where(ms => ms.Id == id);
+        return tracking ? await query.FirstOrDefaultAsync() : await query.AsNoTracking().FirstOrDefaultAsync();
+    }
+                                                 
+    public async ValueTask<List<MainScreen>> GetActive(bool tracking = false)
+    {
+        var query = _podsticarijumContext.MainScreen.Where(ms => ms.Active == true);
+        return tracking ? await query.ToListAsync() : await query.AsNoTracking().ToListAsync();
+    }
 
     public async Task<long> Insert(MainScreen mainScreen)
     {
@@ -44,5 +49,11 @@ public class MainRepository : IMainRepository
         _podsticarijumContext.UpdateRange(mainScreens);
 
         await _podsticarijumContext.SaveChangesAsync().ConfigureAwait(false);
+    }
+
+    public async Task Delete(MainScreen mainScreen)
+    {
+        _podsticarijumContext.Remove(mainScreen);
+        await _podsticarijumContext.SaveChangesAsync();
     }
 }

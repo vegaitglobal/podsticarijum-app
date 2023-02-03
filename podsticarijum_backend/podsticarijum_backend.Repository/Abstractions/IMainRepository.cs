@@ -11,11 +11,13 @@ namespace podsticarijum_backend.Repository.Abstractions;
 public interface IMainRepository
 {
 
-    ValueTask<MainScreen> Get(long Id);
+    ValueTask<MainScreen?> Get(long id, bool tracking = false);
 
-    ValueTask<List<MainScreen>> GetActive();
+    ValueTask<List<MainScreen>> GetActive(bool tracking = false);
 
     Task Update(MainScreen mainScreen);
+
+    Task Delete(MainScreen mainScreen);
 
     Task Update(IEnumerable<MainScreen> mainScreens);
 

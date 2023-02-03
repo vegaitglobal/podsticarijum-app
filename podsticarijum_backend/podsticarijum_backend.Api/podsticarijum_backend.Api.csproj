@@ -6,6 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>42907cf2-63ff-4cae-b2c6-52645f31b5a3</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\podsticarijum_backend.Application\podsticarijum_backend.Application.csproj" />
     <ProjectReference Include="..\podsticarijum_backend.Repository\podsticarijum_backend.Repository.csproj" />

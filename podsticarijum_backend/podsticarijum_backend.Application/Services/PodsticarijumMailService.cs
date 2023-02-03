@@ -14,30 +14,26 @@ public class PodsticarijumMailService : IPodsticarijumMailService
     {
         ArgumentNullException.ThrowIfNull(mailConfig);
         _mailConfig = mailConfig.Value;
-        FromMailAddress = new(_mailConfig.AppMailAddressFrom);
+        var mailAddressFrom = _mailConfig.AppMailAddressFrom ?? throw new ArgumentNullException(nameof(_mailConfig.AppMailAddressFrom));
+        var emailHost = _mailConfig.Host ?? throw new ArgumentNullException(nameof(_mailConfig.Host));
+        FromMailAddress = new(address: mailAddressFrom);
 
         NetworkCredential = new(_mailConfig.AppMailAddressFrom, _mailConfig.Password);
         Host = _mailConfig.Host;
         Port = _mailConfig.Port;
     }
 
-    public string? Body { get; set; }
-    public string? Subject { get; set; }
-    public string? FromName { get; }
-    public string? ToName { get; }
-    public string? AppPackageName { get; set; }
+    public string AppPackageName { get; set; } = "com.example.app_for_family_backup";
     public NetworkCredential NetworkCredential { get; }
     public MailAddress FromMailAddress { get; }
-    private string? Host { get; }
+    private string Host { get; }
     private int Port { get; }
 
 
-    public async Task sendEmail(string ToMailAddress)
+    public async Task sendEmail(string ToMailAddress, string subject, string body)
     {
         try
         {
-            GuardValidEmail(ToMailAddress);
-            GuardValidAppPackageName(AppPackageName);
             MailAddress mailAddressTo = new(ToMailAddress);
             var smtp = new SmtpClient
             {
@@ -50,8 +46,8 @@ public class PodsticarijumMailService : IPodsticarijumMailService
             };
             using var message = new MailMessage(FromMailAddress, mailAddressTo)
             {
-                Subject = Subject,
-                Body = Body
+                Subject = subject,
+                Body = body
             };
             await smtp.SendMailAsync(message);
         }
@@ -61,6 +57,7 @@ public class PodsticarijumMailService : IPodsticarijumMailService
         }
         
     }
+
     private static void GuardValidEmail(string? email)
     {
         ArgumentNullException.ThrowIfNull(email);
