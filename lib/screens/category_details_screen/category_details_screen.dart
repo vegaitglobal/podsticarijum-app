@@ -1,6 +1,6 @@
-import 'package:app_for_family_backup/common/widgets/scrollable_content/scrollable_content_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/widgets/scrollable_content/scrollable_content_widget.dart';
 import '../../common/enums/flag_type.dart';
 import '../../common/widgets/scrollable_content/flag_section.dart';
 

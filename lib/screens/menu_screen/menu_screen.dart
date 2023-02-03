@@ -27,7 +27,6 @@ class _MenuScreenState extends State<MenuScreen> {
     });
     await Future.delayed(const Duration(milliseconds: _navigationDelayMillis));
     final String? routeName = getNavRoute();
-    print("Selected menu item $menuItemId");
     if (routeName != null) {
       Navigator.popAndPushNamed(context, routeName);
     }

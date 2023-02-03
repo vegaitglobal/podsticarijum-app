@@ -32,7 +32,11 @@ class InfoSectionWidget extends StatelessWidget {
         hasBorder
             ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
-                child: Image.asset('images/separator.png'),
+                child: Image.asset(
+                  'images/separator.png',
+                  width: double.infinity,
+                  fit: BoxFit.fitWidth,
+                ),
               )
             : const SizedBox.shrink()
       ],

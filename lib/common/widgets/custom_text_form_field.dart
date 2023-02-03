@@ -4,13 +4,12 @@ class CustomTextFormField extends StatelessWidget {
   static const Color _hintColor = Color(0xFF706F6F);
   static const double _borderWidth = 1;
   static const double _borderRadius = 10;
-  static const double _height = 50;
 
   final String emptyErrorMessage;
   final String invalidErrorMessage;
   final String hint;
   final String? labelText;
-  final double? width;
+  final double? width = null;
   final double bottomMargin;
   final bool largeInputField;
   final bool Function(String value) isValid;
@@ -20,12 +19,11 @@ class CustomTextFormField extends StatelessWidget {
     this.isValid = _foo,
     this.invalidErrorMessage = "",
     this.emptyErrorMessage = "*Obavezno polje",
-    this.width = null,
     this.bottomMargin = 0,
     this.hint = "hint",
-    this.labelText = null,
+    this.labelText,
     this.largeInputField = false,
-    this.onSaved = null,
+    this.onSaved,
     super.key,
   });
 
@@ -38,7 +36,7 @@ class CustomTextFormField extends StatelessWidget {
           labelText ?? "",
           style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Container(
           alignment: Alignment.center,
           child: TextFormField(

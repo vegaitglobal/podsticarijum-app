@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "966720256205",
+    "project_id": "podsticarijumaplikacija",
+    "storage_bucket": "podsticarijumaplikacija.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966720256205:android:abaa422eacbc539495d184",
+        "android_client_info": {
+          "package_name": "com.example.app_for_family_backup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966720256205-07qvp64mqfeh0s8ojk97d8ddnhsfk779.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9A2x_vyxO5mNLDfn29KShC5gVguChzew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966720256205-07qvp64mqfeh0s8ojk97d8ddnhsfk779.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

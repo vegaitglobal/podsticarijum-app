@@ -56,7 +56,7 @@ class NewAppBar extends StatelessWidget implements PreferredSizeWidget {
         AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: getBackgroundColor(context),
-          title: Text('Podsticarium'),
+          title: const Text('Podsticarijum'),
           titleTextStyle: Theme.of(context).textTheme.headline5,
           elevation: 0,
           actions: [buildMenuAction(context)],

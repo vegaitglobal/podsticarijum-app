@@ -1,3 +1,4 @@
+import '../../screens/thank_you_screen/thank_you_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_form.dart';
@@ -24,7 +25,7 @@ Widget buildLogoWidget(
       fit: StackFit.loose,
       alignment: Alignment.center,
       children: [
-        Container(
+        SizedBox(
           width: double.infinity,
           child: Image.asset(
             'images/cloud_with_heart.png',
@@ -57,7 +58,7 @@ Widget centeredContainerWithFooter(
   Widget centeredWidget,
   Widget footerWidget,
 ) {
-  return Container(
+  return SizedBox(
     height: double.infinity,
     child: Stack(
       alignment: Alignment.center,
@@ -79,23 +80,40 @@ Widget centeredContainerWithFooter(
 }
 
 Widget buildDefaultCustomForm(
-  void onValidFormCallback(
+  Future<bool> Function(
     String nameAndSurname,
     String email,
     String question,
-  ),
+  )
+      onValidFormCallback,
+  BuildContext context,
 ) {
   const double marginBottom = 15;
   String? nameAndSurname;
   String? email;
   String? question;
-  bool isTransparent;
 
   return CustomForm(
     submitButtonText: 'Postavi pitanje',
-    onValidCallback: () {
-      if (nameAndSurname != null && email != null && question != null)
+    onClick: () async {
+      if (nameAndSurname != null && email != null && question != null) {
+        bool result =
+            await onValidFormCallback(nameAndSurname!, email!, question!);
+
+        const snackBar = SnackBar(
+          content:
+              Text('Mail nije poslat. Provjerite vašu Internet konekciju.'),
+        );
+
+        result == true
+            ? Navigator.pushNamed(context, ThankYouScreen.route)
+            : ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    },
+    onValidCallback: (value) {
+      if (nameAndSurname != null && email != null && question != null) {
         onValidFormCallback(nameAndSurname!, email!, question!);
+      }
     },
     children: [
       CustomTextFormField(
@@ -103,7 +121,7 @@ Widget buildDefaultCustomForm(
         hint: 'Unesi ime i prezime',
         onSaved: (value) => {nameAndSurname = value},
       ),
-      SizedBox(height: marginBottom),
+      const SizedBox(height: marginBottom),
       CustomTextFormField(
         labelText: 'Adresa',
         hint: 'Unesi e-mail adresu',
@@ -115,7 +133,7 @@ Widget buildDefaultCustomForm(
         invalidErrorMessage: '*Neispravan e-mail',
         onSaved: (value) => {email = value},
       ),
-      SizedBox(height: marginBottom),
+      const SizedBox(height: marginBottom),
       CustomTextFormField(
         labelText: 'Pitanje',
         hint: 'Postavi pitanje specijalisti.',

@@ -1,3 +1,4 @@
+import 'package:app_for_family_backup/screens/category_details_screen/category_flags_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/widgets/app_bar/new_app_bar.dart';
@@ -6,8 +7,7 @@ import '../../common/widgets/useful_widgets.dart';
 class AskExpertFormScreen extends StatelessWidget {
   static const String route = 'ask_expert_form_screen';
   final double marginBottom = 15;
-  double _padding = 0;
-  AskExpertFormScreen({Key? key}) : super(key: key);
+  const AskExpertFormScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +16,10 @@ class AskExpertFormScreen extends StatelessWidget {
         appBar: const NewAppBar(),
         body: Container(
           color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: buildDefaultCustomForm(callback),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: buildDefaultCustomForm(sendEmail, context),
         ),
       ),
     );
-  }
-
-  void callback(String name, String mail, String questino) {
-    print("name - $name \nemail - $mail\nquestion - $questino");
   }
 }

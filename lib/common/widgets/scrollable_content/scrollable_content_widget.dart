@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ScrollableContentWidget extends StatelessWidget {
-   ScrollableContentWidget({
+  const ScrollableContentWidget({
     super.key,
     required this.title,
     required this.content,
@@ -9,10 +9,10 @@ class ScrollableContentWidget extends StatelessWidget {
     this.children,
   });
 
-  String? subtitle;
+  final String? subtitle;
   final String title;
   final String content;
-  List<Widget>? children;
+  final List<Widget>? children;
 
   double get backgroundOffset => subtitle != null ? 0 : -100;
 
@@ -66,7 +66,7 @@ class ScrollableContentWidget extends StatelessWidget {
               ...?children,
               Padding(
                 padding: const EdgeInsets.only(top: 22, bottom: 36),
-                child: Image.asset('images/separator.png'),
+                child: Image.asset('images/logo.png'),
               )
             ],
           ),

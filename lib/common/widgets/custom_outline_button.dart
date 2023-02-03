@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomOutlineButton extends StatelessWidget {
   final String text;
-  final Function() onClick;
+  final Function()? onClick;
   final bool isYellow;
 
-  CustomOutlineButton({
+  const CustomOutlineButton({
     super.key,
     required this.text,
     required this.onClick,
@@ -35,8 +35,8 @@ class CustomOutlineButton extends StatelessWidget {
         ),
         child: Text(text.toUpperCase(),
             style: Theme.of(context).textTheme.headline2?.copyWith(
-                fontSize:
-                    33) //some text weren't able to fit with larget letters,
+                  fontSize: 33,
+                ) //some text weren't able to fit with larger letters,
             ),
       ),
     );

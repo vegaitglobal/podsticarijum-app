@@ -1,4 +1,0 @@
-enum CategoryDetailType {
-  pros,
-  cons;
-}

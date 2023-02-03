@@ -1,7 +1,7 @@
-import 'package:app_for_family_backup/common/widgets/app_bar/new_app_bar.dart';
-import 'package:app_for_family_backup/common/widgets/info_section_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/widgets/app_bar/new_app_bar.dart';
+import '../../common/widgets/info_section_widget.dart';
 import '../../common/widgets/default_container.dart';
 import '../../common/widgets/default_header.dart';
 
@@ -20,8 +20,8 @@ class DonationScreen extends StatelessWidget {
         children: [
           buildTitle(context, "Donacije"),
           const SizedBox(height: 68),
-          InfoSectionWidget(content: loremIpsum),
-          InfoSectionWidget(
+          const InfoSectionWidget(content: loremIpsum),
+          const InfoSectionWidget(
             title: 'Informacije',
             content: loremIpsum,
             hasBorder: false,

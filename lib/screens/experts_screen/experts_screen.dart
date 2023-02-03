@@ -12,21 +12,21 @@ class ExpertsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: NewAppBar(),
+      appBar: const NewAppBar(),
       body: DefaultContainer(
         scale: 0.85,
         children: [
           buildTitle(context, "Tim stručnjaka"),
           const SizedBox(height: 68),
-          InfoSectionWidget(
+          const InfoSectionWidget(
             title: "Petar Peric",
             content: _description,
           ),
-          InfoSectionWidget(
-            title:"Nikola Ivanovic",
+          const InfoSectionWidget(
+            title: "Nikola Ivanovic",
             content: _description,
           ),
-          InfoSectionWidget(
+          const InfoSectionWidget(
             title: "Djuro Radusinovic",
             content: _description,
             hasBorder: false,

@@ -22,7 +22,7 @@ class SplashScreen extends StatelessWidget {
       centeredContainerWithFooter(
         buildLogoWidget(
           context,
-          buildTitle(context, "Podsticarium"),
+          buildTitle(context, "Podsticarijum"),
         ),
         buildFooterWidget(context),
       );
@@ -32,7 +32,7 @@ class SplashScreen extends StatelessWidget {
         children: [
           buildLogoWidget(
             context,
-            buildTitle(context, "Podsticarium"),
+            buildTitle(context, "Podsticarijum"),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 44),
