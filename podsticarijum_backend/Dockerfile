@@ -23,4 +23,4 @@ RUN dotnet publish "./podsticarijum_backend.Api/podsticarijum_backend.Api.csproj
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "podsticarijum_backend.dll"]
+ENTRYPOINT ["dotnet", "podsticarijum_backend.Api.dll"]
