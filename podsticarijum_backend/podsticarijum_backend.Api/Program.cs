@@ -3,6 +3,8 @@ using podsticarijum_backend.Application;
 using podsticarijum_backend.Application.Options;
 using podsticarijum_backend.Application.Services;
 using podsticarijum_backend.Repository.Abstractions;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +19,12 @@ builder.Services.AddScoped<IMainRepository, MainRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
 builder.Services.AddScoped<IExpertRepository, ExpertRepository>();
+builder.Services.AddScoped<IFaqRepository, FaqRepository>();
 
-builder.Services.AddDbContext<PodsticarijumContext>();
+builder.Services.AddDbContext<PodsticarijumContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb"));
+});
 
 builder.Services.AddControllers();
 
