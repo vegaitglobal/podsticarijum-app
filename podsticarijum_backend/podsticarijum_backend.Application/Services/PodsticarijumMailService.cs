@@ -1,41 +1,39 @@
-﻿using System.Net.Mail;
-using System.Net;
+﻿using System.Net;
+using System.Net.Mail;
 using Microsoft.Extensions.Options;
-using System.Text.RegularExpressions;
+using podsticarijum_backend.Application;
+using podsticarijum_backend.Application.Options;
 
-namespace podsticarijum_backend;
+namespace podsticarijum_backend.Application.Services;
 
 public class PodsticarijumMailService : IPodsticarijumMailService
 {
     private readonly MailDataConfig _mailConfig;
+
     public PodsticarijumMailService(IOptions<MailDataConfig> mailConfig)
     {
         ArgumentNullException.ThrowIfNull(mailConfig);
         _mailConfig = mailConfig.Value;
-        FromMailAddress = new(_mailConfig.AppMailAddressFrom);
+        var mailAddressFrom = _mailConfig.AppMailAddressFrom ?? throw new ArgumentNullException(nameof(_mailConfig.AppMailAddressFrom));
+        var emailHost = _mailConfig.Host ?? throw new ArgumentNullException(nameof(_mailConfig.Host));
+        FromMailAddress = new(address: mailAddressFrom);
 
         NetworkCredential = new(_mailConfig.AppMailAddressFrom, _mailConfig.Password);
         Host = _mailConfig.Host;
         Port = _mailConfig.Port;
     }
 
-    public string? Body { get; set; }
-    public string? Subject { get; set; }
-    public string? FromName { get; }
-    public string? ToName { get; }
-    public string? AppPackageName { get; set; }
+    public string AppPackageName { get; set; } = "com.example.app_for_family_backup";
     public NetworkCredential NetworkCredential { get; }
     public MailAddress FromMailAddress { get; }
     private string Host { get; }
     private int Port { get; }
 
 
-    public async Task sendEmail(string ToMailAddress)
+    public async Task sendEmail(string ToMailAddress, string subject, string body)
     {
         try
         {
-            GuardValidEmail(ToMailAddress);
-            GuardValidAppPackageName(AppPackageName);
             MailAddress mailAddressTo = new(ToMailAddress);
             var smtp = new SmtpClient
             {
@@ -48,28 +46,21 @@ public class PodsticarijumMailService : IPodsticarijumMailService
             };
             using var message = new MailMessage(FromMailAddress, mailAddressTo)
             {
-                Subject = Subject,
-                Body = Body
+                Subject = subject,
+                Body = body
             };
             await smtp.SendMailAsync(message);
         }
-        catch(Exception ex)
+        catch(Exception)
         {
             throw;
         }
         
     }
+
     private static void GuardValidEmail(string? email)
     {
-        return;
         ArgumentNullException.ThrowIfNull(email);
-
-        string pattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|" + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)" + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
-        var regex = new Regex(pattern, RegexOptions.IgnoreCase);
-        if (regex.IsMatch(email))
-        {
-            throw new ArgumentException("Provided email is not valid.");
-        }
     }
 
     private static void GuardValidAppPackageName(string? appPackageName)
