@@ -12,10 +12,10 @@ COPY ["podsticarijum_backend.csproj", "."]
 RUN dotnet restore "./podsticarijum_backend.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "podsticarijum_backend.csproj" -c Release -o /app/build
+RUN dotnet build "podsticarijum_backend.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "podsticarijum_backend.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "podsticarijum_backend.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
