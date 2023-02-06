@@ -8,8 +8,8 @@ EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["podsticarijum_backend.csproj", "."]
-RUN dotnet restore "./podsticarijum_backend.csproj"
+COPY ["podsticarijum_backend.Api.csproj", "."]
+RUN dotnet restore "./podsticarijum_backend.Api.csproj"
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "podsticarijum_backend.Api.csproj" -c Release -o /app/build
