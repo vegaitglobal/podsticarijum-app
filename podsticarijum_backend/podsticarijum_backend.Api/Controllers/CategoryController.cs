@@ -35,9 +35,10 @@ public class CategoryController : ControllerBase
 
             return Ok(categories.ToDto());
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return StatusCode(500);
+            //return StatusCode(500);
+            return BadRequest(ex.ToString());
         }
     }
 
