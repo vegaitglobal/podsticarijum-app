@@ -6,7 +6,8 @@ namespace podsticarijum_backend.Repository;
 
 public class PodsticarijumContext : DbContext
 {
-    public PodsticarijumContext()
+    public PodsticarijumContext(DbContextOptions<PodsticarijumContext> dbContextOptions)
+    : base(dbContextOptions)
     {
     }
 
@@ -21,9 +22,4 @@ public class PodsticarijumContext : DbContext
     public DbSet<Faq> Faq { get; set; }
 
     public DbSet<SubCategorySpecificContent> SubCategorySpecificContent { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=podsticarijum");
-    }
 }
