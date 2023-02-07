@@ -23,11 +23,12 @@ builder.Services.AddScoped<IFaqRepository, FaqRepository>();
 
 builder.Services.AddDbContext<PodsticarijumContext>(options =>
 {
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb"));
-    options.UseSqlServer(builder.Configuration.GetValue<string>("DB_CONNECTION_STRING"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb"));
 });
 
 builder.Services.AddControllers();
+builder.Configuration.AddEnvironmentVariables();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
