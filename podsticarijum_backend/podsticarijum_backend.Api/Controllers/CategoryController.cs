@@ -18,6 +18,7 @@ public class CategoryController : ControllerBase
 
     public CategoryController(
         IFaqRepository faqRepository,
+        IConfiguration configuration,
         ICategoryRepository categoryRepository,
         ISubCategoryRepository subCategoryRepository)
     {
