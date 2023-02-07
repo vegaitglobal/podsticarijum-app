@@ -38,8 +38,7 @@ public class CategoryController : ControllerBase
         }
         catch (Exception ex)
         {
-            //return StatusCode(500);
-            return BadRequest(ex.ToString());
+            return StatusCode(500);
         }
     }
 
