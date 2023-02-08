@@ -64,9 +64,8 @@ public class SubCategoryController : ControllerBase
             await _mailService.sendEmail(ToMailAddress: expert.Email, subject: emailDto.Subject, body: emailDto.Body);
             return Ok();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Debug.WriteLine(ex.ToString());
             return BadRequest("There was an error.");
         }
     }

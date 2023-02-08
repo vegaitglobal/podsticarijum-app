@@ -36,7 +36,7 @@ public class CategoryController : ControllerBase
 
             return Ok(categories.ToDto());
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return StatusCode(500);
         }

@@ -1,15 +1,16 @@
+# For local development
 version: "3.4"
 
 services:
   web:
-    image: codeforacause/podsticarijum-app:#{TAG_NUMBER}#
+    build:
+        context: .
     container_name: podsticarijum-api
     ports:
       - "23000:80"
     environment:
-      - ConnectionStrings__PodsticarijumDb=Server=db;Database=podsticarijum;User Id=sa;Password=#{DB_PASSWORD}#;
-      - ASPNETCORE_ENVIRONMENT=Production
-      - MailData__Password=#{MAIL_DATA_PASSWORD}#
+      - ConnectionStrings__PodsticarijumDb=Server=db;Database=podsticarijum;User Id=sa;Password=SecurePass12345;
+      - ASPNETCORE_ENVIRONMENT=Development
       - MailData__AppMailAddressFrom=podsticarijum@gmail.com
       - MailData__Host=smtp.gmail.com
       - MailData__Port=587
@@ -21,7 +22,7 @@ services:
       - 1433
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=#{DB_PASSWORD}#
+      - MSSQL_SA_PASSWORD=SecurePass12345
     volumes:
       - ".:/app:rw"
     restart: always

@@ -29,7 +29,6 @@ builder.Services.AddDbContext<PodsticarijumContext>(options =>
 builder.Services.AddControllers();
 builder.Configuration.AddEnvironmentVariables();
 
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -38,7 +37,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    // app.UseExceptionHandler("/Error");
+     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -48,6 +47,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+using (var scope = app.Services.CreateScope())
+{
+    PodsticarijumContext db = scope.ServiceProvider.GetRequiredService<PodsticarijumContext>();
+    db.Database.Migrate();
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
