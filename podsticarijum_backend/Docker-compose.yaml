@@ -8,6 +8,7 @@ services:
     container_name: podsticarijum-api
     ports:
       - "23000:80"
+      - "23001:443"
     environment:
       - ConnectionStrings__PodsticarijumDb=Server=db;Database=podsticarijum;User Id=sa;Password=SecurePass12345;
       - ASPNETCORE_ENVIRONMENT=Development
