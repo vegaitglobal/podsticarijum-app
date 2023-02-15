@@ -5,12 +5,24 @@ namespace podsticarijum_backend.Application.DtoExtensions;
 
 public static class CategoryDtoExtensions
 {
-    public static Category ToDomainModel(this CategoryDto categoryDto)
+    public static Category ToDomainModel(this CategoryRequestDto categoryDto)
     {
         ArgumentNullException.ThrowIfNull(categoryDto);
 
         return new Category(navMenuText: categoryDto.NavMenuText,
-                            description: categoryDto.Description,
-                            active: categoryDto.Active);
+                            description: categoryDto.Description);
+    }
+
+    public static Category ToDomainModel(this CategoryDto categoryDto)
+    {
+        ArgumentNullException.ThrowIfNull(categoryDto);
+
+        return new Category(
+                            navMenuText: categoryDto.NavMenuText,
+                            description: categoryDto.Description)
+        {
+
+                            Id = categoryDto.Id,
+        };
     }
 }

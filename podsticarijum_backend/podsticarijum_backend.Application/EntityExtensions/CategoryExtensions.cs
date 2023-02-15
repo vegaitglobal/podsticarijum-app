@@ -7,9 +7,10 @@ namespace podsticarijum_backend.Application.EntityExtensions;
 public static class CategoryExtensions
 {
     public static CategoryDto ToDto(this Category category)
-        => new CategoryDto(navMenuText: category.NavMenuText,
-                        description: category.Description,
-                        active: category.Active);
+        => new CategoryDto(
+                           id: category.Id,
+                           navMenuText: category.NavMenuText,
+                           description: category.Description);
 
     public static List<CategoryDto> ToDto(this IEnumerable<Category> categories)
         => categories.Select(c => c.ToDto()).ToList();

@@ -18,7 +18,6 @@ public class ExpertDto
         Email = email;
     }
 
-    [JsonIgnore]
     public long Id { get; set; }
 
     [JsonIgnore]

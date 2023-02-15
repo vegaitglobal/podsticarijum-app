@@ -19,9 +19,9 @@ public class CategoryRepository : ICategoryRepository
         return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }
 
-    public Task<List<Category>> GetActive(bool tracking = false)
+    public Task<List<Category>> GetAll(bool tracking = false)
     {
-        var query = _podsticarijumContext.Category.Where(c => c.Active == true);
+        var query = _podsticarijumContext.Category;
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
 

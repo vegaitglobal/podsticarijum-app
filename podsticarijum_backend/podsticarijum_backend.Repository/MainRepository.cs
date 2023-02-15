@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
@@ -18,42 +19,42 @@ public class MainRepository : IMainRepository
         _podsticarijumContext = podsticarijumContext;
     }
 
-    public async ValueTask<MainScreen?> Get(long id, bool tracking = false)
+    public async Task<Content?> GetContentById(long id, bool tracking = false)
     {
-        var query = _podsticarijumContext.MainScreen.Where(ms => ms.Id == id);
+        var query = _podsticarijumContext.Content.Where(c => c.Id == id);
         return tracking ? await query.FirstOrDefaultAsync() : await query.AsNoTracking().FirstOrDefaultAsync();
     }
-                                                 
-    public async ValueTask<List<MainScreen>> GetActive(bool tracking = false)
+
+    public async Task<List<Content>> GetContentByType(ContentType contentType, bool tracking = false)
     {
-        var query = _podsticarijumContext.MainScreen.Where(ms => ms.Active == true);
+        var query = _podsticarijumContext.Content.Where(c => c.ContentType == contentType);
         return tracking ? await query.ToListAsync() : await query.AsNoTracking().ToListAsync();
     }
 
-    public async Task<long> Insert(MainScreen mainScreen)
+    public async Task<long> Insert(Content content)
     {
-        await _podsticarijumContext.AddAsync(mainScreen);
+        await _podsticarijumContext.AddAsync(content);
         await _podsticarijumContext.SaveChangesAsync();
-        return mainScreen.Id;
+        return content.Id;
     }
 
-    public async Task Update(MainScreen mainScreen)
+    public async Task Update(Content content)
     {
-        _podsticarijumContext.Update(mainScreen);
+        _podsticarijumContext.Update(content);
 
         await _podsticarijumContext.SaveChangesAsync();
     }
 
-    public async Task Update(IEnumerable<MainScreen> mainScreens)
+    public async Task Update(IEnumerable<Content> contents)
     {
-        _podsticarijumContext.UpdateRange(mainScreens);
+        _podsticarijumContext.UpdateRange(contents);
 
         await _podsticarijumContext.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task Delete(MainScreen mainScreen)
+    public async Task Delete(Content content)
     {
-        _podsticarijumContext.Remove(mainScreen);
+        _podsticarijumContext.Remove(content);
         await _podsticarijumContext.SaveChangesAsync();
     }
 }

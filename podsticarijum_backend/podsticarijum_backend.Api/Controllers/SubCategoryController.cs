@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using podsticarijum_backend.Application;
 using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Application.DtoExtensions;
@@ -35,7 +34,7 @@ public class SubCategoryController : ControllerBase
     [HttpGet()]
     public async Task<ActionResult<SubCategory>> Get()
     {
-        List<SubCategory> subCategories = await _subCategoryRepository.GetActive().ConfigureAwait(false);
+        List<SubCategory> subCategories = await _subCategoryRepository.GetAll().ConfigureAwait(false);
 
         return Ok(subCategories);
     }
@@ -83,9 +82,9 @@ public class SubCategoryController : ControllerBase
     }
 
     [HttpPost("{subCategoryId}/expert")]
-    public async Task<ActionResult<ExpertDto>> CreateExpert([FromRoute] long subCategoryId, [FromBody] ExpertDto expertDto)
+    public async Task<ActionResult<ExpertDto>> CreateExpert([FromRoute] long subCategoryId, [FromBody] ExpertRequestDto expertRequestDto)
     {
-        if (expertDto == null || expertDto.Email == null)
+        if (expertRequestDto == null || expertRequestDto.Email == null)
         {
             return BadRequest("Expert data is not sent.");
         }
@@ -95,13 +94,18 @@ public class SubCategoryController : ControllerBase
         {
             return BadRequest("SubCategory is not correct.");
         }
-        expertDto.SubCategoryDto = subCategory.ToDto();
-        expertDto.SubCategoryDto.Id = subCategory.Id;
+        expertRequestDto.SubCategoryDto = subCategory.ToDto();
+        expertRequestDto.SubCategoryDto.Id = subCategory.Id;
+        var expertDto = new ExpertDto(
+            subCategory.ToDto(),
+            firstName: expertRequestDto.FirstName,
+            lastName: expertRequestDto.LastName,
+            email: expertRequestDto.Email);
         var expert = expertDto.ToDomainModel();
         expert.SubCategory = subCategory;
 
-        await _expertRepository.Insert(expert).ConfigureAwait(false);
-
+        var expertInsertedId = await _expertRepository.Insert(expert).ConfigureAwait(false);
+        expertDto.Id = expertInsertedId;
         return Ok(expertDto);
     }
 

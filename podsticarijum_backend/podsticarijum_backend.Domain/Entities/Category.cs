@@ -10,11 +10,10 @@ public class Category : EntityTimestamps
 
     }
 
-    public Category(string navMenuText, string description, bool active)
+    public Category(string navMenuText, string description)
     {
         NavMenuText = navMenuText ?? throw new ArgumentNullException(nameof(navMenuText));
         Description = description ?? throw new ArgumentNullException(nameof(description));
-        Active = active;
     }
 
     public long Id { get; set; }
@@ -28,6 +27,4 @@ public class Category : EntityTimestamps
     /// Currently unused, but can be used for hovers and any additional info
     /// </summary>
     public string Description { get; set; }
-
-    public bool Active { get; set; }
 }

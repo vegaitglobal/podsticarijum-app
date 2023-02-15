@@ -11,9 +11,9 @@ public interface ISubCategoryRepository
 {
     Task<SubCategory?> Get(long id, bool tracking = false);
 
-    Task<List<SubCategory>> GetActive(bool tracking = false);
+    Task<List<SubCategory>> GetAll(bool tracking = false);
 
-    Task<List<SubCategory>> GetActiveForCategory(long categoryId, bool tracking = false);
+    Task<List<SubCategory>> GetForCategory(long categoryId, bool tracking = false);
 
     Task Update(SubCategory subCategory);
 
