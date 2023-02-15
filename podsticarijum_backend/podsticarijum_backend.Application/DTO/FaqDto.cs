@@ -10,7 +10,7 @@ public class FaqDto
 
     public long Id { get; set; }
 
-    public CategoryDto CategoryDto { get; set; }
+    public CategoryDto CategoryDto { get; set; } = null!;
 
     public string Question { get; set; }
 
