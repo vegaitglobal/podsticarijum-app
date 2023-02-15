@@ -4,7 +4,7 @@ using podsticarijum_backend.Application.Options;
 using podsticarijum_backend.Application.Services;
 using podsticarijum_backend.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,15 +23,15 @@ builder.Services.AddScoped<IFaqRepository, FaqRepository>();
 
 builder.Services.AddDbContext<PodsticarijumContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb"), b => b.MigrationsAssembly("podsticarijum_backend.Repository"));
 });
+
 
 builder.Services.AddControllers();
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 //TODO: Remove after adding auth
 builder.Services.AddCors(options =>
@@ -45,6 +45,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -82,4 +83,5 @@ app.UseEndpoints(endpoints =>
 
 //app.UseAuthorization();
 
+app.MapRazorPages();
 app.Run();

@@ -11,7 +11,7 @@ public class PodsticarijumContext : DbContext
     {
     }
 
-    public DbSet<MainScreen> MainScreen { get; set; }
+    public DbSet<Content> Content { get; set; }
 
     public DbSet<Category> Category { get; set; }
 
@@ -22,4 +22,6 @@ public class PodsticarijumContext : DbContext
     public DbSet<Faq> Faq { get; set; }
 
     public DbSet<SubCategorySpecificContent> SubCategorySpecificContent { get; set; }
+
+    public DbSet<User> User { get; set; }
 }

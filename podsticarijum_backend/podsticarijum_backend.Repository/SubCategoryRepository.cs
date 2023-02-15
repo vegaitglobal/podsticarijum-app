@@ -25,23 +25,23 @@ public class SubCategoryRepository : ISubCategoryRepository
         return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }
 
-    public Task<List<SubCategory>> GetActive(bool tracking = false)
+    public Task<List<SubCategory>> GetAll(bool tracking = false)
     {
-        var query = _podsticarijumContext.SubCategory.Where(sc => sc.Active == true)
-                                            .Include(sc => sc.Category);
+        var query = _podsticarijumContext.SubCategory.Include(sc => sc.Category);
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
     
-    public Task<List<SubCategory>> GetActiveForCategory(long categoryId, bool tracking = false)
+    public Task<List<SubCategory>> GetForCategory(long categoryId, bool tracking = false)
     {
-        var query = _podsticarijumContext.SubCategory.Where(sc => sc.Category.Id == categoryId && sc.Active == true);
+        var query = _podsticarijumContext.SubCategory
+                                                .Include(sc => sc.Category)
+                                                .Where(sc => sc.Category.Id == categoryId);
 
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
 
     public async Task<long> Insert(SubCategory subCategory)
     {
-        _podsticarijumContext.Entry(subCategory.Category).State = EntityState.Detached;
         _podsticarijumContext.Add(subCategory);
         await _podsticarijumContext.SaveChangesAsync().ConfigureAwait(false);
         return subCategory.Id;

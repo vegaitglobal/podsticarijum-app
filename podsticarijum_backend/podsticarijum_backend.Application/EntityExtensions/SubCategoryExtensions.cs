@@ -13,6 +13,7 @@ public static class SubCategoryExtensions
 {
     public static SubCategoryDto ToDto(this SubCategory subCategory)
         => new SubCategoryDto(
+            id: subCategory.Id,
             categoryDto: subCategory.Category.ToDto(), 
             mainNavMenuText: subCategory.MainNavMenuText,
             mainText: subCategory.MainText,

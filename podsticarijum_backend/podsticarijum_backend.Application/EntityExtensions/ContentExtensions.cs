@@ -8,10 +8,8 @@ using podsticarijum_backend.Domain.Entities;
 
 namespace podsticarijum_backend.Application.EntityExtensions;
 
-public static class MainScreenExtensions
+public static class ContentExtensions
 {
-    public static MainScreenDto ToDto(this MainScreen entity)
-        => new MainScreenDto(content: entity.Content,
-                             buttonText: entity.ButtonText,
-                             active: entity.Active);
+    public static ContentDto ToDto(this Content content)
+        => new(id: content.Id, contentType: content.ContentType, text: content.Text);
 }

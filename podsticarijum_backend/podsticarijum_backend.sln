@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "podsticarijum_backend.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "podsticarijum_backend.Repository", "podsticarijum_backend.Repository\podsticarijum_backend.Repository.csproj", "{FA4129BB-D4BD-4C5A-87EE-0B8597CC3C6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "podsticarijum_backend.Application", "podsticarijum_backend.Application\podsticarijum_backend.Application.csproj", "{F2B75C02-C5AC-41F4-8897-2B68F057E677}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "podsticarijum_backend.Application", "podsticarijum_backend.Application\podsticarijum_backend.Application.csproj", "{F2B75C02-C5AC-41F4-8897-2B68F057E677}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

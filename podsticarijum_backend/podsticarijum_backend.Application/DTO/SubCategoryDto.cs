@@ -10,8 +10,9 @@ namespace podsticarijum_backend.Application.DTO;
 
 public class SubCategoryDto
 {
-    public SubCategoryDto(CategoryDto? categoryDto, string mainNavMenuText, string mainText, string additionalText, string checkMoreButtonText, string checkMorePageTitle, string checkMorePageText, string developmentSupportingActivitiesButtonText, string atypicalDevelopmentSignsText, bool active)
+    public SubCategoryDto(long id, CategoryDto? categoryDto, string mainNavMenuText, string mainText, string additionalText, string checkMoreButtonText, string checkMorePageTitle, string checkMorePageText, string developmentSupportingActivitiesButtonText, string atypicalDevelopmentSignsText, bool active)
     {
+        Id = id;
         CategoryDto = categoryDto;
         MainNavMenuText = mainNavMenuText;
         MainText = mainText;
@@ -24,13 +25,11 @@ public class SubCategoryDto
         Active = active;
     }
 
-    [JsonIgnore]
     public long Id { get; set; }
 
     /// <summary>
     /// Related category object to this subcategory
     /// </summary>
-    [JsonIgnore]
     public CategoryDto? CategoryDto { get; set; }
 
     /// <summary>

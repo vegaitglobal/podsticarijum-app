@@ -20,7 +20,8 @@ public class FaqRepository : IFaqRepository
 
     public Task<List<Faq>> GetFaqsForCategory(long categoryId, bool tracking = false)
     {
-        var query = _podsticarijumContext.Faq.Include(faq => faq.Category)
+        var query = _podsticarijumContext.Faq
+                                    .Include(faq => faq.Category)
                                     .Where(faq => faq.Category.Id == categoryId);
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }

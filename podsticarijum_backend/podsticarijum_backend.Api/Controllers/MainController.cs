@@ -27,40 +27,39 @@ public class MainController : ControllerBase
     //TODO: Fix comments - add more info
     //TODO: better error handling (Logging #1 prio)
     [HttpGet("{id}")]
-    public async Task<ActionResult<MainScreenDto>> Get([FromRoute] long id)
+    public async Task<ActionResult<ContentDto>> Get([FromRoute] long id)
     {
-        MainScreen? mainScreen = await _mainRepository.Get(id).ConfigureAwait(false);
-        if (mainScreen == null)
+        Content? content = await _mainRepository.GetContentById(id).ConfigureAwait(false);
+        if (content == null)
         {
             return NotFound();
         }
-        return Ok(mainScreen.ToDto());
+        return Ok(content.ToDto());
     }
 
 
     //TODO: Proper validation of each field from the input Dto
     [HttpPost]
-    public async Task<ActionResult<MainScreenDto>> Create([FromBody] MainScreenDto mainScreenDto)
+    public async Task<ActionResult<ContentDto>> Create([FromBody] ContentRequestDto contentDto)
     {
-        if (mainScreenDtoInvalid(mainScreenDto))
+        if (mainScreenDtoInvalid(contentDto))
         {
             return BadRequest();
         }
 
-        MainScreen entity = mainScreenDto.ToDomainModel();
+        Content entity = contentDto.ToDomainModel();
 
         try
         {
-            List<MainScreen> activeMainScreens = await _mainRepository.GetActive().ConfigureAwait(false);
+            List<Content> activeMainScreens = await _mainRepository.GetContentByType(contentDto.ContentType).ConfigureAwait(false);
             if (activeMainScreens.Count != 0)
             {
-                activeMainScreens.ForEach(ams => ams.Active = false);
                 await _mainRepository.Update(activeMainScreens);
             }
 
             var insertedObjectId = await _mainRepository.Insert(entity).ConfigureAwait(false);
-            mainScreenDto.Id = insertedObjectId;
-            return Ok(mainScreenDto);
+            
+            return Ok(entity.ToDto());
         }
         catch (Exception)
         {
@@ -75,16 +74,17 @@ public class MainController : ControllerBase
     /// <returns>204 if object is successfully updated.</returns>
     /// <returns>404 if no object to update.</returns>
     [HttpPut]
-    public async Task<ActionResult> Update([FromBody] MainScreenDto mainScreenDto)
+    public async Task<ActionResult> Update([FromBody] ContentRequestDto contentDto)
     {
-        MainScreen? mainScreen = await _mainRepository.Get(mainScreenDto.Id);
-        if (mainScreen == null)
+        Content? content = await _mainRepository.GetContentById(contentDto.Id);
+        if (content == null)
         {
             return NotFound();
         }
+
         try
         {
-            await _mainRepository.Update(mainScreenDto.ToDomainModel());
+            await _mainRepository.Update(contentDto.ToDomainModel());
             return NoContent();
         }
         catch (Exception)
@@ -93,8 +93,8 @@ public class MainController : ControllerBase
         }
     }
 
-    private static bool mainScreenDtoInvalid(MainScreenDto mainScreenDto)
-        => mainScreenDto == null || mainScreenDto.ButtonText == null || mainScreenDto.Content == null;
+    private static bool mainScreenDtoInvalid(ContentRequestDto contentDto)
+        => contentDto == null || contentDto.Text == null;
 
 }
 

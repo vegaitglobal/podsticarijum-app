@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Application.DtoExtensions;
 using podsticarijum_backend.Application.EntityExtensions;
@@ -18,7 +17,6 @@ public class CategoryController : ControllerBase
 
     public CategoryController(
         IFaqRepository faqRepository,
-        IConfiguration configuration,
         ICategoryRepository categoryRepository,
         ISubCategoryRepository subCategoryRepository)
     {
@@ -32,9 +30,9 @@ public class CategoryController : ControllerBase
     {
         try
         {
-            List<Category> categories = await _categoryRepository.GetActive();
-
-            return Ok(categories.ToDto());
+            List<Category> categories = await _categoryRepository.GetAll();
+            List<CategoryDto> categoryDtos = categories.ToDto();
+            return Ok(categoryDtos);
         }
         catch (Exception)
         {
@@ -42,6 +40,11 @@ public class CategoryController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get a single category by Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Categorys object.</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<CategoryDto>> Get([FromRoute] long id)
     {
@@ -62,43 +65,46 @@ public class CategoryController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get a list of subcategories for this category.
+    /// </summary>
+    /// <param name="categoryId"></param>
+    /// <returns></returns>
     [HttpGet("{categoryId}/sub-category/")]
-    public async Task<ActionResult<SubCategoryDto>> GetSubCategoriesForCategory([FromRoute] long categoryId)
+    public async Task<ActionResult<List<SubCategoryDto>>> GetSubCategoriesForCategory([FromRoute] long categoryId)
     {
-        List<SubCategory> subCategories = await _subCategoryRepository.GetActiveForCategory(categoryId).ConfigureAwait(false);
-
-        if (subCategories.Count() == 0)
-        {
-            return NotFound();
-        }
+        List<SubCategory> subCategories = await _subCategoryRepository.GetForCategory(categoryId).ConfigureAwait(false);
 
         return Ok(subCategories.ToDto());
     }
 
     [HttpPost("{categoryId}/sub-category/")]
-    public async Task<ActionResult> PostSubCategory([FromRoute] long categoryId, [FromBody] SubCategoryDto subCategoryDto)
+    public async Task<ActionResult> PostSubCategory([FromRoute] long categoryId, [FromBody] SubCategoryRequestDto subCategoryDto)
     {
         if (subCategoryDto == null || subCategoryDto.MainText == null)
         {
             return BadRequest();
         }
-        var category = await _categoryRepository.Get(categoryId);
+
+        var category = await _categoryRepository.Get(categoryId, tracking: true);
+        
         if (category == null)
         {
             return BadRequest();
         }
+
         subCategoryDto.CategoryDto = category.ToDto();
         SubCategory subCategory = subCategoryDto.ToDomainModel();
+        subCategory.Category = category;
         await _subCategoryRepository.Insert(subCategory);
 
         subCategory.Category.Id = categoryId;
-
 
         return Ok(subCategory);
     }
 
     [HttpPost]
-    public async Task<ActionResult<CategoryDto>> Create([FromBody] CategoryDto categoryDto)
+    public async Task<ActionResult<CategoryDto>> Create([FromBody] CategoryRequestDto categoryDto)
     {
         try
         {
@@ -107,9 +113,10 @@ public class CategoryController : ControllerBase
                 return BadRequest();
             }
             Category entity = categoryDto.ToDomainModel();
-            categoryDto.Id = await _categoryRepository.Insert(entity);
+            CategoryDto categoryOutputDto = entity.ToDto();
+            categoryOutputDto.Id = await _categoryRepository.Insert(entity);
 
-            return Ok(categoryDto);
+            return Ok(categoryOutputDto);
         }
         catch (Exception)
         {
@@ -118,7 +125,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Update([FromRoute] long id, [FromBody] CategoryDto categoryDto)
+    public async Task<ActionResult> Update([FromRoute] long id, [FromBody] CategoryRequestDto categoryDto)
     {
         if (isCategoryDtoValid(categoryDto))
         {
@@ -150,20 +157,26 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost("{categoryId}/faq")]
-    public async Task<ActionResult<Faq>> CreateFaq([FromRoute] long categoryId, [FromBody] FaqDto faqDto)
+    public async Task<ActionResult<Faq>> CreateFaq([FromRoute] long categoryId, [FromBody] FaqRequestDto faqRequestDto)
     {
-        if ( string.IsNullOrEmpty(faqDto.Question) || string.IsNullOrEmpty(faqDto.Answer))
+        if ( string.IsNullOrEmpty(faqRequestDto.Question) || string.IsNullOrEmpty(faqRequestDto.Answer))
         {
             return BadRequest("FAQ should have non empty question and answer.");
         }
-        Category? category = await _categoryRepository.Get(categoryId).ConfigureAwait(false);
+        Category? category = await _categoryRepository.Get(categoryId, tracking: true).ConfigureAwait(false);
         if(category == null)
         {
             return BadRequest("Category does not exist.");
         }
-        faqDto.CategoryDto = category.ToDto();
 
-        _ = await _faqRepository.Insert(faqDto.ToDomainModel());
+        var faqDto = new FaqDto(question: faqRequestDto.Question, answer: faqRequestDto.Answer);
+        faqDto.CategoryDto = category.ToDto();
+        var faq = faqDto.ToDomainModel();
+        faq.Category = category;
+
+        var insertedFaqId = await _faqRepository.Insert(faq);
+        faqDto.Id = insertedFaqId;
+
         return Ok(faqDto);
     }
 
@@ -180,6 +193,6 @@ public class CategoryController : ControllerBase
         return NoContent();
     }
 
-    private static bool isCategoryDtoValid(CategoryDto categoryDto)
-        => categoryDto == null || categoryDto.Id != 0 || categoryDto.NavMenuText == null;
+    private static bool isCategoryDtoValid(CategoryRequestDto categoryDto)
+        => categoryDto == null || categoryDto.NavMenuText == null;
 }

@@ -11,7 +11,7 @@ public interface ICategoryRepository
 {
     Task<Category?> Get(long id, bool tracking = false);
 
-    Task<List<Category>> GetActive(bool tracking = false);
+    Task<List<Category>> GetAll(bool tracking = false);
 
     Task Update(Category category);
 
