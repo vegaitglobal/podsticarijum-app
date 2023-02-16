@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using podsticarijum_backend.Domain.Entities;
-
-namespace podsticarijum_backend.Application.DTO;
+﻿namespace podsticarijum_backend.Application.DTO;
 
 public class SubCategoryDto
 {

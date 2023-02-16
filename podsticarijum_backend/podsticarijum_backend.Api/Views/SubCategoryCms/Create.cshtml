@@ -1,0 +1,73 @@
+﻿@model List<podsticarijum_backend.Application.DTO.CategoryFullDto>;
+
+@{
+    ViewData["Title"] = "SubCategory Create";
+}
+
+<h1>Create</h1>
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <input type="hidden" asp-for="@Model[].Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MainNavMenuText" class="control-label"></label>
+                <input asp-for="MainNavMenuText" class="form-control" />
+                <span asp-validation-for="MainNavMenuText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MainText" class="control-label"></label>
+                <input asp-for="MainText" class="form-control" />
+                <span asp-validation-for="MainText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdditionalText" class="control-label"></label>
+                <input asp-for="AdditionalText" class="form-control" />
+                <span asp-validation-for="AdditionalText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckMoreButtonText" class="control-label"></label>
+                <input asp-for="CheckMoreButtonText" class="form-control" />
+                <span asp-validation-for="CheckMoreButtonText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckMorePageTitle" class="control-label"></label>
+                <input asp-for="CheckMorePageTitle" class="form-control" />
+                <span asp-validation-for="CheckMorePageTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckMoreButtonText" class="control-label"></label>
+                <input asp-for="CheckMoreButtonText" class="form-control" />
+                <span asp-validation-for="CheckMoreButtonText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DevelopmentSupportingActivitiesButtonText" class="control-label"></label>
+                <input asp-for="DevelopmentSupportingActivitiesButtonText" class="form-control" />
+                <span asp-validation-for="DevelopmentSupportingActivitiesButtonText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AtypicalDevelopmentSignsText" class="control-label"></label>
+                <input asp-for="AtypicalDevelopmentSignsText" class="form-control" />
+                <span asp-validation-for="AtypicalDevelopmentSignsText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

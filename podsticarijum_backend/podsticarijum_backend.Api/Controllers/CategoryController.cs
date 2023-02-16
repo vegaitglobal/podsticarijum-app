@@ -87,7 +87,7 @@ public class CategoryController : ControllerBase
         }
 
         var category = await _categoryRepository.Get(categoryId, tracking: true);
-        
+
         if (category == null)
         {
             return BadRequest();
@@ -124,30 +124,6 @@ public class CategoryController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult> Update([FromRoute] long id, [FromBody] CategoryRequestDto categoryDto)
-    {
-        if (isCategoryDtoValid(categoryDto))
-        {
-            return BadRequest();
-        }
-
-        Category? category = await _categoryRepository.Get(id).ConfigureAwait(false);
-        if (category == null)
-        {
-            return BadRequest();
-        }
-        try
-        {
-            await _categoryRepository.Update(categoryDto.ToDomainModel());
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
     [HttpGet("{categoryId}/faq")]
     public async Task<ActionResult<List<Faq>>> GetAllForCategory([FromRoute] long categoryId)
     {
@@ -159,12 +135,12 @@ public class CategoryController : ControllerBase
     [HttpPost("{categoryId}/faq")]
     public async Task<ActionResult<Faq>> CreateFaq([FromRoute] long categoryId, [FromBody] FaqRequestDto faqRequestDto)
     {
-        if ( string.IsNullOrEmpty(faqRequestDto.Question) || string.IsNullOrEmpty(faqRequestDto.Answer))
+        if (string.IsNullOrEmpty(faqRequestDto.Question) || string.IsNullOrEmpty(faqRequestDto.Answer))
         {
             return BadRequest("FAQ should have non empty question and answer.");
         }
         Category? category = await _categoryRepository.Get(categoryId, tracking: true).ConfigureAwait(false);
-        if(category == null)
+        if (category == null)
         {
             return BadRequest("Category does not exist.");
         }

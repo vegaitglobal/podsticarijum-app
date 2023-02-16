@@ -83,5 +83,13 @@ app.UseEndpoints(endpoints =>
 
 //app.UseAuthorization();
 
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=CategoryCms}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=SubCategoryCms}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 app.Run();
