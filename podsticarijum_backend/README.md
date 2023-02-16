@@ -4,7 +4,7 @@
 You need email password. Ask around. 
 Set that value as environment variable with the name `MailData__Password`.
 
-You need to provide a password for MS SQL server by setting a value for a new variable (of your choosing) named `MSSQL_SA_PASSWORD`.
+You need to provide a password for MS SQL server by setting any value for a variable named `MSSQL_SA_PASSWORD`.
 Beware that the SQL DB uses a Docker volume.  
 
 ### Dotnet
