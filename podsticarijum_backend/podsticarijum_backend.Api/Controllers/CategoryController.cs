@@ -132,23 +132,23 @@ public class CategoryController : ControllerBase
         return Ok(faqs);
     }
 
-    [HttpPost("{categoryId}/faq")]
-    public async Task<ActionResult<Faq>> CreateFaq([FromRoute] long categoryId, [FromBody] FaqRequestDto faqRequestDto)
+    [HttpPost("{subCategoryId}/faq")]
+    public async Task<ActionResult<Faq>> CreateFaq([FromRoute] long subCategoryId, [FromBody] FaqRequestDto faqRequestDto)
     {
         if (string.IsNullOrEmpty(faqRequestDto.Question) || string.IsNullOrEmpty(faqRequestDto.Answer))
         {
             return BadRequest("FAQ should have non empty question and answer.");
         }
-        Category? category = await _categoryRepository.Get(categoryId, tracking: true).ConfigureAwait(false);
-        if (category == null)
+        SubCategory? subCategory = await _subCategoryRepository.Get(subCategoryId, tracking: true).ConfigureAwait(false);
+        if (subCategory == null)
         {
             return BadRequest("Category does not exist.");
         }
 
         var faqDto = new FaqDto(question: faqRequestDto.Question, answer: faqRequestDto.Answer);
-        faqDto.CategoryDto = category.ToDto();
+        faqDto.SubCategoryDto = subCategory.ToDto();
         var faq = faqDto.ToDomainModel();
-        faq.Category = category;
+        faq.SubCategory = subCategory;
 
         var insertedFaqId = await _faqRepository.Insert(faq);
         faqDto.Id = insertedFaqId;

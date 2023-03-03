@@ -2,6 +2,12 @@
 
 public class SubCategoryDto
 {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    protected SubCategoryDto()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    {
+    }
+
     public SubCategoryDto(long id, CategoryDto? categoryDto, string mainNavMenuText, string mainText, string additionalText, string checkMoreButtonText, string checkMorePageTitle, string checkMorePageText, string developmentSupportingActivitiesButtonText, string atypicalDevelopmentSignsText, bool active)
     {
         Id = id;

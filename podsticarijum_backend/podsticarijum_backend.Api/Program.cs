@@ -4,12 +4,25 @@ using podsticarijum_backend.Application.Options;
 using podsticarijum_backend.Application.Services;
 using podsticarijum_backend.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services
+       .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+       .AddCookie(
+                 CookieAuthenticationDefaults.AuthenticationScheme, 
+                 options =>
+                 {
+                     options.LoginPath = "/auth/login"; 
+                     options.ExpireTimeSpan = TimeSpan.FromHours(12);
+                 });
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 
 builder.Services.Configure<MailDataConfig>(builder.Configuration.GetSection("MailData"));
 
@@ -33,19 +46,6 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//TODO: Remove after adding auth
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.AllowAnyOrigin();
-            policy.AllowAnyHeader();
-            policy.AllowAnyMethod();
-        });
-});
-
-builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -67,6 +67,9 @@ using (var scope = app.Services.CreateScope())
 {
     PodsticarijumContext db = scope.ServiceProvider.GetRequiredService<PodsticarijumContext>();
     db.Database.Migrate();
+
+    IDataSeeder dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
+    await dataSeeder.EnsureInitialSeed();
 }
 
 app.UseHttpsRedirection();
@@ -74,22 +77,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
-
-//app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=CategoryCms}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=SubCategoryCms}/{action=Index}/{id?}");
+app.MapDefaultControllerRoute();
 
 app.MapRazorPages();
 app.Run();

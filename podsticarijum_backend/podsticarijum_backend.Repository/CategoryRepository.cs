@@ -21,7 +21,8 @@ public class CategoryRepository : ICategoryRepository
 
     public Task<List<Category>> GetAll(bool tracking = false)
     {
-        var query = _podsticarijumContext.Category.Include(c => c.SubCategories);
+        var query = _podsticarijumContext.Category
+            .Include(c => c.SubCategories);
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
 

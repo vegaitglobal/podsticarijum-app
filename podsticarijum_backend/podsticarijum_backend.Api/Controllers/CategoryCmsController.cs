@@ -1,124 +1,129 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Application.DtoExtensions;
 using podsticarijum_backend.Application.EntityExtensions;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
-namespace podsticarijum_backend.Api.Controllers
+namespace podsticarijum_backend.Api.Controllers;
+
+
+public class CategoryCmsController : Controller
 {
-    public class CategoryCmsController : Controller
+    private readonly ICategoryRepository _categoryRepository;
+
+    public CategoryCmsController(
+        ICategoryRepository categoryRepository)
     {
-        private readonly ICategoryRepository _categoryRepository;
+        _categoryRepository = categoryRepository;
+    }
 
-        public CategoryCmsController(
-            ICategoryRepository categoryRepository)
+    // GET: CategoryCmsController
+    public async Task<ActionResult> IndexAsync()
+    {
+        List<Category> categories = await _categoryRepository.GetAll();
+        List<CategoryDto> categoryDtos = categories.ToDto();
+        return View(categoryDtos);
+    }
+
+    // GET: CategoryCmsController/Details/5
+    public ActionResult Details(int id)
+    {
+        return View();
+    }
+
+    //[Authorize(CookieAuthenticationDefaults.AuthenticationScheme)]
+    [Authorize]
+    [HttpGet]
+    public ActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    // GET: CategoryCmsController/Create
+    public async Task<ActionResult> Create(CategoryRequestDto categoryDto)
+    {
+        if (categoryDto == null || categoryDto.NavMenuText == null)
         {
-            _categoryRepository = categoryRepository;
+            return BadRequest();
         }
+        Category entity = categoryDto.ToDomainModel();
+        CategoryDto categoryOutputDto = entity.ToDto();
+        categoryOutputDto.Id = await _categoryRepository.Insert(entity);
 
-        // GET: CategoryCmsController
-        public async Task<ActionResult> Index()
+        return RedirectToAction(nameof(Index));
+    }
+
+    // GET: CategoryCmsController/Edit/5
+    public async Task<ActionResult> Edit(int id)
+    {
+        var category = await _categoryRepository.Get(id);
+        if (category == null)
         {
-            List<Category> categories = await _categoryRepository.GetAll();
-            List<CategoryDto> categoryDtos = categories.ToDto();
-            return View(categoryDtos);
+            return NotFound();
         }
+        return View(category.ToDto());
+    }
 
-        // GET: CategoryCmsController/Details/5
-        public ActionResult Details(int id)
+    // POST: CategoryCmsController/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> Edit(int id, CategoryRequestDto categoryRequestDto)
+    {
+        try
         {
-            return View();
-        }
-
-        [HttpGet]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        // GET: CategoryCmsController/Create
-        public async Task<ActionResult> Create(CategoryRequestDto categoryDto)
-        {
-            if (categoryDto == null || categoryDto.NavMenuText == null)
+            Category? category = await _categoryRepository.Get(id, tracking: true).ConfigureAwait(false);
+            
+            if (category == null)
             {
-                return BadRequest();
+                return View();
             }
-            Category entity = categoryDto.ToDomainModel();
-            CategoryDto categoryOutputDto = entity.ToDto();
-            categoryOutputDto.Id = await _categoryRepository.Insert(entity);
-
+            category.NavMenuText = categoryRequestDto.NavMenuText;
+            category.Description = categoryRequestDto.Description;
+            category.UpdatedAt = DateTime.UtcNow;
+            await _categoryRepository.Update(category);
             return RedirectToAction(nameof(Index));
         }
-
-        // GET: CategoryCmsController/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        catch
         {
-            var category = await _categoryRepository.Get(id);
+            return View();
+        }
+    }
+
+    // GET: CategoryCmsController/Delete/5
+    public async Task<ActionResult> Delete(int id)
+    {
+        Category? category = await _categoryRepository.Get(id);
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        CategoryDto categoryDto = category.ToDto();
+        return View(categoryDto);
+    }
+
+    // POST: CategoryCmsController/Delete/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> Delete(int id, IFormCollection collection)
+    {
+        try
+        {
+            Category? category = await _categoryRepository.Get(id).ConfigureAwait(false);
             if (category == null)
             {
                 return NotFound();
             }
-            return View(category.ToDto());
+            await _categoryRepository.Delete(category);
+            return RedirectToAction(nameof(Index));
         }
-
-        // POST: CategoryCmsController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, CategoryRequestDto categoryRequestDto)
+        catch
         {
-            try
-            {
-                Category? category = await _categoryRepository.Get(id, tracking: true).ConfigureAwait(false);
-                
-                if (category == null)
-                {
-                    return View();
-                }
-                category.NavMenuText = categoryRequestDto.NavMenuText;
-                category.Description = categoryRequestDto.Description;
-                await _categoryRepository.Update(category);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CategoryCmsController/Delete/5
-        public async Task<ActionResult> Delete(int id)
-        {
-            Category? category = await _categoryRepository.Get(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            CategoryDto categoryDto = category.ToDto();
-            return View(categoryDto);
-        }
-
-        // POST: CategoryCmsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                Category? category = await _categoryRepository.Get(id).ConfigureAwait(false);
-                if (category == null)
-                {
-                    return NotFound();
-                }
-                await _categoryRepository.Delete(category);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
     }
 }

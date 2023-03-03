@@ -13,34 +13,16 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model[0].NavMenuText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].SubCategories[0].MainNavMenuText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].SubCategories[0].MainText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].SubCategories[0].AdditionalText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].SubCategories[0].CheckMoreButtonText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].SubCategories[0].CheckMorePageTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].SubCategories[0].CheckMoreButtonText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].SubCategories[0].DevelopmentSupportingActivitiesButtonText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].SubCategories[0].AtypicalDevelopmentSignsText)
-            </th>
-            <th></th>
+            <th>Edit&nbsp;|&nbsp;Delete</th>
+            <th>Category</th>
+            <th>MainNavMenuText</th>
+            <th>MainText</th>
+            <th>AdditionalText</th>
+            <th>CheckMoreButtonText</th>
+            <th>CheckMorePageTitle</th>
+            <th>CheckMoreButtonText</th>
+            <th>DevelopmentSupportingActivitiesButtonText</th>
+            <th>AtypicalDevelopmentSignsText</th>
         </tr>
     </thead>
     <tbody>
@@ -48,16 +30,19 @@
         {
             foreach (var subCategory in category.SubCategories)
             {
-
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => subCategory.CategoryDto.NavMenuText)
+                        <a class="link-warning" asp-action="Edit" asp-route-id="@subCategory.Id">Edit</a> |
+                        <a class ="link-danger" asp-action="Delete" asp-route-id="@subCategory.Id">Delete</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.CategoryDto!.NavMenuText)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => subCategory.MainNavMenuText)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => subCategory.MainNavMenuText)
+                        @Html.DisplayFor(modelItem => subCategory.MainText)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => subCategory.AdditionalText)
@@ -76,10 +61,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => subCategory.AtypicalDevelopmentSignsText)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@subCategory.Id">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@subCategory.Id">Delete</a>
                     </td>
                 </tr>
             }

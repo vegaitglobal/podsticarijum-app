@@ -10,16 +10,16 @@ public class Faq : EntityTimestamps
 
     }
 
-    public Faq(Category category, string question, string answer)
+    public Faq(SubCategory subCategory, string question, string answer)
     {
-        Category = category ?? throw new ArgumentNullException(nameof(category));
+        SubCategory = subCategory ?? throw new ArgumentNullException(nameof(subCategory));
         Question = question ?? throw new ArgumentNullException(nameof(question));
         Answer = answer ?? throw new ArgumentNullException(nameof(answer));
     }
 
     public long Id { get; set; }
 
-    public Category Category { get; set; }
+    public SubCategory SubCategory { get; set; }
 
     public string Question { get; set; }
 

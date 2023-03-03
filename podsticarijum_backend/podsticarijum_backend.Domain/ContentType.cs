@@ -2,6 +2,6 @@
 
 public enum ContentType
 {
-    MainScreen = 0,
-    Donations = 1
+    MainScreen = 1,
+    Donations = 2
 }

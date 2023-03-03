@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
@@ -36,6 +32,20 @@ public class SubCategoryRepository : ISubCategoryRepository
         var query = _podsticarijumContext.SubCategory
                                                 .Include(sc => sc.Category)
                                                 .Where(sc => sc.Category.Id == categoryId);
+
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
+    }
+
+    public Task<List<SubCategorySpecificContent>> GetSubCategorySpecific(long subCategoryId, ParagraphSign paragraphSign = ParagraphSign.Default, bool tracking = false)
+    {
+        var query = _podsticarijumContext.SubCategorySpecificContent
+            .Include(sc => sc.SubCategory)
+            .Where(sc => sc.SubCategory.Id == subCategoryId);
+
+        if (paragraphSign != ParagraphSign.Default)
+        {
+            query = query.Where(sc => sc.ParagraphSign == paragraphSign);
+        }
 
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
