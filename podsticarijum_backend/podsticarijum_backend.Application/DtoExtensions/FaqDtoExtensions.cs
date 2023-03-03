@@ -12,7 +12,7 @@ public static class FaqDtoExtensions
 {
     public static Faq ToDomainModel(this FaqDto faqDto)
         => new Faq(
-            category: faqDto.CategoryDto.ToDomainModel(),
+            subCategory: faqDto.SubCategoryDto.ToDomainModel(),
             question: faqDto.Question,
             answer: faqDto.Answer
             );

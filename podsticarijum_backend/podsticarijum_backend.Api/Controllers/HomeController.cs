@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace podsticarijum_backend.Api.Controllers
+namespace podsticarijum_backend.Api.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    public ActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }

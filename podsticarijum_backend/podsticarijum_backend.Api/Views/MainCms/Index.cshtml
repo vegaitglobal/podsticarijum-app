@@ -1,0 +1,41 @@
+﻿@model List<podsticarijum_backend.Application.DTO.ContentDto>;
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Edit&nbsp;|&nbsp;Delete</th>
+            <th>
+                Content Type
+            </th>
+            <th>
+                Content Text
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a class="link-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="link-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContentType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,16 @@
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace podsticarijum_backend.Api.Viewmodels;
+
+public class FaqViewModel
+{
+    public IEnumerable<SelectListItem> SubCategoryDtoList { get; set; } = null!;
+
+    public long SubCategoryId { get; set; }
+
+    public string CategoryName { get; set; } = null!;
+
+    public string Question { get; set; } = null!;
+
+    public string Answer { get; set; } = null!;
+}

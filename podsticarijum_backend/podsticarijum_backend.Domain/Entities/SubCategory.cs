@@ -1,6 +1,6 @@
 ﻿namespace podsticarijum_backend.Domain.Entities;
 
-public class SubCategory
+public class SubCategory : EntityTimestamps
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     protected SubCategory()

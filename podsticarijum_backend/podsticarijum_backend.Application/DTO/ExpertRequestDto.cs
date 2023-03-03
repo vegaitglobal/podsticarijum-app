@@ -4,12 +4,18 @@ namespace podsticarijum_backend.Application.DTO;
 
 public class ExpertRequestDto
 {
-    public ExpertRequestDto(SubCategoryDto? subCategoryDto, string firstName, string lastName, string email)
+    public ExpertRequestDto(
+        SubCategoryDto? subCategoryDto, 
+        string firstName, 
+        string lastName, 
+        string email, 
+        string description)
     {
         SubCategoryDto = subCategoryDto;
         FirstName = firstName;
         LastName = lastName;
         Email = email;
+        Description = description;
     }
 
     [JsonIgnore]
@@ -23,4 +29,6 @@ public class ExpertRequestDto
     public string LastName { get; set; }
 
     public string Email { get; set; }
+
+    public string Description { get; set; }
 }

@@ -1,0 +1,82 @@
+﻿@model podsticarijum_backend.Api.Viewmodels.SubCategoryViewModel;
+
+@{
+    ViewData["Title"] = "SubCategory Create";
+}
+
+<h1>Create</h1>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div class="form-group">
+                <select asp-for="@Model.CategoryId"
+                        asp-items="@Model.CategoryDtoList">
+                </select>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.SubCategoryDto.MainNavMenuText" class="control-label"></label>
+                <textarea asp-for="@Model.SubCategoryDto.MainNavMenuText" class="form-control"></textarea>
+                <span asp-validation-for="@Model.SubCategoryDto.MainNavMenuText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.SubCategoryDto.MainText" class="control-label"></label>
+                <textarea asp-for="@Model.SubCategoryDto.MainText" class="form-control"></textarea>
+                <span asp-validation-for="@Model.SubCategoryDto.MainText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.SubCategoryDto.AdditionalText" class="control-label"></label>
+                <textarea asp-for="@Model.SubCategoryDto.AdditionalText" class="form-control"></textarea>
+                <span asp-validation-for="@Model.SubCategoryDto.AdditionalText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.SubCategoryDto.CheckMoreButtonText" class="control-label"></label>
+                <textarea asp-for="@Model.SubCategoryDto.CheckMoreButtonText" class="form-control"></textarea>
+                <span asp-validation-for="@Model.SubCategoryDto.CheckMoreButtonText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.SubCategoryDto.CheckMorePageTitle" class="control-label"></label>
+                <input asp-for="@Model.SubCategoryDto.CheckMorePageTitle" class="form-control" />
+                <span asp-validation-for="@Model.SubCategoryDto.CheckMorePageTitle" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.SubCategoryDto.CheckMorePageText" class="control-label"></label>
+                <input asp-for="@Model.SubCategoryDto.CheckMorePageText" class="form-control" />
+                <span asp-validation-for="@Model.SubCategoryDto.CheckMorePageText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.SubCategoryDto.DevelopmentSupportingActivitiesButtonText" class="control-label"></label>
+                <textarea asp-for="@Model.SubCategoryDto.DevelopmentSupportingActivitiesButtonText" class="form-control"></textarea>
+                <span asp-validation-for="@Model.SubCategoryDto.DevelopmentSupportingActivitiesButtonText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.SubCategoryDto.AtypicalDevelopmentSignsText" class="control-label"></label>
+                <input asp-for="@Model.SubCategoryDto.AtypicalDevelopmentSignsText" class="form-control" />
+                <span asp-validation-for="@Model.SubCategoryDto.AtypicalDevelopmentSignsText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -3,6 +3,7 @@ using podsticarijum_backend.Application;
 using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Application.DtoExtensions;
 using podsticarijum_backend.Application.EntityExtensions;
+using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
@@ -36,7 +37,7 @@ public class SubCategoryController : ControllerBase
     {
         List<SubCategory> subCategories = await _subCategoryRepository.GetAll().ConfigureAwait(false);
 
-        return Ok(subCategories);
+        return Ok(subCategories.ToDto());
     }
 
     [HttpPost("{subCategoryId}/email")]
@@ -96,11 +97,13 @@ public class SubCategoryController : ControllerBase
         }
         expertRequestDto.SubCategoryDto = subCategory.ToDto();
         expertRequestDto.SubCategoryDto.Id = subCategory.Id;
-        var expertDto = new ExpertDto(
-            subCategory.ToDto(),
-            firstName: expertRequestDto.FirstName,
-            lastName: expertRequestDto.LastName,
-            email: expertRequestDto.Email);
+        var expertDto = new 
+            ExpertDto(
+                subCategory.ToDto(),
+                firstName: expertRequestDto.FirstName,
+                lastName: expertRequestDto.LastName,
+                email: expertRequestDto.Email,
+                description: expertRequestDto.Description);
         var expert = expertDto.ToDomainModel();
         expert.SubCategory = subCategory;
 
@@ -113,6 +116,7 @@ public class SubCategoryController : ControllerBase
     public async Task<ActionResult> Delete([FromRoute] long subCategoryId)
     {
         SubCategory? subCategory = await _subCategoryRepository.Get(subCategoryId).ConfigureAwait(false);
+
         if (subCategory == null)
         {
             return NotFound();
@@ -121,4 +125,19 @@ public class SubCategoryController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet("{subCategoryId}/SubCategorySpecificContent")]
+    public async Task<ActionResult> GetSubcategorySpecificContent(
+        [FromRoute] long subCategoryId,
+        [FromQuery] ParagraphSign paragraphSign = ParagraphSign.Default
+        )
+    {
+        List<SubCategorySpecificContent> subCategorySpecificContent = await
+            _subCategoryRepository.GetSubCategorySpecific(
+                subCategoryId, 
+                paragraphSign);
+
+        return Ok(subCategorySpecificContent.ToDto());
+    }
+
 }

@@ -14,7 +14,8 @@ public static class ExpertDtoExtensions
             subCategory: expertDto.SubCategoryDto.ToDomainModel(),
             firstName: expertDto.FirstName,
             lastName: expertDto.LastName,
-            email: expertDto.Email)
+            email: expertDto.Email,
+            description: expertDto.Description)
         { Id = expertDto.Id};
     }
 

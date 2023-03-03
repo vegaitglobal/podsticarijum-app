@@ -16,7 +16,7 @@ namespace podsticarijum_backend.Api.Controllers
         public ExpertController(IExpertRepository expertRepository)
         {
             _expertRepository = expertRepository;
-        } 
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ExpertDto>> Get([FromRoute] long id)

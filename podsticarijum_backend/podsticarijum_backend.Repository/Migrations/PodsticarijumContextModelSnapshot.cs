@@ -95,6 +95,10 @@ namespace podsticarijum_backend.Repository.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -132,9 +136,6 @@ namespace podsticarijum_backend.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("CategoryId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -145,12 +146,15 @@ namespace podsticarijum_backend.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("SubCategoryId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("SubCategoryId");
 
                     b.ToTable("Faq");
                 });
@@ -189,6 +193,12 @@ namespace podsticarijum_backend.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DevelopmentSupportingActivitiesButtonText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -200,6 +210,9 @@ namespace podsticarijum_backend.Repository.Migrations
                     b.Property<string>("MainText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -246,6 +259,27 @@ namespace podsticarijum_backend.Repository.Migrations
                     b.ToTable("SubCategorySpecificContent");
                 });
 
+            modelBuilder.Entity("podsticarijum_backend.Domain.Entities.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("podsticarijum_backend.Domain.Entities.Expert", b =>
                 {
                     b.HasOne("podsticarijum_backend.Domain.Entities.SubCategory", "SubCategory")
@@ -259,19 +293,19 @@ namespace podsticarijum_backend.Repository.Migrations
 
             modelBuilder.Entity("podsticarijum_backend.Domain.Entities.Faq", b =>
                 {
-                    b.HasOne("podsticarijum_backend.Domain.Entities.Category", "Category")
+                    b.HasOne("podsticarijum_backend.Domain.Entities.SubCategory", "SubCategory")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("podsticarijum_backend.Domain.Entities.SubCategory", b =>
                 {
                     b.HasOne("podsticarijum_backend.Domain.Entities.Category", "Category")
-                        .WithMany()
+                        .WithMany("SubCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -288,6 +322,11 @@ namespace podsticarijum_backend.Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("podsticarijum_backend.Domain.Entities.Category", b =>
+                {
+                    b.Navigation("SubCategories");
                 });
 #pragma warning restore 612, 618
         }

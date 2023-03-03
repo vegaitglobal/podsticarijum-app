@@ -6,8 +6,11 @@ namespace podsticarijum_backend.Application.DtoExtensions;
 public static class ContentDtoExtensions
 {
     public static Content ToDomainModel(this ContentDto contentDto)
-        => new Content(id: contentDto.Id, contentType: contentDto.ContentType, text: contentDto.Text);
+        => new Content(contentType: contentDto.ContentType, text: contentDto.Text)
+        {
+            Id = contentDto.Id
+        };
 
     public static Content ToDomainModel(this ContentRequestDto contentDto)
-        => new(id: contentDto.Id, contentType: contentDto.ContentType, text: contentDto.Text);
+        => new(contentType: contentDto.ContentType, text: contentDto.Text);
 }

@@ -30,5 +30,4 @@ public class SubCategorySpecificContent : EntityTimestamps
     public string ParagraphText { get; set; }
 
     public ParagraphSign ParagraphSign { get; set; }
-
 }
