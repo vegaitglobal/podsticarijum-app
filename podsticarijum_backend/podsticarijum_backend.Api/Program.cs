@@ -5,6 +5,7 @@ using podsticarijum_backend.Application.Services;
 using podsticarijum_backend.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,12 @@ builder.Services.AddDbContext<PodsticarijumContext>(options =>
 });
 
 
-builder.Services.AddControllers();
+builder.Services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler =            ReferenceHandler.IgnoreCycles;
+                }); ;
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddEndpointsApiExplorer();

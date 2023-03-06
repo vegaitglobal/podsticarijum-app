@@ -89,19 +89,16 @@ public class DataSeeder : IDataSeeder
             }
         }
 
-        if (_podsticarijumContext.Expert.Count() < 20)
+        if (_podsticarijumContext.Expert.Count() < 5)
         {
             foreach(SubCategory subCategory in _podsticarijumContext.SubCategory)
             {
-                for (int i = 0; i < 5; i++)
-                {
-                    _podsticarijumContext.Expert.Add(
+                _podsticarijumContext.Expert.Add(
                         new Expert(subCategory: subCategory,
                             firstName: "Expert",
                             lastName: "Expertovic",
                             email: "validEmail@validprovider.com",
                             description: "description for expert"));
-                }
             }
         }
 

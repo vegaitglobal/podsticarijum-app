@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace podsticarijum_backend.Api.Controllers;
 
+//[Authorize]
 public class SubCategorySpecificCmsController : Controller
 {
     // GET: SubCategorySpecificController

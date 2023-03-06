@@ -9,7 +9,7 @@ using podsticarijum_backend.Repository.Abstractions;
 
 namespace podsticarijum_backend.Api.Controllers;
 
-
+//[Authorize]
 public class CategoryCmsController : Controller
 {
     private readonly ICategoryRepository _categoryRepository;
@@ -35,7 +35,6 @@ public class CategoryCmsController : Controller
     }
 
     //[Authorize(CookieAuthenticationDefaults.AuthenticationScheme)]
-    [Authorize]
     [HttpGet]
     public ActionResult Create()
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using podsticarijum_backend.Api.Viewmodels;
 using podsticarijum_backend.Application.DTO;
@@ -9,6 +10,7 @@ using podsticarijum_backend.Repository.Abstractions;
 
 namespace podsticarijum_backend.Api.Controllers;
 
+//[Authorize]
 public class SubCategoryCmsController : Controller
 {
     private readonly ICategoryRepository _categoryRepository;
