@@ -87,6 +87,6 @@ app.*.map.json
 *.scc
 
 # generated files
-linux/flutter
-macos/Flutter
-windows/flutter
+.linux/flutter
+.macos/Flutter
+.windows/flutter
