@@ -85,3 +85,8 @@ app.*.map.json
 *.pidb
 *.svclog
 *.scc
+
+# generated files
+linux/flutter
+macos/Flutter
+windows/flutter
