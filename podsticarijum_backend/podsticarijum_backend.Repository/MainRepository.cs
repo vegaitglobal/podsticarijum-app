@@ -19,6 +19,13 @@ public class MainRepository : IMainRepository
         _podsticarijumContext = podsticarijumContext;
     }
 
+    public Task<User?> GetUser(string username, string password)
+        => _podsticarijumContext.User.Where(
+            u => username.ToLower() == u.Username.ToLower()
+            && password.ToLower() == u.Password.ToLower()
+            ).FirstOrDefaultAsync();
+    
+
     public async Task<Content?> GetContentById(long id, bool tracking = false)
     {
         var query = _podsticarijumContext.Content.Where(c => c.Id == id);
@@ -28,6 +35,12 @@ public class MainRepository : IMainRepository
     public async Task<List<Content>> GetContentByType(ContentType contentType, bool tracking = false)
     {
         var query = _podsticarijumContext.Content.Where(c => c.ContentType == contentType);
+        return tracking ? await query.ToListAsync() : await query.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<List<Content>> GetAll(bool tracking = false)
+    {
+        var query = _podsticarijumContext.Content;
         return tracking ? await query.ToListAsync() : await query.AsNoTracking().ToListAsync();
     }
 

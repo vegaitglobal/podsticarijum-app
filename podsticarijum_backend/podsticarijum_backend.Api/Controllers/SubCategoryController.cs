@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using podsticarijum_backend.Application;
 using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Application.DtoExtensions;
 using podsticarijum_backend.Application.EntityExtensions;
+using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
@@ -36,7 +38,7 @@ public class SubCategoryController : ControllerBase
     {
         List<SubCategory> subCategories = await _subCategoryRepository.GetAll().ConfigureAwait(false);
 
-        return Ok(subCategories);
+        return Ok(subCategories.ToDto());
     }
 
     [HttpPost("{subCategoryId}/email")]
@@ -53,18 +55,19 @@ public class SubCategoryController : ControllerBase
                 _mailService.AppPackageName = emailDto.AppPackageName;
             }
 
-            var expert = await _expertRepository.GetExpertForSubCategory(subCategoryId).ConfigureAwait(false);
+            var experts = await _expertRepository.GetExpertsForSubCategory(subCategoryId).ConfigureAwait(false);
 
-            if (expert == null)
+            if (experts.Count() != 1)
             {
                 return BadRequest("Experts not found.");
             }
 
-            await _mailService.sendEmail(ToMailAddress: expert.Email, subject: emailDto.Subject, body: emailDto.Body);
+            await _mailService.sendEmail(ToMailAddress: experts[0].Email, subject: emailDto.Subject, body: emailDto.Body);
             return Ok();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             return BadRequest("There was an error.");
         }
     }
@@ -72,47 +75,25 @@ public class SubCategoryController : ControllerBase
     [HttpGet("{subCategoryId}/expert")]
     public async Task<ActionResult<List<Expert?>>> GetExpertBySubCategoryId([FromRoute] long subCategoryId)
     {
-        Expert? expert = await _expertRepository.GetExpertForSubCategory(subCategoryId).ConfigureAwait(false);
-        if (expert == null)
+        List<Expert> experts = await _expertRepository.GetExpertsForSubCategory(subCategoryId).ConfigureAwait(false);
+
+        if (!experts.Any())
         {
             return NotFound();
         }
-
-        return Ok(expert);
-    }
-
-    [HttpPost("{subCategoryId}/expert")]
-    public async Task<ActionResult<ExpertDto>> CreateExpert([FromRoute] long subCategoryId, [FromBody] ExpertRequestDto expertRequestDto)
-    {
-        if (expertRequestDto == null || expertRequestDto.Email == null)
+        if (experts.Count() > 1)
         {
-            return BadRequest("Expert data is not sent.");
+            return BadRequest();
         }
 
-        SubCategory? subCategory = await _subCategoryRepository.Get(subCategoryId, tracking: true).ConfigureAwait(false);
-        if (subCategory == null)
-        {
-            return BadRequest("SubCategory is not correct.");
-        }
-        expertRequestDto.SubCategoryDto = subCategory.ToDto();
-        expertRequestDto.SubCategoryDto.Id = subCategory.Id;
-        var expertDto = new ExpertDto(
-            subCategory.ToDto(),
-            firstName: expertRequestDto.FirstName,
-            lastName: expertRequestDto.LastName,
-            email: expertRequestDto.Email);
-        var expert = expertDto.ToDomainModel();
-        expert.SubCategory = subCategory;
-
-        var expertInsertedId = await _expertRepository.Insert(expert).ConfigureAwait(false);
-        expertDto.Id = expertInsertedId;
-        return Ok(expertDto);
+        return Ok(experts[0]);
     }
 
     [HttpDelete("{subCategoryId}")]
     public async Task<ActionResult> Delete([FromRoute] long subCategoryId)
     {
         SubCategory? subCategory = await _subCategoryRepository.Get(subCategoryId).ConfigureAwait(false);
+
         if (subCategory == null)
         {
             return NotFound();
@@ -121,4 +102,19 @@ public class SubCategoryController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet("{subCategoryId}/SubCategorySpecificContent")]
+    public async Task<ActionResult> GetSubcategorySpecificContent(
+        [FromRoute] long subCategoryId,
+        [FromQuery] ParagraphSign paragraphSign = ParagraphSign.Default
+        )
+    {
+        List<SubCategorySpecificContent> subCategorySpecificContent = await
+            _subCategoryRepository.GetSubCategorySpecificForSubCategory(
+                subCategoryId
+                );
+
+        return Ok(subCategorySpecificContent.ToDto());
+    }
+
 }

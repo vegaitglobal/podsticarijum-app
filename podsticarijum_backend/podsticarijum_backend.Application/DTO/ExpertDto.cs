@@ -10,12 +10,25 @@ namespace podsticarijum_backend.Application.DTO;
 
 public class ExpertDto
 {
-    public ExpertDto(SubCategoryDto? subCategoryDto, string firstName, string lastName, string email)
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public ExpertDto()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    {
+
+    }
+
+    public ExpertDto(
+        SubCategoryDto? subCategoryDto, 
+        string firstName, 
+        string lastName, 
+        string email,
+        string description)
     {
         SubCategoryDto = subCategoryDto;
         FirstName = firstName;
         LastName = lastName;
         Email = email;
+        Description = description;
     }
 
     public long Id { get; set; }
@@ -28,4 +41,6 @@ public class ExpertDto
     public string LastName { get; set; }
 
     public string Email { get; set; }
+
+    public string Description { get; set; }
 }

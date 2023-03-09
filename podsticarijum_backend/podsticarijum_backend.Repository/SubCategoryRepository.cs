@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
@@ -40,6 +36,21 @@ public class SubCategoryRepository : ISubCategoryRepository
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
 
+    public Task<List<SubCategorySpecificContent>> GetSubCategorySpecificForSubCategory(long subCategoryId, ParagraphSign paragraphSign = ParagraphSign.Default, bool tracking = false)
+    {
+        var query = _podsticarijumContext.SubCategorySpecificContent
+            .Include(sc => sc.SubCategory)
+            .Where(sc => sc.SubCategory.Id == subCategoryId);
+
+        if (paragraphSign != ParagraphSign.Default)
+        {
+            query = query.Where(sc => sc.ParagraphSign == paragraphSign);
+        }
+
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
+    }
+
+
     public async Task<long> Insert(SubCategory subCategory)
     {
         _podsticarijumContext.Add(subCategory);
@@ -53,9 +64,39 @@ public class SubCategoryRepository : ISubCategoryRepository
         await _podsticarijumContext.SaveChangesAsync();
     }
 
+    public async Task Update(SubCategorySpecificContent content)
+    {
+        _podsticarijumContext.Update(content);
+        await _podsticarijumContext.SaveChangesAsync();
+    }
+
     public async Task Delete(SubCategory subCategory)
     {
         _podsticarijumContext.Remove(subCategory);
         await _podsticarijumContext.SaveChangesAsync();
+    }
+
+    public Task<List<SubCategorySpecificContent>> GetAllSubCategorySpecific(bool tracking = false)
+    {
+        var query = _podsticarijumContext.SubCategorySpecificContent
+            .Include(sc => sc.SubCategory)
+            .Include(sc => sc.SubCategory.Category);
+
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<long> Insert(SubCategorySpecificContent content)
+    {
+        _podsticarijumContext.Add(content);
+        var insertedId = await _podsticarijumContext.SaveChangesAsync();
+        return insertedId;
+    }
+
+    public Task<SubCategorySpecificContent?> GetSubCategorySpecific(long id, bool tracking = false)
+    {
+        var query = _podsticarijumContext.SubCategorySpecificContent
+            .Include(sc => sc.SubCategory);
+
+        return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }
 }

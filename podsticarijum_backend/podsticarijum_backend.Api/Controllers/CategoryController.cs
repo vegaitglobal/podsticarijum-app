@@ -87,7 +87,7 @@ public class CategoryController : ControllerBase
         }
 
         var category = await _categoryRepository.Get(categoryId, tracking: true);
-        
+
         if (category == null)
         {
             return BadRequest();
@@ -124,30 +124,6 @@ public class CategoryController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult> Update([FromRoute] long id, [FromBody] CategoryRequestDto categoryDto)
-    {
-        if (isCategoryDtoValid(categoryDto))
-        {
-            return BadRequest();
-        }
-
-        Category? category = await _categoryRepository.Get(id).ConfigureAwait(false);
-        if (category == null)
-        {
-            return BadRequest();
-        }
-        try
-        {
-            await _categoryRepository.Update(categoryDto.ToDomainModel());
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
     [HttpGet("{categoryId}/faq")]
     public async Task<ActionResult<List<Faq>>> GetAllForCategory([FromRoute] long categoryId)
     {
@@ -156,28 +132,30 @@ public class CategoryController : ControllerBase
         return Ok(faqs);
     }
 
-    [HttpPost("{categoryId}/faq")]
-    public async Task<ActionResult<Faq>> CreateFaq([FromRoute] long categoryId, [FromBody] FaqRequestDto faqRequestDto)
+    [HttpPost("{subCategoryId}/faq")]
+    public async Task<ActionResult<Faq>> CreateFaq([FromRoute] long subCategoryId, [FromBody] FaqRequestDto faqRequestDto)
     {
-        if ( string.IsNullOrEmpty(faqRequestDto.Question) || string.IsNullOrEmpty(faqRequestDto.Answer))
+        if (string.IsNullOrEmpty(faqRequestDto.Question) || string.IsNullOrEmpty(faqRequestDto.Answer))
         {
             return BadRequest("FAQ should have non empty question and answer.");
         }
-        Category? category = await _categoryRepository.Get(categoryId, tracking: true).ConfigureAwait(false);
-        if(category == null)
+
+        SubCategory? subCategory = await _subCategoryRepository.Get(subCategoryId, tracking: true).ConfigureAwait(false);
+
+        if (subCategory == null)
         {
             return BadRequest("Category does not exist.");
         }
 
-        var faqDto = new FaqDto(question: faqRequestDto.Question, answer: faqRequestDto.Answer);
-        faqDto.CategoryDto = category.ToDto();
-        var faq = faqDto.ToDomainModel();
-        faq.Category = category;
+        Faq faq = new(
+            subCategory: subCategory, 
+            question: faqRequestDto.Question,
+            answer: faqRequestDto.Answer);
 
         var insertedFaqId = await _faqRepository.Insert(faq);
-        faqDto.Id = insertedFaqId;
+        faq.Id = insertedFaqId;
 
-        return Ok(faqDto);
+        return Ok(faq.ToDto());
     }
 
     [HttpDelete("{categoryId}")]

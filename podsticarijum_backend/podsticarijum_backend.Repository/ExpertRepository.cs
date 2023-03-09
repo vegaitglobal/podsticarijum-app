@@ -35,12 +35,12 @@ public class ExpertRepository : IExpertRepository
 
     }
 
-    public Task<Expert?> GetExpertForSubCategory(long subCategoryId, bool tracking = false)
+    public Task<List<Expert>> GetExpertsForSubCategory(long subCategoryId, bool tracking = false)
     {
         var query = _podsticarijumContext.Expert.Include(e => e.SubCategory)
                                        .Include(e => e.SubCategory.Category)
                                        .Where(e => e.SubCategory.Id == subCategoryId);
-        return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
 
     public async Task<long> Insert(Expert expert)

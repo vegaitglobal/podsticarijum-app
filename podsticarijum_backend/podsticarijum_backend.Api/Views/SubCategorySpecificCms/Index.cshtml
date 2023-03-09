@@ -1,0 +1,52 @@
+﻿@model List<podsticarijum_backend.Application.DTO.SubCategorySpecificDto>;
+@{
+    ViewData["Title"] = "Index";
+}
+<h3>Frequently asked questions</h3>
+<p>
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+</p>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Edit&nbsp;|&nbsp;Delete</th>
+            <th>
+                Sub Category
+            </th>
+            <th>
+                Page Title
+            </th>
+            <th>
+                Paragraph Text
+            </th>
+            <th>
+                Flag Colour
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a class="link-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="link-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.
+                SubCategoryDto.MainNavMenuText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PageTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParagraphText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParagraphSign)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

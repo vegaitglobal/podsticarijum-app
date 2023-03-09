@@ -12,4 +12,7 @@ public static class ContentExtensions
 {
     public static ContentDto ToDto(this Content content)
         => new(id: content.Id, contentType: content.ContentType, text: content.Text);
+
+    public static List<ContentDto> ToDto(this List<Content> contentList)
+        => contentList.Select(c => c.ToDto()).ToList();
 }

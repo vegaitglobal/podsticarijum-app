@@ -9,12 +9,18 @@ public class Expert : EntityTimestamps
 
     }
 
-    public Expert(SubCategory subCategory, string firstName, string lastName, string email)
+    public Expert(
+        SubCategory subCategory, 
+        string firstName, 
+        string lastName, 
+        string email, 
+        string description)
     {
         SubCategory = subCategory ?? throw new ArgumentNullException(nameof(subCategory));
         FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
         LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
         Email = email ?? throw new ArgumentNullException(nameof(email));
+        Description = description ?? throw new ArgumentNullException(nameof(description));
     }
 
     public long Id { get; set; }
@@ -26,4 +32,6 @@ public class Expert : EntityTimestamps
     public string LastName { get; set; }
 
     public string Email { get; set; }
+
+    public string Description { get; set; }
 }

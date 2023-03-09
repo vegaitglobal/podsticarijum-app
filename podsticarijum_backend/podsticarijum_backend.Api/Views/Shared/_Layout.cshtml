@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        @ViewData["Title"] - podsticarijum
+    </title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/podsticarijum_backend.Cms.styles.css" asp-append-version="true" />
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        
+                        <a class="navbar-brand" href="/"><img style="height:40px;width:40px;" src="~/podsti.svg" />&nbsp podsticarijum</a>
+                    </li>
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/maincms">Main Content</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="true" href="/categorycms">Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/subcategorycms">Sub Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/subcategoryspecificcms">Sub Category Content </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/expertcms">Experts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/faqcms">Faq</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <hr />
+        </nav>
+    </header>
+
+    <div class="container" style="min-height:800px;">
+        <main role="main" class="pb-3">
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            podsticarijum &copy; 2023
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

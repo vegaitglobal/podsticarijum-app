@@ -15,9 +15,8 @@ public class Content : EntityTimestamps
 
     }
 
-    public Content(long id, ContentType contentType, string text)
+    public Content(ContentType contentType, string text)
     {
-        Id = id;
         ContentType = contentType;
         Text = text;
     }

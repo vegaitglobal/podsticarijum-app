@@ -6,7 +6,7 @@ public interface IExpertRepository
 {
     Task<Expert?> Get(long expertId, bool tracking = false);
 
-    Task<Expert?> GetExpertForSubCategory(long subCategoryId, bool tracking = false);
+    Task<List<Expert>> GetExpertsForSubCategory(long subCategoryId, bool tracking = false);
 
     Task<List<Expert>> GetAll(bool tracking = false);
 

@@ -58,7 +58,7 @@ public class MainController : ControllerBase
             }
 
             var insertedObjectId = await _mainRepository.Insert(entity).ConfigureAwait(false);
-            
+
             return Ok(entity.ToDto());
         }
         catch (Exception)

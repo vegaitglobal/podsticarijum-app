@@ -1,0 +1,53 @@
+﻿@model List<podsticarijum_backend.Application.DTO.ExpertDto>;
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Experts</h3>
+<p>
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Edit&nbsp;|&nbsp;Delete</th>
+            <th>
+                Sub Category
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                Email
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a class="link-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="link-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+                <td>
+                    @Html.Raw(
+                        $"{item.SubCategoryDto!.MainNavMenuText} [{item.SubCategoryDto!.CategoryDto!.NavMenuText}]")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

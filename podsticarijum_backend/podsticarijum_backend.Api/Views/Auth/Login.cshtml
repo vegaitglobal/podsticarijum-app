@@ -1,0 +1,29 @@
+﻿@model podsticarijum_backend.Api.Viewmodels.LoginViewModel;
+
+@{
+    <br>
+    <div class="row">
+        <div class="col-md-4 offset-2">
+            <h6>Morate se ulogovati da bi pristupili unosu podataka.</h6>
+            <form method="POST">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.Username" class="control-label"></label>
+                    <input asp-for="@Model.Username" class="form-control" />
+                    <span asp-validation-for="@Model.Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Password" class="control-label"></label>
+                    <input  asp-for="@Model.Password" class="form-control" />
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <input type="submit" value="Login" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+}

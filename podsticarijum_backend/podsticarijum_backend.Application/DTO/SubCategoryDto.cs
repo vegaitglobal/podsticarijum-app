@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using podsticarijum_backend.Domain.Entities;
-
-namespace podsticarijum_backend.Application.DTO;
+﻿namespace podsticarijum_backend.Application.DTO;
 
 public class SubCategoryDto
 {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    protected SubCategoryDto()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    {
+    }
+
     public SubCategoryDto(long id, CategoryDto? categoryDto, string mainNavMenuText, string mainText, string additionalText, string checkMoreButtonText, string checkMorePageTitle, string checkMorePageText, string developmentSupportingActivitiesButtonText, string atypicalDevelopmentSignsText, bool active)
     {
         Id = id;

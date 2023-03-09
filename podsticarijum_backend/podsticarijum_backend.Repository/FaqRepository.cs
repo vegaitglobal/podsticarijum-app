@@ -18,11 +18,28 @@ public class FaqRepository : IFaqRepository
         _podsticarijumContext = podsticarijumContext;
     }
 
+    public Task<Faq?> Get(long id, bool tracking = false)
+    {
+        var query = _podsticarijumContext.Faq.Where(f => f.Id == id)
+                                             .Include(f => f.SubCategory)
+                                             .Include(f => f.SubCategory.Category);
+        return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
+    }
+
     public Task<List<Faq>> GetFaqsForCategory(long categoryId, bool tracking = false)
     {
         var query = _podsticarijumContext.Faq
-                                    .Include(faq => faq.Category)
-                                    .Where(faq => faq.Category.Id == categoryId);
+                                    .Include(faq => faq.SubCategory)
+                                    .Include(faq => faq.SubCategory.Category)
+                                    .Where(faq => faq.SubCategory.Category.Id == categoryId);
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
+    }
+
+    public Task<List<Faq>> GetAll(bool tracking = false)
+    {
+        var query = _podsticarijumContext.Faq
+            .Include(faq => faq.SubCategory)
+            .Include(faq => faq.SubCategory.Category);
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
 

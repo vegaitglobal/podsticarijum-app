@@ -1,0 +1,69 @@
+﻿@model List<podsticarijum_backend.Application.DTO.CategoryFullDto>;
+
+@{
+    ViewData["Title"] = "Category Index";
+}
+
+<h3>SubCategories</h3>
+<p>
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+</p>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Edit&nbsp;|&nbsp;Delete</th>
+            <th>Category</th>
+            <th>MainNavMenuText</th>
+            <th>MainText</th>
+            <th>AdditionalText</th>
+            <th>CheckMoreButtonText</th>
+            <th>CheckMorePageTitle</th>
+            <th>CheckMoreButtonText</th>
+            <th>DevelopmentSupportingActivitiesButtonText</th>
+            <th>AtypicalDevelopmentSignsText</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            foreach (var subCategory in category.SubCategories)
+            {
+                <tr>
+                    <td>
+                        <a class="link-warning" asp-action="Edit" asp-route-id="@subCategory.Id">Edit</a> |
+                        <a class ="link-danger" asp-action="Delete" asp-route-id="@subCategory.Id">Delete</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.CategoryDto!.NavMenuText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.MainNavMenuText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.MainText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.AdditionalText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.CheckMoreButtonText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.CheckMorePageTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.CheckMorePageText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.DevelopmentSupportingActivitiesButtonText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => subCategory.AtypicalDevelopmentSignsText)
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

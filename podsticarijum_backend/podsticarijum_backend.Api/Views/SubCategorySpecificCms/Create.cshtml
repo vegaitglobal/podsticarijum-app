@@ -1,0 +1,53 @@
+﻿@model podsticarijum_backend.Api.Viewmodels.SubCategorySpecificViewModel;
+
+@{
+    ViewData["Title"] = "Content Create";
+}
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h4>Create subcategory content</h4>
+            <br />
+            <div class="form-group"> 
+                <select class="form-control" asp-for="@Model.SubCategoryId"
+                        asp-items="@Model.SubCategoryDtoList">
+                </select>
+            </div>
+            <br />
+            <div class="form-group"> 
+                <select class="form-control" asp-for="@Model.ParagraphSign"
+                        asp-items="@Model.ParagraphSigns">
+                </select>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.PageTitle" class="control-label"></label>
+                <input asp-for="@Model.PageTitle" class="form-control" />
+                <span asp-validation-for="@Model.PageTitle" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.ParagraphText" class="control-label"></label>
+                <input asp-for="@Model.ParagraphText" class="form-control" />
+                <span asp-validation-for="@Model.ParagraphText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

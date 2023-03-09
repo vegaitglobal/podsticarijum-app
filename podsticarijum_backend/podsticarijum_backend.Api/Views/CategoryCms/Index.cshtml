@@ -1,0 +1,41 @@
+﻿@model List<podsticarijum_backend.Application.DTO.CategoryDto>;
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Categories</h3>
+
+<p>
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Edit&nbsp;|&nbsp;Delete</th>
+            <th>
+                Category
+            </th>
+            <th>
+                Description
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a class="link-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="link-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NavMenuText)
+                </td>
+                <td >
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

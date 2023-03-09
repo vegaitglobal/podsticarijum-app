@@ -1,0 +1,53 @@
+﻿@model podsticarijum_backend.Api.Viewmodels.SubCategorySpecificViewModel;
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<br />
+<h1>Edit</h1>
+<hr />
+
+
+<h4>Frequently asked questions</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div class="form-group">
+                <label asp-for="@Model.PageTitle" class="control-label"></label>
+                <input asp-for="@Model.PageTitle" class="form-control" />
+                <span asp-validation-for="@Model.PageTitle" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="@Model.ParagraphText" class="control-label"></label>
+                <input asp-for="@Model.ParagraphText" class="form-control" />
+                <span asp-validation-for="@Model.ParagraphText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label">Flag</label>
+                <select class="form-control" asp-for="@Model.ParagraphSign"
+                        asp-items="@Model.ParagraphSigns">
+                </select>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
