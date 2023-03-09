@@ -1,9 +1,19 @@
-﻿namespace podsticarijum_backend.Application.DTO;
+﻿
+namespace podsticarijum_backend.Application.DTO;
 
 public class FaqDto
 {
-    public FaqDto(string question, string answer)
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public FaqDto()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
+
+    }
+
+    public FaqDto(long id, SubCategoryDto subCategoryDto, string question, string answer)
+    {
+        Id = id;
+        SubCategoryDto = subCategoryDto;
         Question = question;
         Answer = answer;
     }

@@ -13,6 +13,6 @@ public static class SubCategorySpecificExtensions
         paragraphText: subCategorySpecificContent.ParagraphText,
         paragraphSign: subCategorySpecificContent.ParagraphSign);
 
-    public static List<SubCategorySpecificDto> ToDto(this IEnumerable<SubCategorySpecificContent> subCategorySpecificContents)
-        => subCategorySpecificContents.Select(scc => scc.ToDto()).ToList();
+    public static List<SubCategorySpecificDto?> ToDto(this IEnumerable<SubCategorySpecificContent> subCategorySpecificContents)
+        => subCategorySpecificContents.Select(scc => scc?.ToDto()).ToList();
 }

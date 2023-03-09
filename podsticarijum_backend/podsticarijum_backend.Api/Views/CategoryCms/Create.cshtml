@@ -4,17 +4,15 @@
     ViewData["Title"] = "Category Create";
 }
 
-<h1>Create</h1>
-
-<h4>Category</h4>
-<hr />
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+<br />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6 offset-2">
+        <h4>Create a category</h4>
+        <br />
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -22,6 +20,7 @@
                 <input asp-for="NavMenuText" class="form-control" />
                 <span asp-validation-for="NavMenuText" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />

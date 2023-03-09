@@ -1,15 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using podsticarijum_backend.Api.Viewmodels;
+using podsticarijum_backend.Application.EntityExtensions;
+using podsticarijum_backend.Domain;
+using podsticarijum_backend.Domain.Entities;
+using podsticarijum_backend.Repository.Abstractions;
 
 namespace podsticarijum_backend.Api.Controllers;
 
 //[Authorize]
 public class SubCategorySpecificCmsController : Controller
 {
-    // GET: SubCategorySpecificController
-    public ActionResult Index()
+    private readonly ISubCategoryRepository _subCategoryRepository;
+    public SubCategorySpecificCmsController(ISubCategoryRepository subCategoryRepository)
     {
-        return View();
+        _subCategoryRepository = subCategoryRepository;
+    }
+    // GET: SubCategorySpecificController
+    public async Task<ActionResult> Index()
+    {
+        List<SubCategorySpecificContent> contents = await _subCategoryRepository.GetAllSubCategorySpecific();
+
+        return View(contents.ToDto());
     }
 
     // GET: SubCategorySpecificController/Details/5
@@ -19,45 +32,117 @@ public class SubCategorySpecificCmsController : Controller
     }
 
     // GET: SubCategorySpecificController/Create
-    public ActionResult Create()
+    public async Task<ActionResult> Create()
     {
-        return View();
+        var subCategories = await _subCategoryRepository.GetAll();
+        var paragraphSigns = Enum.GetValues<ParagraphSign>().Cast<ParagraphSign>();
+        SubCategorySpecificViewModel contentViewModel = new()
+        {
+            SubCategoryDtoList = subCategories.Select(sc =>
+                new SelectListItem()
+                {
+                    Text = sc.MainNavMenuText,
+                    Value = sc.Id.ToString()
+                }),
+            ParagraphSigns = paragraphSigns.Select(ps =>
+                new SelectListItem()
+                {
+                    Text = ps.ToString(),
+                    Value = ((int)ps).ToString()
+                }
+            )
+        };
+
+        return View(contentViewModel);
     }
 
     // POST: SubCategorySpecificController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(IFormCollection collection)
+    public async Task<ActionResult> Create(SubCategorySpecificViewModel viewModel)
     {
-        try
+        SubCategory? subCategory = await _subCategoryRepository
+                                    .Get(viewModel.SubCategoryId, tracking: true)
+                                    .ConfigureAwait(false);
+
+        if (subCategory == null)
         {
-            return RedirectToAction(nameof(Index));
+            return NotFound();
         }
-        catch
+
+        ParagraphSign sign = ParagraphSign.Default;
+
+        if (Enum.TryParse(viewModel.ParagraphSign, out sign))
         {
-            return View();
+            SubCategorySpecificContent content = new(
+                subCategory: subCategory,
+                pageTitle: viewModel.PageTitle,
+                paragraphText: viewModel.ParagraphText,
+                paragraphSign: sign
+                );
+
+            await _subCategoryRepository.Insert(content);
         }
+
+        return RedirectToAction("");
     }
 
     // GET: SubCategorySpecificController/Edit/5
-    public ActionResult Edit(int id)
+    public async Task<ActionResult> Edit(int id)
     {
-        return View();
+        SubCategorySpecificContent? content = await _subCategoryRepository.GetSubCategorySpecific(id);
+        List<SubCategory> subCategories = await _subCategoryRepository.GetAll();
+
+        if (content == null)
+        {
+            return BadRequest();
+        }
+
+        var paragraphSigns = Enum.GetValues<ParagraphSign>().Cast<ParagraphSign>();
+        
+        SubCategorySpecificViewModel contentViewModel = new()
+        {
+            SubCategoryDtoList = subCategories.Select(sc =>
+                new SelectListItem()
+                {
+                    Text = sc.MainNavMenuText,
+                    Value = sc.Id.ToString(),
+                    Selected = sc.Id == content.SubCategory.Id
+                }),
+            ParagraphSigns = paragraphSigns.Select(ps =>
+                new SelectListItem()
+                {
+                    Text = ps.ToString(),
+                    Value = ((int)ps).ToString(),
+                    Selected = ps == content.ParagraphSign
+                }
+            ),
+            ParagraphText = content.ParagraphText,
+            PageTitle = content.PageTitle
+        };
+
+        return View(contentViewModel);
     }
 
     // POST: SubCategorySpecificController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(int id, IFormCollection collection)
+    public async Task<ActionResult> Edit(int id, SubCategorySpecificViewModel viewModel)
     {
-        try
+        ParagraphSign sign = ParagraphSign.Default;
+
+        if (!Enum.TryParse(viewModel.ParagraphSign, out sign))
         {
-            return RedirectToAction(nameof(Index));
+            return BadRequest();
         }
-        catch
+
+        SubCategorySpecificContent? content = await _subCategoryRepository.GetSubCategorySpecific(id);
+        if (content == null)
         {
-            return View();
+            return BadRequest();
         }
+        return Ok();
+
     }
 
     // GET: SubCategorySpecificController/Delete/5

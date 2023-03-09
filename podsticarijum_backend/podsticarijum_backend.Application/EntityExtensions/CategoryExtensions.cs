@@ -1,5 +1,4 @@
 ﻿using podsticarijum_backend.Application.DTO;
-using podsticarijum_backend.Application.DtoExtensions;
 using podsticarijum_backend.Domain.Entities;
 
 namespace podsticarijum_backend.Application.EntityExtensions;

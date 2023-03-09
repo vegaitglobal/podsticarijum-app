@@ -139,21 +139,23 @@ public class CategoryController : ControllerBase
         {
             return BadRequest("FAQ should have non empty question and answer.");
         }
+
         SubCategory? subCategory = await _subCategoryRepository.Get(subCategoryId, tracking: true).ConfigureAwait(false);
+
         if (subCategory == null)
         {
             return BadRequest("Category does not exist.");
         }
 
-        var faqDto = new FaqDto(question: faqRequestDto.Question, answer: faqRequestDto.Answer);
-        faqDto.SubCategoryDto = subCategory.ToDto();
-        var faq = faqDto.ToDomainModel();
-        faq.SubCategory = subCategory;
+        Faq faq = new(
+            subCategory: subCategory, 
+            question: faqRequestDto.Question,
+            answer: faqRequestDto.Answer);
 
         var insertedFaqId = await _faqRepository.Insert(faq);
-        faqDto.Id = insertedFaqId;
+        faq.Id = insertedFaqId;
 
-        return Ok(faqDto);
+        return Ok(faq.ToDto());
     }
 
     [HttpDelete("{categoryId}")]

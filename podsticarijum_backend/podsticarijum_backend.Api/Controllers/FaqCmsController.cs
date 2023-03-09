@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using podsticarijum_backend.Api.Viewmodels;
 using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Application.EntityExtensions;
@@ -26,7 +27,6 @@ public class FaqCmsController : Controller
     public async Task<ActionResult<List<FaqDto>>> Index()
     {
         List<Faq> faqs = await _faqRepository.GetAll();
-
         return View(faqs.ToDto());
     }
 
@@ -41,8 +41,18 @@ public class FaqCmsController : Controller
     {
         List<Faq> faqs = await _faqRepository.GetAll();
         var subCategories = faqs.Select(f => f.SubCategory);
+        FaqViewModel faqViewModel = new()
+        {
+            SubCategoryDtoList = subCategories.Select(sc =>
+                new SelectListItem() 
+                {
+                    Text = $"{sc.MainNavMenuText} [{sc.Category.NavMenuText}]",
+                    Value = sc.Id.ToString()
+                }
+            )
+        };
 
-        return View(subCategories.ToDto());
+        return View(faqViewModel);
     }
 
     // POST: FaqCmsController/Create
@@ -50,7 +60,7 @@ public class FaqCmsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(FaqViewModel faqViewModel)
     {
-        SubCategory? subCategory = await _subCategoryRepository.Get(faqViewModel.SubCategoryId);
+        SubCategory? subCategory = await _subCategoryRepository.Get(faqViewModel.SubCategoryId, tracking: true);
 
         if (subCategory == null)
         {
@@ -95,6 +105,7 @@ public class FaqCmsController : Controller
         faq.Question = faqDto.Question;
         faq.Answer = faqDto.Answer;
         faq.UpdatedAt = DateTime.UtcNow;
+        await _faqRepository.Update(faq);
 
         return RedirectToAction("");
     }
@@ -109,7 +120,7 @@ public class FaqCmsController : Controller
             return NotFound();
         }
 
-        return View();
+        return View(faq.ToDto());
     }
 
     // POST: FaqCmsController/Delete/5

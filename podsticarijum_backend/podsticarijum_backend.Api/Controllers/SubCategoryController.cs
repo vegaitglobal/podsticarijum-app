@@ -110,9 +110,9 @@ public class SubCategoryController : ControllerBase
         )
     {
         List<SubCategorySpecificContent> subCategorySpecificContent = await
-            _subCategoryRepository.GetSubCategorySpecific(
-                subCategoryId, 
-                paragraphSign);
+            _subCategoryRepository.GetSubCategorySpecificForSubCategory(
+                subCategoryId
+                );
 
         return Ok(subCategorySpecificContent.ToDto());
     }

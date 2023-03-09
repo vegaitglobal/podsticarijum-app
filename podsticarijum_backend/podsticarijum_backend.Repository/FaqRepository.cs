@@ -21,7 +21,8 @@ public class FaqRepository : IFaqRepository
     public Task<Faq?> Get(long id, bool tracking = false)
     {
         var query = _podsticarijumContext.Faq.Where(f => f.Id == id)
-                                             .Include(f => f.SubCategory);
+                                             .Include(f => f.SubCategory)
+                                             .Include(f => f.SubCategory.Category);
         return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }
 

@@ -14,5 +14,9 @@ public class SubCategorySpecificViewModel
 
     public string ParagraphText { get; set; }
 
+    public IEnumerable<SelectListItem> ParagraphSigns { get; set; }
+
+    public string ParagraphSign { get; set; }
+
     public SubCategorySpecificDto SubCategoryDto { get; set; }
 }

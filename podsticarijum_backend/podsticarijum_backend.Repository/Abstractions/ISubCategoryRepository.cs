@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using podsticarijum_backend.Domain;
+﻿using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;
 
 namespace podsticarijum_backend.Repository.Abstractions;
@@ -16,11 +11,19 @@ public interface ISubCategoryRepository
 
     Task<List<SubCategory>> GetForCategory(long categoryId, bool tracking = false);
 
-    Task<List<SubCategorySpecificContent>> GetSubCategorySpecific(long subCategoryId, ParagraphSign paragraphSign = ParagraphSign.Default, bool tracking = false);
+    Task<List<SubCategorySpecificContent>> GetSubCategorySpecificForSubCategory(long subCategoryId, ParagraphSign paragraphSign = ParagraphSign.Default, bool tracking = false);
+
+    Task<List<SubCategorySpecificContent>> GetAllSubCategorySpecific(bool tracking = false);
+
+    Task<SubCategorySpecificContent?> GetSubCategorySpecific(long id, bool tracking = false);
 
     Task Update(SubCategory subCategory);
+
+    Task Update(SubCategorySpecificContent content);
 
     Task Delete(SubCategory subCategory);
 
     Task<long> Insert(SubCategory subCategory);
+
+    Task<long> Insert(SubCategorySpecificContent content);
 }

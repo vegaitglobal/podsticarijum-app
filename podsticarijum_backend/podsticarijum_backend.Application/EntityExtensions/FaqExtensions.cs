@@ -7,6 +7,8 @@ public static class FaqExtensions
 {
     public static FaqDto ToDto(this Faq faqEntity) 
         => new FaqDto(
+            id : faqEntity.Id,
+            faqEntity.SubCategory.ToDto(),
             question: faqEntity.Question, 
             answer: faqEntity.Answer);
 

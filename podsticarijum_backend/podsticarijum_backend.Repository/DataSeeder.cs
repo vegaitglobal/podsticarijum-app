@@ -49,7 +49,7 @@ public class DataSeeder : IDataSeeder
             }
         }
 
-        if (_podsticarijumContext.SubCategorySpecificContent.Count() < 50)
+        if (_podsticarijumContext.SubCategorySpecificContent.Count() < 55)
         {
             foreach(SubCategory subCategory in _podsticarijumContext.SubCategory)
             {
@@ -67,11 +67,10 @@ public class DataSeeder : IDataSeeder
                         subCategory: subCategory,
                         pageTitle: "title!!!",
                         paragraphText: "paragraph texttt",
-                        paragraphSign: Domain.ParagraphSign.GreenFlag));
+                        paragraphSign: Domain.ParagraphSign.RedFlag));
                 }
             }
-        }
-        await _podsticarijumContext.SaveChangesAsync();
+        } 
 
         if (_podsticarijumContext.Faq.Count() < 50)
         {

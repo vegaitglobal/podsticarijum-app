@@ -4,6 +4,8 @@ namespace podsticarijum_backend.Api.Viewmodels;
 
 public class FaqViewModel
 {
+    public long Id { get; set; }
+
     public IEnumerable<SelectListItem> SubCategoryDtoList { get; set; } = null!;
 
     public long SubCategoryId { get; set; }

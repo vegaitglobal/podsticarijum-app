@@ -36,7 +36,7 @@ public class SubCategoryRepository : ISubCategoryRepository
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
 
-    public Task<List<SubCategorySpecificContent>> GetSubCategorySpecific(long subCategoryId, ParagraphSign paragraphSign = ParagraphSign.Default, bool tracking = false)
+    public Task<List<SubCategorySpecificContent>> GetSubCategorySpecificForSubCategory(long subCategoryId, ParagraphSign paragraphSign = ParagraphSign.Default, bool tracking = false)
     {
         var query = _podsticarijumContext.SubCategorySpecificContent
             .Include(sc => sc.SubCategory)
@@ -49,6 +49,7 @@ public class SubCategoryRepository : ISubCategoryRepository
 
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
+
 
     public async Task<long> Insert(SubCategory subCategory)
     {
@@ -63,9 +64,39 @@ public class SubCategoryRepository : ISubCategoryRepository
         await _podsticarijumContext.SaveChangesAsync();
     }
 
+    public async Task Update(SubCategorySpecificContent content)
+    {
+        _podsticarijumContext.Update(content);
+        await _podsticarijumContext.SaveChangesAsync();
+    }
+
     public async Task Delete(SubCategory subCategory)
     {
         _podsticarijumContext.Remove(subCategory);
         await _podsticarijumContext.SaveChangesAsync();
+    }
+
+    public Task<List<SubCategorySpecificContent>> GetAllSubCategorySpecific(bool tracking = false)
+    {
+        var query = _podsticarijumContext.SubCategorySpecificContent
+            .Include(sc => sc.SubCategory)
+            .Include(sc => sc.SubCategory.Category);
+
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<long> Insert(SubCategorySpecificContent content)
+    {
+        _podsticarijumContext.Add(content);
+        var insertedId = await _podsticarijumContext.SaveChangesAsync();
+        return insertedId;
+    }
+
+    public Task<SubCategorySpecificContent?> GetSubCategorySpecific(long id, bool tracking = false)
+    {
+        var query = _podsticarijumContext.SubCategorySpecificContent
+            .Include(sc => sc.SubCategory);
+
+        return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }
 }

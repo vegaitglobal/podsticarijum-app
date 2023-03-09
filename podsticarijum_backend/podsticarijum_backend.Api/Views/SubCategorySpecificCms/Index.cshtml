@@ -1,25 +1,27 @@
-﻿@model List<podsticarijum_backend.Application.DTO.FaqDto>;
+﻿@model List<podsticarijum_backend.Application.DTO.SubCategorySpecificDto>;
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
-
+<h3>Frequently asked questions</h3>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
 </p>
+<br />
 <table class="table">
     <thead>
         <tr>
             <th>Edit&nbsp;|&nbsp;Delete</th>
             <th>
-                Category
+                Sub Category
             </th>
             <th>
-                Question
+                Page Title
             </th>
             <th>
-                Answer
+                Paragraph Text
+            </th>
+            <th>
+                Flag Colour
             </th>
         </tr>
     </thead>
@@ -32,13 +34,17 @@
                     <a class="link-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.SubCategoryDto.MainNavMenuText)
+                    @Html.DisplayFor(modelItem => item.
+                SubCategoryDto.MainNavMenuText)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Question)
+                    @Html.DisplayFor(modelItem => item.PageTitle)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Answer)
+                    @Html.DisplayFor(modelItem => item.ParagraphText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParagraphSign)
                 </td>
             </tr>
         }

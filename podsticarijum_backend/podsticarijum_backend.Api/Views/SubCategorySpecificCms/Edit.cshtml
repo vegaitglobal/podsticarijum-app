@@ -1,14 +1,15 @@
-﻿@model podsticarijum_backend.Application.DTO.FaqDto;
+﻿@model podsticarijum_backend.Api.Viewmodels.SubCategorySpecificViewModel;
 
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<br />
+<h1>Edit</h1>
+<hr />
+
 
 <h4>Frequently asked questions</h4>
 <hr />
@@ -16,14 +17,22 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div class="form-group">
-                <label asp-for="@Model.Question" class="control-label"></label>
-                <input asp-for="@Model.Question" class="form-control" />
-                <span asp-validation-for="@Model.Question" class="text-danger"></span>
+                <label asp-for="@Model.PageTitle" class="control-label"></label>
+                <input asp-for="@Model.PageTitle" class="form-control" />
+                <span asp-validation-for="@Model.PageTitle" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <label asp-for="@Model.Answer" class="control-label"></label>
-                <input asp-for="@Model.Answer" class="form-control" />
-                <span asp-validation-for="@Model.Answer" class="text-danger"></span>
+                <label asp-for="@Model.ParagraphText" class="control-label"></label>
+                <input asp-for="@Model.ParagraphText" class="form-control" />
+                <span asp-validation-for="@Model.ParagraphText" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label">Flag</label>
+                <select class="form-control" asp-for="@Model.ParagraphSign"
+                        asp-items="@Model.ParagraphSigns">
+                </select>
             </div>
             <br />
             <div class="form-group">
