@@ -1,5 +1,7 @@
+import 'package:app_for_family_backup/api/models/SubcategoryModel.dart';
 import 'package:flutter/material.dart';
 
+import '../../api/podsticariju_api.dart';
 import '../../common/enums/age_group_type.dart';
 import '../../common/enums/app_bar_type.dart';
 import '../../common/enums/development_ascpect_type.dart';
@@ -8,12 +10,12 @@ import '../../common/widgets/custom_outline_button.dart';
 import '../category_details_screen/category_intro_screen.dart';
 
 class SubCategoriesScreenArguments {
-  AgeGroupType ageGroupType;
+  int categoryId;
 
-  SubCategoriesScreenArguments(this.ageGroupType);
+  SubCategoriesScreenArguments(this.categoryId);
 }
 
-class SubCategoriesScreen extends StatelessWidget {
+class SubCategoriesScreen extends StatefulWidget {
   static const route = '/subcategories';
   static const double _padding = 12;
   static const List<String> subCategories = [
@@ -27,10 +29,27 @@ class SubCategoriesScreen extends StatelessWidget {
   const SubCategoriesScreen({Key? key}) : super(key: key);
 
   @override
+  State<SubCategoriesScreen> createState() => _SubCategoriesScreenState();
+}
+
+class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
+  List<SubcategoryModel> subcategoryList = List.empty();
+
+  void getSubcategoryNameList(int categoryId) async {
+    var result = await PodsticarijumApi.getSubcategoryList(categoryId);
+
+    setState(() {
+      subcategoryList = result;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     SubCategoriesScreenArguments? args = ModalRoute.of(context)!
         .settings
         .arguments as SubCategoriesScreenArguments;
+
+    getSubcategoryNameList(args.categoryId);
 
     return SafeArea(
       child: Scaffold(
@@ -43,10 +62,12 @@ class SubCategoriesScreen extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ...DevelopmentAspectType.values
-                        .map((aspectType) =>
-                            _getColumnElement(context, aspectType, args))
-                        .toList(),
+                    ...subcategoryList.map((subcategory) => _getColumnElement(
+                        context, subcategory.name, subcategory.id, args))
+                    // ...DevelopmentAspectType.values
+                    //     .map((aspectType) =>
+                    //         _getColumnElement(context, aspectType, args))
+                    //     .toList(),
                   ]),
             ),
           ),
@@ -55,21 +76,22 @@ class SubCategoriesScreen extends StatelessWidget {
     );
   }
 
-  Widget _getColumnElement(BuildContext context, DevelopmentAspectType type,
+  Widget _getColumnElement(BuildContext context, String text, int subcategoryId,
       SubCategoriesScreenArguments args) {
     return Column(
       children: [
         CustomOutlineButton(
-          text: type.title,
+          text: text,
           onClick: () {
             Navigator.pushNamed(context, CategoryIntroScreen.route,
                 arguments: CategoryIntroScreenArguments(
-                  args.ageGroupType,
-                  type,
+                  // args.ageGroupType,
+                  AgeGroupType.first,
+                  DevelopmentAspectType.cognitive,
                 ));
           },
         ),
-        const SizedBox(height: _padding),
+        const SizedBox(height: SubCategoriesScreen._padding),
       ],
     );
   }
