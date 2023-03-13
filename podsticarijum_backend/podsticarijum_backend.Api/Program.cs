@@ -63,6 +63,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    PodsticarijumContext db = scope.ServiceProvider.GetRequiredService<PodsticarijumContext>();
+    db.Database.Migrate();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -73,12 +79,6 @@ if (app.Environment.IsDevelopment())
         IDataSeeder dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
         await dataSeeder.EnsureInitialSeed();
     }
-}
-
-using (var scope = app.Services.CreateScope())
-{
-    PodsticarijumContext db = scope.ServiceProvider.GetRequiredService<PodsticarijumContext>();
-    db.Database.Migrate();
 }
 
 app.UseHttpsRedirection();
