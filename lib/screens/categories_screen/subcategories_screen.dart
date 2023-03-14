@@ -62,8 +62,14 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ...subcategoryList.map((subcategory) => _getColumnElement(
-                        context, subcategory.name, subcategory.id, args))
+                    ...subcategoryList.map(
+                      (subcategory) => _getColumnElement(
+                        context,
+                        subcategory.name,
+                        args.categoryId,
+                        subcategory.id,
+                      ),
+                    )
                     // ...DevelopmentAspectType.values
                     //     .map((aspectType) =>
                     //         _getColumnElement(context, aspectType, args))
@@ -76,8 +82,12 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
     );
   }
 
-  Widget _getColumnElement(BuildContext context, String text, int subcategoryId,
-      SubCategoriesScreenArguments args) {
+  Widget _getColumnElement(
+    BuildContext context,
+    String text,
+    int categoryId,
+    int subcategoryId,
+  ) {
     return Column(
       children: [
         CustomOutlineButton(
@@ -85,9 +95,11 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
           onClick: () {
             Navigator.pushNamed(context, CategoryIntroScreen.route,
                 arguments: CategoryIntroScreenArguments(
+                  categoryId,
+                  subcategoryId,
                   // args.ageGroupType,
-                  AgeGroupType.first,
-                  DevelopmentAspectType.cognitive,
+                  // AgeGroupType.first,
+                  // DevelopmentAspectType.cognitive,
                 ));
           },
         ),

@@ -8,31 +8,47 @@ import '../../common/widgets/default_header.dart';
 import 'category_details_more_screen.dart';
 
 class CategoryIntroScreenArguments {
-  AgeGroupType ageGroupType;
-  DevelopmentAspectType developmentAspectType;
+  int categoryId;
+  int subcategoryId;
 
   CategoryIntroScreenArguments(
-    this.ageGroupType,
-    this.developmentAspectType,
+    this.categoryId,
+    this.subcategoryId,
   );
 }
 
-class CategoryIntroScreen extends StatelessWidget {
+class CategoryIntroScreen extends StatefulWidget {
   static const String route = '/category_details_intro';
 
+  CategoryIntroScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CategoryIntroScreen> createState() => _CategoryIntroScreenState();
+}
+
+class _CategoryIntroScreenState extends State<CategoryIntroScreen> {
   final String description =
       ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! ';
 
-  final List<String> bulletpointList = [
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
-  ];
+  // final List<String> bulletpointList = [
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+  // ];
+  final List<String> bulletpointList = [];
 
-  CategoryIntroScreen({Key? key}) : super(key: key);
+  List<SubcategoryModel> subcategoryList = List.empty();
+
+  void getSubcategoryNameList(int categoryId) async {
+    var result = await PodsticarijumApi.getSubcategoryList(categoryId);
+
+    setState(() {
+      subcategoryList = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +70,7 @@ class CategoryIntroScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 25),
-                    buildTitle(context, args.developmentAspectType.title),
+                    buildTitle(context, "whut"),
                     const SizedBox(height: 10),
                     Text(
                       description,
@@ -104,8 +120,8 @@ class CategoryIntroScreen extends StatelessWidget {
                     context,
                     CategoryDetailsMoreScreen.route,
                     arguments: CategoryDetailsMoreScreenArguments(
-                      args.ageGroupType,
-                      args.developmentAspectType,
+                      AgeGroupType.first,
+                      DevelopmentAspectType.cognitive,
                     ),
                   );
                 },
