@@ -16,13 +16,17 @@ public class SubCategoryController : ControllerBase
 {
     private readonly IPodsticarijumMailService _mailService;
 
+    private readonly IFaqRepository _faqRepository;
     private readonly ISubCategoryRepository _subCategoryRepository;
     private readonly IExpertRepository _expertRepository;
     public SubCategoryController(
+        IFaqRepository faqRepository,
         IExpertRepository expertRepository,
         ISubCategoryRepository subCategoryRepository,
         IPodsticarijumMailService mailService)
     {
+
+        _faqRepository = faqRepository ?? throw new ArgumentNullException(nameof(faqRepository));
         _expertRepository = expertRepository ?? throw new ArgumentNullException(nameof(expertRepository));
         _subCategoryRepository = subCategoryRepository ?? throw new ArgumentNullException(nameof(subCategoryRepository));
         _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
@@ -39,6 +43,24 @@ public class SubCategoryController : ControllerBase
         List<SubCategory> subCategories = await _subCategoryRepository.GetAll().ConfigureAwait(false);
 
         return Ok(subCategories.ToDto());
+    }
+
+    /// <summary>
+    /// Fetch a single subcategory by Id
+    /// </summary>
+    /// <returns>Ok result with the specified subcategory</returns>
+    /// <returns>404 if no categories were found</returns>
+    [HttpGet("{id}")]
+    public async Task<ActionResult<SubCategory>> Get(long id)
+    {
+        SubCategory? subCategory = await _subCategoryRepository.Get(id).ConfigureAwait(false);
+
+        if (subCategory == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(subCategory.ToDto());
     }
 
     [HttpPost("{subCategoryId}/email")]
@@ -117,4 +139,29 @@ public class SubCategoryController : ControllerBase
         return Ok(subCategorySpecificContent.ToDto());
     }
 
+    [HttpPost("{subCategoryId}/faq")]
+    public async Task<ActionResult<Faq>> CreateFaq([FromRoute] long subCategoryId, [FromBody] FaqRequestDto faqRequestDto)
+    {
+        if (string.IsNullOrEmpty(faqRequestDto.Question) || string.IsNullOrEmpty(faqRequestDto.Answer))
+        {
+            return BadRequest("FAQ should have non empty question and answer.");
+        }
+
+        SubCategory? subCategory = await _subCategoryRepository.Get(subCategoryId, tracking: true).ConfigureAwait(false);
+
+        if (subCategory == null)
+        {
+            return BadRequest("Category does not exist.");
+        }
+
+        Faq faq = new(
+            subCategory: subCategory,
+            question: faqRequestDto.Question,
+            answer: faqRequestDto.Answer);
+
+        var insertedFaqId = await _faqRepository.Insert(faq);
+        faq.Id = insertedFaqId;
+
+        return Ok(faq.ToDto());
+    }
 }
