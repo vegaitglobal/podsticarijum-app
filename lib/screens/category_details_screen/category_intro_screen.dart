@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../api/models/SubcategoryModel.dart';
+import '../../api/podsticariju_api.dart';
 import '../../common/enums/age_group_type.dart';
 import '../../common/enums/development_ascpect_type.dart';
 import '../../common/widgets/app_bar/new_app_bar.dart';
@@ -27,8 +29,8 @@ class CategoryIntroScreen extends StatefulWidget {
 }
 
 class _CategoryIntroScreenState extends State<CategoryIntroScreen> {
-  final String description =
-      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! ';
+  // final String description =
+  //     ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! ';
 
   // final List<String> bulletpointList = [
   //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
@@ -38,7 +40,8 @@ class _CategoryIntroScreenState extends State<CategoryIntroScreen> {
   //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
   //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
   // ];
-  final List<String> bulletpointList = [];
+  String description = "";
+  List<String> bulletpointList = [];
 
   List<SubcategoryModel> subcategoryList = List.empty();
 
