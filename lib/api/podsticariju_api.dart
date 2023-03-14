@@ -53,7 +53,14 @@ class PodsticarijumApi {
     return subcategoryList;
   }
 
-  static Future<SubcategoryModel?> getSubcategory(
+  static Future<SubcategoryModel?> getSubcategory(int subcategoryId) async {
+    String url = "${BASE_URL}/api/sub-category/$subcategoryId";
+    var response = await http.get(Uri.parse(url));
+
+    return SubcategoryModel.fromJson(json.decode(response.body));
+  }
+
+  static Future<SubcategoryModel?> getSubcategoryWithCategoryId(
       int categoryId, int subcategoryId) async {
     var subcategoryList = await getSubcategoryList(categoryId);
     SubcategoryModel subcategory;

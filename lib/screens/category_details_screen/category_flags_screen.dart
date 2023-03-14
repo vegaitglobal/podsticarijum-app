@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
-import '../../common/enums/age_group_type.dart';
-import '../../common/enums/development_ascpect_type.dart';
+import '../../api/podsticariju_api.dart';
 import '../../common/enums/flag_type.dart';
 import '../../common/widgets/app_bar/new_app_bar.dart';
 import '../../common/widgets/default_container.dart';
@@ -46,33 +45,54 @@ Future<bool> sendEmail(String name, String mail, String question) async {
 }
 
 class CategoryFlagsScreenArguments {
-  AgeGroupType ageGroupType;
-  DevelopmentAspectType developmentAspectType;
+  // AgeGroupType ageGroupType;
+  // DevelopmentAspectType developmentAspectType;
+  int subcategoryId;
   FlagType flagType;
 
   CategoryFlagsScreenArguments(
-      this.ageGroupType, this.developmentAspectType, this.flagType);
+    this.subcategoryId,
+    this.flagType,
+  );
 }
 
-class CategoryFlagsScreen extends StatelessWidget {
+class CategoryFlagsScreen extends StatefulWidget {
   static const String route = '/category_flags';
-
-  //data
-  final List<String> paragraphList = [
-    'Lorem ipsum dolor sit ',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-  ];
 
   CategoryFlagsScreen({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<CategoryFlagsScreen> createState() => _CategoryFlagsScreenState();
+}
+
+class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
+  List<String> flagList = [];
+
+  void getCategoryFlags(int subcategoryId, FlagType flagType) async {
+    var subcategory = await PodsticarijumApi.getSubcategory(subcategoryId);
+
+    setState(() {
+      if (subcategory != null) {
+        switch (flagType) {
+          case FlagType.green:
+            flagList = subcategory.positiveSigns;
+            break;
+          case FlagType.red:
+            flagList = subcategory.negativeSigns;
+            break;
+        }
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments
         as CategoryFlagsScreenArguments;
+
+    getCategoryFlags(args.subcategoryId, args.flagType);
 
     return SafeArea(
       child: Scaffold(
@@ -86,8 +106,8 @@ class CategoryFlagsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 buildSubtitle(
-                  context,
-                  args.ageGroupType.title,
+                  context, "some stringylingy",
+                  // args.ageGroupType.title,
                 ),
                 buildTitle(
                   context,
@@ -96,7 +116,7 @@ class CategoryFlagsScreen extends StatelessWidget {
                       : 'Znakovi odstupanja od neurotipičnog razvoja',
                 ),
                 const SizedBox(height: 100),
-                ...paragraphList.map(
+                ...flagList.map(
                   (paragraph) =>
                       _buildParagraph(context, args.flagType, paragraph),
                 ),

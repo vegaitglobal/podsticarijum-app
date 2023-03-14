@@ -2,9 +2,7 @@ import 'package:app_for_family_backup/api/models/SubcategoryModel.dart';
 import 'package:flutter/material.dart';
 
 import '../../api/podsticariju_api.dart';
-import '../../common/enums/age_group_type.dart';
 import '../../common/enums/app_bar_type.dart';
-import '../../common/enums/development_ascpect_type.dart';
 import '../../common/widgets/app_bar/new_app_bar.dart';
 import '../../common/widgets/custom_outline_button.dart';
 import '../category_details_screen/category_intro_screen.dart';
@@ -66,14 +64,9 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                       (subcategory) => _getColumnElement(
                         context,
                         subcategory.name,
-                        args.categoryId,
                         subcategory.id,
                       ),
                     )
-                    // ...DevelopmentAspectType.values
-                    //     .map((aspectType) =>
-                    //         _getColumnElement(context, aspectType, args))
-                    //     .toList(),
                   ]),
             ),
           ),
@@ -85,7 +78,6 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
   Widget _getColumnElement(
     BuildContext context,
     String text,
-    int categoryId,
     int subcategoryId,
   ) {
     return Column(
@@ -94,13 +86,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
           text: text,
           onClick: () {
             Navigator.pushNamed(context, CategoryIntroScreen.route,
-                arguments: CategoryIntroScreenArguments(
-                  categoryId,
-                  subcategoryId,
-                  // args.ageGroupType,
-                  // AgeGroupType.first,
-                  // DevelopmentAspectType.cognitive,
-                ));
+                arguments: CategoryIntroScreenArguments(subcategoryId));
           },
         ),
         const SizedBox(height: SubCategoriesScreen._padding),

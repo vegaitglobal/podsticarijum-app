@@ -2,19 +2,27 @@ import 'package:flutter/material.dart';
 
 import '../../api/models/SubcategoryModel.dart';
 import '../../api/podsticariju_api.dart';
-import '../../common/enums/age_group_type.dart';
-import '../../common/enums/development_ascpect_type.dart';
 import '../../common/widgets/app_bar/new_app_bar.dart';
 import '../../common/widgets/custom_outline_button.dart';
 import '../../common/widgets/default_header.dart';
 import 'category_details_more_screen.dart';
 
+class CategoryIntroUiModel {
+  String subcategoryName;
+  String description;
+  List<String> bulletpointList;
+
+  CategoryIntroUiModel(
+    this.subcategoryName,
+    this.description,
+    this.bulletpointList,
+  );
+}
+
 class CategoryIntroScreenArguments {
-  int categoryId;
   int subcategoryId;
 
   CategoryIntroScreenArguments(
-    this.categoryId,
     this.subcategoryId,
   );
 }
@@ -22,34 +30,26 @@ class CategoryIntroScreenArguments {
 class CategoryIntroScreen extends StatefulWidget {
   static const String route = '/category_details_intro';
 
-  CategoryIntroScreen({Key? key}) : super(key: key);
+  const CategoryIntroScreen({Key? key}) : super(key: key);
 
   @override
   State<CategoryIntroScreen> createState() => _CategoryIntroScreenState();
 }
 
 class _CategoryIntroScreenState extends State<CategoryIntroScreen> {
-  // final String description =
-  //     ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! ';
+  CategoryIntroUiModel categoryIntroUiModel = CategoryIntroUiModel("", "", []);
 
-  // final List<String> bulletpointList = [
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
-  // ];
-  String description = "";
-  List<String> bulletpointList = [];
-
-  List<SubcategoryModel> subcategoryList = List.empty();
-
-  void getSubcategoryNameList(int categoryId) async {
-    var result = await PodsticarijumApi.getSubcategoryList(categoryId);
+  void getCategoryIntro(int subcategoryId) async {
+    var result = await PodsticarijumApi.getSubcategory(subcategoryId);
 
     setState(() {
-      subcategoryList = result;
+      if (result != null) {
+        categoryIntroUiModel = CategoryIntroUiModel(
+          result.name,
+          result.description,
+          result.detailedDescription.split("\n"),
+        );
+      }
     });
   }
 
@@ -57,6 +57,8 @@ class _CategoryIntroScreenState extends State<CategoryIntroScreen> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments
         as CategoryIntroScreenArguments;
+
+    getCategoryIntro(args.subcategoryId);
 
     return SafeArea(
       child: Scaffold(
@@ -73,10 +75,10 @@ class _CategoryIntroScreenState extends State<CategoryIntroScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 25),
-                    buildTitle(context, "whut"),
+                    buildTitle(context, categoryIntroUiModel.subcategoryName),
                     const SizedBox(height: 10),
                     Text(
-                      description,
+                      categoryIntroUiModel.description,
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -102,7 +104,7 @@ class _CategoryIntroScreenState extends State<CategoryIntroScreen> {
                     ),
               ),
               const SizedBox(height: 20),
-              ...bulletpointList
+              ...categoryIntroUiModel.bulletpointList
                   .map(
                     (bulletpoint) => _textWithIcon(bulletpoint, context),
                   )
@@ -123,8 +125,7 @@ class _CategoryIntroScreenState extends State<CategoryIntroScreen> {
                     context,
                     CategoryDetailsMoreScreen.route,
                     arguments: CategoryDetailsMoreScreenArguments(
-                      AgeGroupType.first,
-                      DevelopmentAspectType.cognitive,
+                      args.subcategoryId,
                     ),
                   );
                 },

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/enums/age_group_type.dart';
-import '../../common/enums/development_ascpect_type.dart';
+import '../../api/podsticariju_api.dart';
 import '../../common/enums/flag_type.dart';
 import '../../common/widgets/app_bar/new_app_bar.dart';
 import '../../common/widgets/custom_outline_button.dart';
@@ -12,32 +11,63 @@ import '../categories_screen/categories_screen.dart';
 import 'category_flags_screen.dart';
 
 class CategoryDetailsMoreScreenArguments {
-  AgeGroupType ageGroupType;
-  DevelopmentAspectType developmentAspectType;
+  int subcategoryId;
+  CategoryDetailsMoreScreenArguments(this.subcategoryId);
+}
 
-  CategoryDetailsMoreScreenArguments(
-    this.ageGroupType,
-    this.developmentAspectType,
+class CategoryDetailsMoreUiModel {
+  String subtitle;
+  String title;
+  List<String> paragraphList;
+
+  CategoryDetailsMoreUiModel(
+    this.subtitle,
+    this.title,
+    this.paragraphList,
   );
 }
 
-class CategoryDetailsMoreScreen extends StatelessWidget {
+class CategoryDetailsMoreScreen extends StatefulWidget {
   static const String route = '/category_details_more_screen';
 
-  //data
-  final List<String> paragraphList = [
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-  ];
-
   CategoryDetailsMoreScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CategoryDetailsMoreScreen> createState() =>
+      _CategoryDetailsMoreScreenState();
+}
+
+class _CategoryDetailsMoreScreenState extends State<CategoryDetailsMoreScreen> {
+  //  data
+  // final List<String> paragraphList = [
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
+  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
+  // ];
+  CategoryDetailsMoreUiModel categoryDetailsMoreUiModel =
+      CategoryDetailsMoreUiModel("", "", []);
+
+  void getCategoryDetailsMoreUiModel(int subcategoryId) async {
+    var subcategory = await PodsticarijumApi.getSubcategory(subcategoryId);
+
+    setState(() {
+      if (subcategory != null) {
+        categoryDetailsMoreUiModel = CategoryDetailsMoreUiModel(
+          subcategory.categoryName,
+          subcategory.name,
+          subcategory.detailedDescription.split('\n'),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments
         as CategoryDetailsMoreScreenArguments;
+
+    getCategoryDetailsMoreUiModel(args.subcategoryId);
 
     return SafeArea(
       child: Scaffold(
@@ -50,10 +80,10 @@ class CategoryDetailsMoreScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildSubtitle(context, "0-1 godina"),
-                buildTitle(context, "Neurotipičan senzo-motorni razvoj"),
+                buildSubtitle(context, categoryDetailsMoreUiModel.subtitle),
+                buildTitle(context, categoryDetailsMoreUiModel.title),
                 const SizedBox(height: 100),
-                ...paragraphList.map(
+                ...categoryDetailsMoreUiModel.paragraphList.map(
                   (paragraph) => _buildParagraph(paragraph, context),
                 ),
                 CustomOutlineButton(
@@ -62,8 +92,9 @@ class CategoryDetailsMoreScreen extends StatelessWidget {
                     context,
                     CategoryFlagsScreen.route,
                     arguments: CategoryFlagsScreenArguments(
-                      args.ageGroupType,
-                      args.developmentAspectType,
+                      // args.ageGroupType,
+                      // args.developmentAspectType,
+                      args.subcategoryId,
                       FlagType.green,
                     ),
                   ),
@@ -76,8 +107,9 @@ class CategoryDetailsMoreScreen extends StatelessWidget {
                     context,
                     CategoryFlagsScreen.route,
                     arguments: CategoryFlagsScreenArguments(
-                      args.ageGroupType,
-                      args.developmentAspectType,
+                      // args.ageGroupType,
+                      // args.developmentAspectType,
+                      args.subcategoryId,
                       FlagType.red,
                     ),
                   ),
