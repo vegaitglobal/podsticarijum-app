@@ -48,7 +48,7 @@ public class SubCategoryController : ControllerBase
     /// <summary>
     /// Fetch a single subcategory by Id
     /// </summary>
-    /// <returns>Ok result with list of sub categories</returns>
+    /// <returns>Ok result with the specified subcategory</returns>
     /// <returns>404 if no categories were found</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<SubCategory>> Get(long id)
