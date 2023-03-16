@@ -1,8 +1,8 @@
 class FAQModel {
-  String description;
-  String information;
+  String question;
+  String answer;
 
   FAQModel.fromJson(Map<String, dynamic> json)
-      : description = json['question'],
-        information = json['answer'];
+      : question = json['question'],
+        answer = json['answer'];
 }

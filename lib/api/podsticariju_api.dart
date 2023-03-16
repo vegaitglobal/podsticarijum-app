@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:app_for_family_backup/api/models/AboutUsModel.dart';
 import 'package:app_for_family_backup/api/models/DonationsModel.dart';
 import 'package:app_for_family_backup/api/models/ExpertModel.dart';
+import 'package:app_for_family_backup/api/models/FAQModel.dart';
 import 'package:app_for_family_backup/api/models/SubcategoryModel.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -38,7 +39,7 @@ class PodsticarijumApi {
     return categoryList;
   }
 
-  static Future<List<SubcategoryModel>> getSubcategoryList(
+  static Future<List<SubcategoryModel>> getSubcategoryListByCategoryId(
       int categoryId) async {
     String url = "${BASE_URL}/api/category/$categoryId/sub-category";
     List<SubcategoryModel> subcategoryList = [];
@@ -62,7 +63,7 @@ class PodsticarijumApi {
 
   static Future<SubcategoryModel?> getSubcategoryWithCategoryId(
       int categoryId, int subcategoryId) async {
-    var subcategoryList = await getSubcategoryList(categoryId);
+    var subcategoryList = await getSubcategoryListByCategoryId(categoryId);
     SubcategoryModel subcategory;
     return subcategoryList
         .firstWhereOrNull((element) => element.id == subcategoryId);
@@ -94,5 +95,29 @@ class PodsticarijumApi {
     Map<String, dynamic> aboutusJson = json.decode(response.body);
 
     return AboutUsModel.fromJson(aboutusJson);
+  }
+
+  static Future<List<FAQModel>> getFaqList(int subcategoryId) async {
+    String url = "${BASE_URL}/api/category/$subcategoryId/faq";
+    var response = await http.get(Uri.parse(url));
+    List<dynamic> faqList = json.decode(response.body);
+    List<FAQModel> faqModelList = [];
+    faqList.forEach((element) {
+      faqModelList.add(FAQModel.fromJson(element));
+    });
+
+    return faqModelList;
+  }
+
+  static Future<List<SubcategoryModel>> getSubcategoryList() async {
+    String url = "$BASE_URL/api/sub-category";
+    var response = await http.get(Uri.parse(url));
+    List<SubcategoryModel> subcategoryList = [];
+    List<dynamic> subcategoryListJson = json.decode(response.body);
+    subcategoryListJson.forEach((element) {
+      subcategoryList.add(SubcategoryModel.fromJson(element));
+    });
+
+    return subcategoryList;
   }
 }

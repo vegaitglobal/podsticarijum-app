@@ -1,18 +1,52 @@
+import 'package:app_for_family_backup/api/podsticariju_api.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/enums/development_ascpect_type.dart';
 import '../../common/widgets/app_bar/new_app_bar.dart';
 import '../../common/widgets/custom_outline_button.dart';
 import '../frequent_questions_screen/frequent_questions_screen.dart';
 
-class FaqCategoriesScreen extends StatelessWidget {
+class FaqCategoriesElementUiModel {
+  String subcategoryName;
+  int subcategoryId;
+
+  FaqCategoriesElementUiModel(
+    this.subcategoryName,
+    this.subcategoryId,
+  );
+}
+
+class FaqCategoriesScreen extends StatefulWidget {
   static const String route = '/faq_categories';
   static const double _padding = 12;
 
   const FaqCategoriesScreen({super.key});
 
   @override
+  State<FaqCategoriesScreen> createState() => _FaqCategoriesScreenState();
+}
+
+class _FaqCategoriesScreenState extends State<FaqCategoriesScreen> {
+  List<FaqCategoriesElementUiModel>? faqCategoriesElementUiModelList = null;
+
+  void getFaqCategoryUiModel() async {
+    var response = await PodsticarijumApi.getSubcategoryList();
+
+    setState(() {
+      faqCategoriesElementUiModelList = response
+          .map(
+            (subcategory) => FaqCategoriesElementUiModel(
+              subcategory.name,
+              subcategory.id,
+            ),
+          )
+          .toList();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (faqCategoriesElementUiModelList == null) getFaqCategoryUiModel();
+
     return SafeArea(
       child: Scaffold(
         appBar: const NewAppBar(),
@@ -32,8 +66,16 @@ class FaqCategoriesScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 25),
-                ...DevelopmentAspectType.values
-                    .map((e) => _getColumnElement(e, context))
+                ...?faqCategoriesElementUiModelList
+                    ?.map(
+                      (faqCategoryElement) => _getColumnElement(
+                        faqCategoryElement.subcategoryName,
+                        faqCategoryElement.subcategoryId,
+                        // subcategory.name,
+                        // subcategory.id,
+                        context,
+                      ),
+                    )
                     .toList()
               ],
             ),
@@ -43,20 +85,24 @@ class FaqCategoriesScreen extends StatelessWidget {
     );
   }
 
-  Widget _getColumnElement(DevelopmentAspectType type, BuildContext context) {
+  Widget _getColumnElement(
+    String subcategoryName,
+    int subcategoryId,
+    BuildContext context,
+  ) {
     return Column(
       children: [
         CustomOutlineButton(
-          text: type.title,
+          text: subcategoryName,
           onClick: () {
             Navigator.pushNamed(
               context,
               FaqAnswersScreen.route,
-              arguments: FaqAnswersScreenArguments(type),
+              arguments: FaqAnswersScreenArguments(subcategoryId),
             );
           },
         ),
-        const SizedBox(height: _padding),
+        const SizedBox(height: FaqCategoriesScreen._padding),
       ],
     );
   }

@@ -51,18 +51,7 @@ class FamilyBackupApp extends StatelessWidget {
         ExpertsScreen.route: (context) => const ExpertsScreen(),
         DonationScreen.route: (context) => const DonationScreen(),
         FaqCategoriesScreen.route: (context) => const FaqCategoriesScreen(),
-        FaqAnswersScreen.route: (context) => FaqAnswersScreen(
-              const {
-                "neko pitanje": "neki odgovor",
-                "neko pitanje 2": "neki odgovor 2",
-                "neko pitanje 3": "neki odgovor 3",
-                "PITANJE ALLOO": "neki odgovor",
-                "neko pitanje 5": "neki odgovor",
-                "neko pitanje 6": "neki odgovor",
-                "neko pitanje 7": "neki odgovor",
-              },
-              "Motorički razvoj",
-            ),
+        FaqAnswersScreen.route: (context) => FaqAnswersScreen(),
         ThankYouScreen.route: (context) => const ThankYouScreen()
       },
     );

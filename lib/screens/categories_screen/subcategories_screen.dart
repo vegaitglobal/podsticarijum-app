@@ -34,7 +34,8 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
   List<SubcategoryModel> subcategoryList = List.empty();
 
   void getSubcategoryNameList(int categoryId) async {
-    var result = await PodsticarijumApi.getSubcategoryList(categoryId);
+    var result =
+        await PodsticarijumApi.getSubcategoryListByCategoryId(categoryId);
 
     setState(() {
       subcategoryList = result;

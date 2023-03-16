@@ -1,7 +1,7 @@
 class ExpertModel {
   int id;
   String firstName;
-  bool lastName;
+  String lastName;
   String description;
 
   ExpertModel.fromJson(Map<String, dynamic> json)

@@ -11,6 +11,16 @@ import '../../common/widgets/default_header.dart';
 import '../../common/widgets/useful_widgets.dart';
 import '../categories_screen/categories_screen.dart';
 
+class CategoryFlagsUiModel {
+  String categoryName;
+  List<String> flagList;
+
+  CategoryFlagsUiModel(
+    this.categoryName,
+    this.flagList,
+  );
+}
+
 class EmailPayloadDto {
   String nameSurname;
   String mail;
@@ -70,11 +80,16 @@ class CategoryFlagsScreen extends StatefulWidget {
 class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
   List<String> flagList = [];
 
+  CategoryFlagsUiModel? categoryFlagsUiModel = null;
+
   void getCategoryFlags(int subcategoryId, FlagType flagType) async {
     var subcategory = await PodsticarijumApi.getSubcategory(subcategoryId);
 
+    print("00<99 building ...");
+
     setState(() {
       if (subcategory != null) {
+        List<String> flagList;
         switch (flagType) {
           case FlagType.green:
             flagList = subcategory.positiveSigns;
@@ -83,6 +98,10 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
             flagList = subcategory.negativeSigns;
             break;
         }
+        categoryFlagsUiModel = CategoryFlagsUiModel(
+          subcategory.categoryName,
+          flagList,
+        );
       }
     });
   }
@@ -92,7 +111,8 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
     final args = ModalRoute.of(context)!.settings.arguments
         as CategoryFlagsScreenArguments;
 
-    getCategoryFlags(args.subcategoryId, args.flagType);
+    if (categoryFlagsUiModel == null)
+      getCategoryFlags(args.subcategoryId, args.flagType);
 
     return SafeArea(
       child: Scaffold(
@@ -106,7 +126,8 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 buildSubtitle(
-                  context, "some stringylingy",
+                  context,
+                  categoryFlagsUiModel?.categoryName ?? "",
                   // args.ageGroupType.title,
                 ),
                 buildTitle(
@@ -116,7 +137,7 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
                       : 'Znakovi odstupanja od neurotipičnog razvoja',
                 ),
                 const SizedBox(height: 100),
-                ...flagList.map(
+                ...?categoryFlagsUiModel?.flagList.map(
                   (paragraph) =>
                       _buildParagraph(context, args.flagType, paragraph),
                 ),
