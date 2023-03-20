@@ -6,6 +6,7 @@ using podsticarijum_backend.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.Json.Serialization;
+using podsticarijum_backend.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +66,13 @@ using (var scope = app.Services.CreateScope())
 {
     PodsticarijumContext db = scope.ServiceProvider.GetRequiredService<PodsticarijumContext>();
     db.Database.Migrate();
+
+    db.User.Add(new User
+    {
+        Username = "superuser",
+        Password = Environment.GetEnvironmentVariable("DB_PASSWORD")!
+    });
+    db.SaveChanges();
 }
 
 if (app.Environment.IsDevelopment())

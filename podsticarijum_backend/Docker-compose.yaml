@@ -15,6 +15,7 @@ services:
       - MailData__AppMailAddressFrom=podsticarijum@gmail.com
       - MailData__Host=smtp.gmail.com
       - MailData__Port=587
+      - DB_PASSWORD=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     restart: always
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
