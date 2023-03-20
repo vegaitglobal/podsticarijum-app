@@ -1,4 +1,7 @@
 ﻿#nullable disable
+using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using podsticarijum_backend.Domain.Entities;
 
 namespace podsticarijum_backend.Repository;
@@ -6,6 +9,7 @@ namespace podsticarijum_backend.Repository;
 public class DataSeeder : IDataSeeder
 {
     private readonly PodsticarijumContext _podsticarijumContext;
+
     public DataSeeder(PodsticarijumContext podsticarijumContext)
     {
         _podsticarijumContext = podsticarijumContext;
@@ -15,7 +19,7 @@ public class DataSeeder : IDataSeeder
     {
         if (_podsticarijumContext.Category.Count() < 5)
         {
-            for(int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 _podsticarijumContext.Category
                 .Add(
@@ -27,9 +31,9 @@ public class DataSeeder : IDataSeeder
 
         if (_podsticarijumContext.SubCategory.Count() < 25)
         {
-            foreach(Category category in _podsticarijumContext.Category)
+            foreach (Category category in _podsticarijumContext.Category)
             {
-                for(int i = 0; i < 5; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     _podsticarijumContext.SubCategory.Add(
                         new SubCategory(
@@ -51,7 +55,7 @@ public class DataSeeder : IDataSeeder
 
         if (_podsticarijumContext.SubCategorySpecificContent.Count() < 55)
         {
-            foreach(SubCategory subCategory in _podsticarijumContext.SubCategory)
+            foreach (SubCategory subCategory in _podsticarijumContext.SubCategory)
             {
                 for (int i = 0; i < 5; i++)
                 {
@@ -70,13 +74,13 @@ public class DataSeeder : IDataSeeder
                         paragraphSign: Domain.ParagraphSign.RedFlag));
                 }
             }
-        } 
+        }
 
         if (_podsticarijumContext.Faq.Count() < 50)
         {
-            foreach(SubCategory subCategory in _podsticarijumContext.SubCategory)
+            foreach (SubCategory subCategory in _podsticarijumContext.SubCategory)
             {
-                for(int i = 0; i < 6; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     _podsticarijumContext.Faq.Add(
                         new Faq(
@@ -90,7 +94,7 @@ public class DataSeeder : IDataSeeder
 
         if (_podsticarijumContext.Expert.Count() < 5)
         {
-            foreach(SubCategory subCategory in _podsticarijumContext.SubCategory)
+            foreach (SubCategory subCategory in _podsticarijumContext.SubCategory)
             {
                 _podsticarijumContext.Expert.Add(
                         new Expert(subCategory: subCategory,
@@ -122,4 +126,20 @@ public class DataSeeder : IDataSeeder
 
         await _podsticarijumContext.SaveChangesAsync();
     }
+
+    public async Task EnsureSuperadminSeeded()
+    {
+        if (_podsticarijumContext.User.Count() < 1)
+        {
+            _podsticarijumContext.User.Add(
+                new User()
+                {
+                    Username = "superuser",
+                    Password = Environment.GetEnvironmentVariable("DB_PASSWORD")
+                }
+                );
+            await _podsticarijumContext.SaveChangesAsync();
+        }
+    }
+
 }
