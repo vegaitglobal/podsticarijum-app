@@ -1,7 +1,4 @@
 ﻿#nullable disable
-using System;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using podsticarijum_backend.Domain.Entities;
 
 namespace podsticarijum_backend.Repository;
