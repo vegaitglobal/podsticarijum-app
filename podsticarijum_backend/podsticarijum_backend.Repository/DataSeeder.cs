@@ -126,6 +126,7 @@ public class DataSeeder : IDataSeeder
 
     public async Task EnsureSuperuserSeeded()
     {
+
         if (_podsticarijumContext.User.Count() < 1)
         {
             _podsticarijumContext.User.Add(
