@@ -28,7 +28,6 @@ jobs:
         env:
           TAG_NUMBER: "${{ github.run_number }}"
           MAIL_DATA_PASSWORD: "${{ secrets.MAIL_DATA_PASSWORD }}"
-          DB_CONNECTION_STRING: "${{ secrets.DB_CONNECTION_STRING }}"
           DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
