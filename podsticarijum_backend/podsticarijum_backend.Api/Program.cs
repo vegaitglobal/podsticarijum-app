@@ -54,6 +54,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -66,6 +67,8 @@ using (var scope = app.Services.CreateScope())
 {
     PodsticarijumContext db = scope.ServiceProvider.GetRequiredService<PodsticarijumContext>();
     db.Database.Migrate();
+    IDataSeeder dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
+    await dataSeeder.EnsureSuperuserSeeded();
 }
 
 if (app.Environment.IsDevelopment())

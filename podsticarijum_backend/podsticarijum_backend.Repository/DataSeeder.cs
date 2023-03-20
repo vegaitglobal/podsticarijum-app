@@ -124,7 +124,7 @@ public class DataSeeder : IDataSeeder
         await _podsticarijumContext.SaveChangesAsync();
     }
 
-    public async Task EnsureSuperadminSeeded()
+    public async Task EnsureSuperuserSeeded()
     {
         if (_podsticarijumContext.User.Count() < 1)
         {
