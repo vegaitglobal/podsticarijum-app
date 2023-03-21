@@ -6,7 +6,6 @@ using podsticarijum_backend.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.Json.Serialization;
-using podsticarijum_backend.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +37,7 @@ builder.Services.AddScoped<IFaqRepository, FaqRepository>();
 
 builder.Services.AddDbContext<PodsticarijumContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb"), b => b.MigrationsAssembly("podsticarijum_backend.Repository"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb")!, b => b.MigrationsAssembly("podsticarijum_backend.Repository"));
 });
 
 

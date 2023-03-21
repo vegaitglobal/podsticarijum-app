@@ -9,7 +9,7 @@ using podsticarijum_backend.Repository.Abstractions;
 
 namespace podsticarijum_backend.Api.Controllers;
 
-//[Authorize]
+[Authorize]
 public class FaqCmsController : Controller
 {
     private readonly IFaqRepository _faqRepository;

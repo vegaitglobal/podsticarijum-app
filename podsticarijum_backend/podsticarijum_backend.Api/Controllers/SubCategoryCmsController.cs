@@ -10,7 +10,7 @@ using podsticarijum_backend.Repository.Abstractions;
 
 namespace podsticarijum_backend.Api.Controllers;
 
-//[Authorize]
+[Authorize]
 public class SubCategoryCmsController : Controller
 {
     private readonly ICategoryRepository _categoryRepository;

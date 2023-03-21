@@ -13,7 +13,7 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <h4>Create subcategory content</h4>
+            <h4>Create Specific Content</h4>
             <br />
             <div class="form-group"> 
                 <select class="form-control" asp-for="@Model.SubCategoryId"
@@ -28,19 +28,13 @@
             </div>
             <br />
             <div class="form-group">
-                <label asp-for="@Model.PageTitle" class="control-label"></label>
-                <input asp-for="@Model.PageTitle" class="form-control" />
-                <span asp-validation-for="@Model.PageTitle" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
                 <label asp-for="@Model.ParagraphText" class="control-label"></label>
-                <input asp-for="@Model.ParagraphText" class="form-control" />
+                <textarea rows="8" asp-for="@Model.ParagraphText" class="form-control"></textarea>
                 <span asp-validation-for="@Model.ParagraphText" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary btn-lg" />
             </div>
         </form>
     </div>

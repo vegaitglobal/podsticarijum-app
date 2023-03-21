@@ -44,6 +44,8 @@ public class DataSeeder : IDataSeeder
                             developmentSupportingActivitiesButtonText:
                             "supporting activities 1 2 3",
                             atypicalDevelopmentSignsText: "not so typical",
+                            greenActivityPageTitle: "green activity page title", 
+                            redActivityPageTitle: "red activity page title",
                             active: true)
                         );
                 }
@@ -59,14 +61,12 @@ public class DataSeeder : IDataSeeder
                     _podsticarijumContext.Add(
                         new SubCategorySpecificContent(
                         subCategory: subCategory,
-                        pageTitle: "title!!!",
                         paragraphText: "paragraph texttt",
                         paragraphSign: Domain.ParagraphSign.GreenFlag));
 
                     _podsticarijumContext.Add(
                         new SubCategorySpecificContent(
                         subCategory: subCategory,
-                        pageTitle: "title!!!",
                         paragraphText: "paragraph texttt",
                         paragraphSign: Domain.ParagraphSign.RedFlag));
                 }

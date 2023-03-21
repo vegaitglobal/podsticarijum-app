@@ -2,9 +2,9 @@
 
 public class SubCategory : EntityTimestamps
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     protected SubCategory()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
 
     }
@@ -19,6 +19,8 @@ public class SubCategory : EntityTimestamps
         string checkMorePageText,
         string developmentSupportingActivitiesButtonText,
         string atypicalDevelopmentSignsText,
+        string greenActivityPageTitle,
+        string redActivityPageTitle,
         bool active)
     {
         Category = category ?? throw new ArgumentNullException(nameof(category));
@@ -28,9 +30,11 @@ public class SubCategory : EntityTimestamps
         CheckMoreButtonText = checkMoreButtonText ?? throw new ArgumentNullException(nameof(checkMoreButtonText));
         CheckMorePageTitle = checkMorePageTitle ?? throw new ArgumentNullException(nameof(checkMorePageTitle));
         CheckMorePageText = checkMorePageText ?? throw new ArgumentNullException(nameof(checkMorePageText));
-        DevelopmentSupportingActivitiesButtonText = developmentSupportingActivitiesButtonText ?? 
+        DevelopmentSupportingActivitiesButtonText = developmentSupportingActivitiesButtonText ??
                                                     throw new ArgumentNullException(nameof(developmentSupportingActivitiesButtonText));
         AtypicalDevelopmentSignsText = atypicalDevelopmentSignsText ?? throw new ArgumentNullException(nameof(atypicalDevelopmentSignsText));
+        RedActivityPageTitle = redActivityPageTitle ?? throw new ArgumentNullException(redActivityPageTitle);
+        GreenActivityPageTitle = greenActivityPageTitle ?? throw new ArgumentNullException(greenActivityPageTitle);
         Active = active;
     }
 
@@ -78,6 +82,10 @@ public class SubCategory : EntityTimestamps
     public string DevelopmentSupportingActivitiesButtonText { get; set; }
 
     public string AtypicalDevelopmentSignsText { get; set; }
+
+    public string GreenActivityPageTitle { get; set; } = string.Empty;
+
+    public string RedActivityPageTitle { get; set; } = string.Empty;
 
     public bool Active { get; set; }
 }

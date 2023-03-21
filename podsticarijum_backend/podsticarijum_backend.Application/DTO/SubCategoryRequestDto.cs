@@ -4,7 +4,19 @@ namespace podsticarijum_backend.Application.DTO;
 
 public class SubCategoryRequestDto
 {
-    public SubCategoryRequestDto(CategoryDto? categoryDto, string mainNavMenuText, string mainText, string additionalText, string checkMoreButtonText, string checkMorePageTitle, string checkMorePageText, string developmentSupportingActivitiesButtonText, string atypicalDevelopmentSignsText, bool active)
+    public SubCategoryRequestDto(
+        CategoryDto? categoryDto,
+        string mainNavMenuText,
+        string mainText,
+        string additionalText,
+        string checkMoreButtonText,
+        string checkMorePageTitle,
+        string checkMorePageText,
+        string developmentSupportingActivitiesButtonText,
+        string atypicalDevelopmentSignsText,
+        string greenActivityPageTitle, 
+        string redActivityPageTitle, 
+        bool active)
     {
         CategoryDto = categoryDto;
         MainNavMenuText = mainNavMenuText;
@@ -15,6 +27,8 @@ public class SubCategoryRequestDto
         CheckMorePageText = checkMorePageText;
         DevelopmentSupportingActivitiesButtonText = developmentSupportingActivitiesButtonText;
         AtypicalDevelopmentSignsText = atypicalDevelopmentSignsText;
+        GreenActivityPageTitle = greenActivityPageTitle;
+        RedActivityPageTitle = redActivityPageTitle;
         Active = active;
     }
 
@@ -61,6 +75,10 @@ public class SubCategoryRequestDto
     public string DevelopmentSupportingActivitiesButtonText { get; set; }
 
     public string AtypicalDevelopmentSignsText { get; set; }
+
+    public string GreenActivityPageTitle { get; set; }
+
+    public string RedActivityPageTitle { get; set; }
 
     public bool Active { get; set; }
 }

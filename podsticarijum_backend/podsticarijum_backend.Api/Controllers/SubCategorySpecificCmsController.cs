@@ -10,7 +10,7 @@ using podsticarijum_backend.Repository.Abstractions;
 
 namespace podsticarijum_backend.Api.Controllers;
 
-//[Authorize]
+[Authorize]
 public class SubCategorySpecificCmsController : Controller
 {
     private readonly ISubCategoryRepository _subCategoryRepository;
@@ -45,7 +45,9 @@ public class SubCategorySpecificCmsController : Controller
                     Text = sc.MainNavMenuText,
                     Value = sc.Id.ToString()
                 }),
-            ParagraphSigns = paragraphSigns.Select(ps =>
+            ParagraphSigns = paragraphSigns
+            .Where(ps => ps != ParagraphSign.Default)
+            .Select(ps =>
                 new SelectListItem()
                 {
                     Text = ps.ToString(),
@@ -73,17 +75,21 @@ public class SubCategorySpecificCmsController : Controller
 
         ParagraphSign sign = ParagraphSign.Default;
 
-        if (Enum.TryParse(viewModel.ParagraphSign, out sign))
+        bool enumParsed = Enum.TryParse(viewModel.ParagraphSign, out sign);
+        
+        if (!enumParsed || sign == ParagraphSign.Default)
         {
-            SubCategorySpecificContent content = new(
-                subCategory: subCategory,
-                pageTitle: viewModel.PageTitle,
-                paragraphText: viewModel.ParagraphText,
-                paragraphSign: sign
-                );
-
-            await _subCategoryRepository.Insert(content);
+            return BadRequest();
         }
+
+        SubCategorySpecificContent content = new(
+            subCategory: subCategory,
+            paragraphText: viewModel.ParagraphText,
+            paragraphSign: sign
+            );
+
+        await _subCategoryRepository.Insert(content);
+
 
         return RedirectToAction("");
     }
@@ -100,7 +106,7 @@ public class SubCategorySpecificCmsController : Controller
         }
 
         var paragraphSigns = Enum.GetValues<ParagraphSign>().Cast<ParagraphSign>();
-        
+
         SubCategorySpecificViewModel contentViewModel = new()
         {
             SubCategoryDtoList = subCategories.Select(sc =>
@@ -118,8 +124,7 @@ public class SubCategorySpecificCmsController : Controller
                     Selected = ps == content.ParagraphSign
                 }
             ),
-            ParagraphText = content.ParagraphText,
-            PageTitle = content.PageTitle
+            ParagraphText = content.ParagraphText
         };
 
         return View(contentViewModel);
@@ -144,7 +149,6 @@ public class SubCategorySpecificCmsController : Controller
         }
         content.ParagraphSign = Enum.Parse<ParagraphSign>(viewModel.ParagraphSign);
         content.ParagraphText = viewModel.ParagraphText;
-        content.PageTitle = viewModel.PageTitle;
 
         await _subCategoryRepository.Update(content);
 

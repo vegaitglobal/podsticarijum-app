@@ -10,12 +10,10 @@ public class SubCategorySpecificContent : EntityTimestamps
 
     public SubCategorySpecificContent(
         SubCategory subCategory,
-        string pageTitle,
         string paragraphText,
         ParagraphSign paragraphSign)
     {
         SubCategory = subCategory ?? throw new ArgumentNullException(nameof(subCategory));
-        PageTitle = pageTitle ?? throw new ArgumentNullException(nameof(pageTitle));
         ParagraphText = paragraphText ?? throw new ArgumentNullException(nameof(paragraphText));
         ParagraphSign = paragraphSign;
     }
@@ -23,8 +21,6 @@ public class SubCategorySpecificContent : EntityTimestamps
     public long Id { get; set; }
 
     public SubCategory SubCategory { get; set; }
-
-    public string PageTitle { get; set; }
 
     public string ParagraphText { get; set; }
 

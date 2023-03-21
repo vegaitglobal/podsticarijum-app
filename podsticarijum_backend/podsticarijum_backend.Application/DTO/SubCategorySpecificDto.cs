@@ -16,11 +16,13 @@ public class SubCategorySpecificDto
 
     }
 
-    public SubCategorySpecificDto(long id, SubCategoryDto subCategoryDto, string pageTitle, string paragraphText, ParagraphSign paragraphSign)
+    public SubCategorySpecificDto(long id,
+        SubCategoryDto subCategoryDto,
+        string paragraphText,
+        ParagraphSign paragraphSign)
     {
         Id = id;
         SubCategoryDto = subCategoryDto;
-        PageTitle = pageTitle;
         ParagraphText = paragraphText;
         ParagraphSign = paragraphSign;
     }
@@ -28,8 +30,6 @@ public class SubCategorySpecificDto
     public long Id { get; set; }
 
     public SubCategoryDto SubCategoryDto { get; set; }
-
-    public string PageTitle { get; set; }
 
     public string ParagraphText { get; set; }
 

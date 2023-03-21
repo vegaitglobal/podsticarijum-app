@@ -9,7 +9,6 @@ public static class SubCategorySpecificExtensions
     => new SubCategorySpecificDto(
         id: subCategorySpecificContent.Id,
         subCategoryDto: subCategorySpecificContent.SubCategory.ToDto(),
-        pageTitle: subCategorySpecificContent.PageTitle,
         paragraphText: subCategorySpecificContent.ParagraphText,
         paragraphSign: subCategorySpecificContent.ParagraphSign);
 

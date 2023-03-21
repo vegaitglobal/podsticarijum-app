@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using podsticarijum_backend.Application;
 using podsticarijum_backend.Application.DTO;
-using podsticarijum_backend.Application.DtoExtensions;
 using podsticarijum_backend.Application.EntityExtensions;
 using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;

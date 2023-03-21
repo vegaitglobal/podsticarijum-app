@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using podsticarijum_backend.Application.DTO;
-using podsticarijum_backend.Application.DtoExtensions;
+﻿using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Domain.Entities;
 
 namespace podsticarijum_backend.Application.EntityExtensions;
@@ -23,6 +17,8 @@ public static class SubCategoryExtensions
             checkMorePageText: subCategory.CheckMorePageText,
             developmentSupportingActivitiesButtonText: subCategory.DevelopmentSupportingActivitiesButtonText,
             atypicalDevelopmentSignsText: subCategory.AtypicalDevelopmentSignsText,
+            greenActivityPageTitle: subCategory.GreenActivityPageTitle,
+            redActivityPageTitle: subCategory.RedActivityPageTitle,
             active: subCategory.Active);
 
     public static List<SubCategoryDto> ToDto(this IEnumerable<SubCategory> subCategories)
@@ -42,6 +38,8 @@ public static class SubCategoryExtensions
         subCategory.Active = subCategoryDto.Active;
         subCategory.DevelopmentSupportingActivitiesButtonText = subCategoryDto.DevelopmentSupportingActivitiesButtonText;
         subCategory.AtypicalDevelopmentSignsText = subCategoryDto.AtypicalDevelopmentSignsText;
+        subCategory.GreenActivityPageTitle = subCategoryDto.GreenActivityPageTitle;
+        subCategory.RedActivityPageTitle = subCategoryDto.RedActivityPageTitle;
     }
 
 }

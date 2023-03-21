@@ -9,7 +9,7 @@ using podsticarijum_backend.Repository.Abstractions;
 
 namespace podsticarijum_backend.Api.Controllers;
 
-//[Authorize]
+[Authorize]
 public class ExpertCmsController : Controller
 {
     private readonly IExpertRepository _expertRepository;
