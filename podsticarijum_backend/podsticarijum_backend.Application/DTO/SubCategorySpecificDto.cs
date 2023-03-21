@@ -9,6 +9,13 @@ namespace podsticarijum_backend.Application.DTO;
 
 public class SubCategorySpecificDto
 {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public SubCategorySpecificDto()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    {
+
+    }
+
     public SubCategorySpecificDto(long id, SubCategoryDto subCategoryDto, string pageTitle, string paragraphText, ParagraphSign paragraphSign)
     {
         Id = id;
