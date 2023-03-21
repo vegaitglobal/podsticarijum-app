@@ -17,7 +17,7 @@ public class ContentDto
 
     }
 
-    public ContentDto(long id, ContentType contentType, string text)
+    public ContentDto(long id, string contentType, string text)
     {
         Id = id;
         ContentType = contentType;
@@ -26,7 +26,7 @@ public class ContentDto
 
     public long Id { get; set; }
 
-    public ContentType ContentType { get; init; }
+    public string ContentType { get; init; }
 
     public string Text { get; set; }
 }

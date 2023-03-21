@@ -57,7 +57,9 @@ public class MainCmsController : Controller
     public async Task<ActionResult> Create(ContentViewModel contentViewModel)
     {
 
-        if (await alreadyExistingMainContent(contentViewModel))
+        if (await alreadyExistingMainContent(contentViewModel)
+            || await alreadyExistingAboutUs(contentViewModel)
+            )
         {
             return BadRequest();
         }
@@ -74,6 +76,22 @@ public class MainCmsController : Controller
     private async Task<bool> alreadyExistingMainContent(ContentViewModel contentViewModel)
     {
         if (contentViewModel.ContentType == ContentType.MainScreen)
+        {
+            List<Content> existingMainContent =
+            await _mainRepository.GetContentByType(contentViewModel.ContentType);
+
+            if (existingMainContent.Any())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private async Task<bool> alreadyExistingAboutUs(ContentViewModel contentViewModel)
+    {
+        if (contentViewModel.ContentType == ContentType.AboutUs)
         {
             List<Content> existingMainContent =
             await _mainRepository.GetContentByType(contentViewModel.ContentType);
