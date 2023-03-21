@@ -32,7 +32,7 @@
         {
             foreach (var subCategory in category.SubCategories)
             {
-                <tr style="height: 200px;">
+                    <tr>
                     <td>
                         <a class="link-warning" asp-action="Edit" asp-route-id="@subCategory.Id">Edit</a> |
                         <a class ="link-danger" asp-action="Delete" asp-route-id="@subCategory.Id">Delete</a>

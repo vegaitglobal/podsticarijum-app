@@ -42,7 +42,7 @@ public class SubCategorySpecificCmsController : Controller
             SubCategoryDtoList = subCategories.Select(sc =>
                 new SelectListItem()
                 {
-                    Text = sc.MainNavMenuText,
+                    Text = sc.MainNavMenuText + " " + sc.Category.NavMenuText,
                     Value = sc.Id.ToString()
                 }),
             ParagraphSigns = paragraphSigns
