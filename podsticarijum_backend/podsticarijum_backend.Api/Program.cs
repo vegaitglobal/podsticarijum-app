@@ -47,7 +47,8 @@ builder.Services
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.ReferenceHandler =            ReferenceHandler.IgnoreCycles;
-                }); ;
+                });
+
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddEndpointsApiExplorer();
