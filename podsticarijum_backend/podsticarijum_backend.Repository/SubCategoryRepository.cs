@@ -76,6 +76,12 @@ public class SubCategoryRepository : ISubCategoryRepository
         await _podsticarijumContext.SaveChangesAsync();
     }
 
+    public async Task Delete(SubCategorySpecificContent subCategorySpecificContent)
+    {
+        _podsticarijumContext.Remove(subCategorySpecificContent);
+        await _podsticarijumContext.SaveChangesAsync();
+    }
+
     public Task<List<SubCategorySpecificContent>> GetAllSubCategorySpecific(bool tracking = false)
     {
         var query = _podsticarijumContext.SubCategorySpecificContent
@@ -95,7 +101,8 @@ public class SubCategoryRepository : ISubCategoryRepository
     public Task<SubCategorySpecificContent?> GetSubCategorySpecific(long id, bool tracking = false)
     {
         var query = _podsticarijumContext.SubCategorySpecificContent
-            .Include(sc => sc.SubCategory);
+            .Include(scc => scc.SubCategory)
+            .Include(scc => scc.SubCategory.Category);
 
         return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }

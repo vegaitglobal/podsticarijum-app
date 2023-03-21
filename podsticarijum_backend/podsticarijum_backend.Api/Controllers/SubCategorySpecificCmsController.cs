@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using podsticarijum_backend.Api.Viewmodels;
+using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Application.EntityExtensions;
 using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;
@@ -141,28 +142,42 @@ public class SubCategorySpecificCmsController : Controller
         {
             return BadRequest();
         }
-        return Ok();
+        content.ParagraphSign = Enum.Parse<ParagraphSign>(viewModel.ParagraphSign);
+        content.ParagraphText = viewModel.ParagraphText;
+        content.PageTitle = viewModel.PageTitle;
 
+        await _subCategoryRepository.Update(content);
+
+        return RedirectToAction("");
     }
 
     // GET: SubCategorySpecificController/Delete/5
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
-        return View();
+        SubCategorySpecificContent? content = await _subCategoryRepository.GetSubCategorySpecific(id);
+
+        if (content == null)
+        {
+            return NotFound();
+        }
+
+
+        return View(content.ToDto());
     }
 
     // POST: SubCategorySpecificController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(int id, IFormCollection collection)
+    public async Task<ActionResult> Delete(int id, IFormCollection formCollection)
     {
-        try
+        SubCategorySpecificContent? content = await _subCategoryRepository.GetSubCategorySpecific(id);
+
+        if (content == null)
         {
-            return RedirectToAction(nameof(Index));
+            return NotFound();
         }
-        catch
-        {
-            return View();
-        }
+
+        await _subCategoryRepository.Delete(content);
+        return RedirectToAction("");
     }
 }

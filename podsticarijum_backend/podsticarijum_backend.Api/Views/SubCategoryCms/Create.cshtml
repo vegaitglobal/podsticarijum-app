@@ -24,7 +24,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="@Model.SubCategoryDto.MainNavMenuText" class="control-label"></label>
-                <textarea rows="6" asp-for="@Model.SubCategoryDto.MainNavMenuText" class="form-control"></textarea>
+                <input asp-for="@Model.SubCategoryDto.MainNavMenuText" class="form-control"/>
                 <span asp-validation-for="@Model.SubCategoryDto.MainNavMenuText" class="text-danger"></span>
             </div>
             <br />
@@ -40,9 +40,10 @@
                 <span asp-validation-for="@Model.SubCategoryDto.AdditionalText" class="text-danger"></span>
             </div>
             <br />
+            <hr />
             <div class="form-group">
                 <label asp-for="@Model.SubCategoryDto.CheckMoreButtonText" class="control-label"></label>
-                <textarea rows="6" asp-for="@Model.SubCategoryDto.CheckMoreButtonText" class="form-control"></textarea>
+                <input asp-for="@Model.SubCategoryDto.CheckMoreButtonText" class="form-control"/>
                 <span asp-validation-for="@Model.SubCategoryDto.CheckMoreButtonText" class="text-danger"></span>
             </div>
             <br />
@@ -54,10 +55,11 @@
             <br />
             <div class="form-group">
                 <label asp-for="@Model.SubCategoryDto.CheckMorePageText" class="control-label"></label>
-                <input asp-for="@Model.SubCategoryDto.CheckMorePageText" class="form-control" />
+                <textarea rows="6" asp-for="@Model.SubCategoryDto.CheckMorePageText" class="form-control"></textarea>
                 <span asp-validation-for="@Model.SubCategoryDto.CheckMorePageText" class="text-danger"></span>
             </div>
             <br />
+            <hr />
             <div class="form-group">
                 <label asp-for="@Model.SubCategoryDto.DevelopmentSupportingActivitiesButtonText" class="control-label"></label>
                 <textarea rows="6" asp-for="@Model.SubCategoryDto.DevelopmentSupportingActivitiesButtonText" class="form-control"></textarea>
@@ -66,7 +68,7 @@
             <br />
             <div class="form-group">
                 <label asp-for="@Model.SubCategoryDto.AtypicalDevelopmentSignsText" class="control-label"></label>
-                <input asp-for="@Model.SubCategoryDto.AtypicalDevelopmentSignsText" class="form-control" />
+                <textarea rows="6" asp-for="@Model.SubCategoryDto.AtypicalDevelopmentSignsText" class="form-control"></textarea>
                 <span asp-validation-for="@Model.SubCategoryDto.AtypicalDevelopmentSignsText" class="text-danger"></span>
             </div>
             <br />

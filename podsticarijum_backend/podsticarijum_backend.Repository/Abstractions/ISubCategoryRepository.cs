@@ -23,6 +23,8 @@ public interface ISubCategoryRepository
 
     Task Delete(SubCategory subCategory);
 
+    Task Delete(SubCategorySpecificContent subCategorySpecificContent);
+
     Task<long> Insert(SubCategory subCategory);
 
     Task<long> Insert(SubCategorySpecificContent content);
