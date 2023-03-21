@@ -17,6 +17,12 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div class="form-group">
+                <label class="control-label">Flag</label>
+                <select class="form-control" asp-for="@Model.SubCategoryId"
+                        asp-items="@Model.SubCategoryDtoList">
+                </select>
+            </div>
+            <div class="form-group">
                 <label asp-for="@Model.ParagraphText" class="control-label"></label>
                 <input asp-for="@Model.ParagraphText" class="form-control" />
                 <span asp-validation-for="@Model.ParagraphText" class="text-danger"></span>

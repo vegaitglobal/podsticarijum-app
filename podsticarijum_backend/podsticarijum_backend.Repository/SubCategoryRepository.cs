@@ -101,6 +101,7 @@ public class SubCategoryRepository : ISubCategoryRepository
     public Task<SubCategorySpecificContent?> GetSubCategorySpecific(long id, bool tracking = false)
     {
         var query = _podsticarijumContext.SubCategorySpecificContent
+            .Where(scc => scc.Id == id)
             .Include(scc => scc.SubCategory)
             .Include(scc => scc.SubCategory.Category);
 

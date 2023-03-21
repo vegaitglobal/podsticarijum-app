@@ -112,19 +112,21 @@ public class SubCategorySpecificCmsController : Controller
             SubCategoryDtoList = subCategories.Select(sc =>
                 new SelectListItem()
                 {
-                    Text = sc.MainNavMenuText,
-                    Value = sc.Id.ToString(),
-                    Selected = sc.Id == content.SubCategory.Id
+                    Text = sc.MainNavMenuText + " [" + sc.Category.NavMenuText + "]",
+                    Value = sc.Id.ToString()
                 }),
-            ParagraphSigns = paragraphSigns.Select(ps =>
+            ParagraphSigns = paragraphSigns
+                .Where(ps => ps != ParagraphSign.Default)
+                .Select(ps =>
                 new SelectListItem()
                 {
                     Text = ps.ToString(),
-                    Value = ((int)ps).ToString(),
-                    Selected = ps == content.ParagraphSign
+                    Value = ((int)ps).ToString()
                 }
             ),
-            ParagraphText = content.ParagraphText
+            ParagraphText = content.ParagraphText,
+            ParagraphSign = ((int)content.ParagraphSign).ToString(),
+            SubCategoryId = content.SubCategory.Id
         };
 
         return View(contentViewModel);
