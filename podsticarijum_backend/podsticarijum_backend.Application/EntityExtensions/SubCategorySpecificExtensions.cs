@@ -10,7 +10,12 @@ public static class SubCategorySpecificExtensions
         id: subCategorySpecificContent.Id,
         subCategoryDto: subCategorySpecificContent.SubCategory.ToDto(),
         paragraphText: subCategorySpecificContent.ParagraphText,
-        paragraphSign: subCategorySpecificContent.ParagraphSign);
+        paragraphSign: subCategorySpecificContent.ParagraphSign)
+    {
+        CategoryDtoNavMenuText = 
+        subCategorySpecificContent.SubCategory.MainNavMenuText + " [" +
+        subCategorySpecificContent.SubCategory.Category.NavMenuText + "]"
+    };
 
     public static List<SubCategorySpecificDto?> ToDto(this IEnumerable<SubCategorySpecificContent> subCategorySpecificContents)
         => subCategorySpecificContents.Select(scc => scc?.ToDto()).ToList();

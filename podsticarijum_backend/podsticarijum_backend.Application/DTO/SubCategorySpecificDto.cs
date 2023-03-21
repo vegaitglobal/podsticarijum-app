@@ -34,4 +34,6 @@ public class SubCategorySpecificDto
     public string ParagraphText { get; set; }
 
     public ParagraphSign ParagraphSign { get; set; }
+
+    public string? CategoryDtoNavMenuText { get; set; } = string.Empty;
 }

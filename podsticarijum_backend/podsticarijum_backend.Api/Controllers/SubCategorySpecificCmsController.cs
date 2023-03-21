@@ -151,6 +151,14 @@ public class SubCategorySpecificCmsController : Controller
         }
         content.ParagraphSign = Enum.Parse<ParagraphSign>(viewModel.ParagraphSign);
         content.ParagraphText = viewModel.ParagraphText;
+        if (content.SubCategory.Id != viewModel.SubCategoryId)
+        {
+            SubCategory? subCategory = await _subCategoryRepository.Get(content.SubCategory.Id, tracking: true);
+            if (subCategory != null)
+            {
+                content.SubCategory = subCategory;
+            }
+        }
 
         await _subCategoryRepository.Update(content);
 
