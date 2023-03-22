@@ -42,14 +42,13 @@ public class ExpertCmsController : Controller
     public async Task<ActionResult> Create()
     {
         List<SubCategory> subCategories = await _subCategoryRepository.GetAll();
-        List<SelectListItem> selectListItems = subCategories
-            .GroupBy(sc => new {sc.Id, sc.MainNavMenuText})
-            .Select(sc => new SelectListItem()
-            {
-                Text = sc.Key.MainNavMenuText,
-                Value = sc.Key.Id.ToString()
-            })
-            .ToList();
+        var asdf = subCategories.DistinctBy(sc => sc.MainNavMenuText);
+
+        var selectListItems = asdf.Select(sc => new SelectListItem()
+        {
+            Text = sc.MainNavMenuText,
+            Value = sc.Id.ToString()
+        });
 
         ExpertViewModel expertViewModel = new()
         {
@@ -64,21 +63,20 @@ public class ExpertCmsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(ExpertViewModel expertViewModel)
     {
-        SubCategory? subCategory = await _subCategoryRepository.Get(expertViewModel.SubCategoryId, tracking: true);
-        if (subCategory == null)
+        SelectListItem? selectedSubCategory = expertViewModel.SubCategoryList.Where(x => x.Selected).FirstOrDefault();
+        if (selectedSubCategory == null)
         {
             return NotFound();
         }
 
-        List<Expert> expertBySubCategory = await _expertRepository.GetExpertsForSubCategory(subCategory.Id);
+        List<Expert> expertBySubCategory = await _expertRepository.GetExpertsForSubCategory(long.Parse(selectedSubCategory.Value));
 
         if (expertBySubCategory.Any())
         {
             return BadRequest();
         }
 
-
-        List<SubCategory> subCategoriesByName = await _subCategoryRepository.GetByNavMenuText(subCategory.MainNavMenuText, tracking: true);
+        List<SubCategory> subCategoriesByName = await _subCategoryRepository.GetByNavMenuText(selectedSubCategory.Text, tracking: true);
 
         IEnumerable<Expert> experts = subCategoriesByName
             .Select(sc =>
