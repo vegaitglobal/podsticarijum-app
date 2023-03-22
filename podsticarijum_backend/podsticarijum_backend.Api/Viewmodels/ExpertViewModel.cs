@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace podsticarijum_backend.Api.Viewmodels;
 
@@ -8,9 +9,9 @@ public class ExpertViewModel
 
     public long SubCategoryId { get; set; }
 
-    public string FirstName { get; set; } = null!;
+    public string FirstName { get; set; } = string.Empty!;
 
-    public string LastName { get; set; } = null!;
+    public string LastName { get; set; } = string.Empty!;
 
     public string Email { get; set; } = null!;
 

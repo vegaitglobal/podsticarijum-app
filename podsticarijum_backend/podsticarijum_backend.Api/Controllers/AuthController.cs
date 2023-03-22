@@ -41,7 +41,7 @@ public class AuthController : Controller
 
         if (user == null)
         {
-            return BadRequest("User does not exist");
+            return BadRequest();
         }
 
         await loginUser(loginViewModel);
