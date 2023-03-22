@@ -63,7 +63,7 @@ public class ExpertCmsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(ExpertViewModel expertViewModel)
     {
-        SubCategory? subCategory = await _subCategoryRepository.Get(expertViewModel.SubCategoryId);
+        SubCategory? subCategory = await _subCategoryRepository.Get(expertViewModel.SubCategoryId, tracking: true);
         if (subCategory == null)
         {
             return NotFound();
