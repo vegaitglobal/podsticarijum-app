@@ -118,7 +118,7 @@ public class ExpertCmsController : Controller
 
         expert.Email = expertDto.Email;
         expert.FirstName = expertDto.FirstName;
-        expert.LastName = expertDto.LastName;
+        expert.LastName = expertDto.LastName ?? string.Empty;
         expert.Description = expertDto.Description;
 
         await _expertRepository.Update(expert);
