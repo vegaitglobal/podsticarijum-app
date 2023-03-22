@@ -43,10 +43,11 @@ public class ExpertCmsController : Controller
     {
         List<SubCategory> subCategories = await _subCategoryRepository.GetAll();
         List<SelectListItem> selectListItems = subCategories
+            .GroupBy(sc => new {sc.Id, sc.MainNavMenuText})
             .Select(sc => new SelectListItem()
             {
-                Text = sc.MainNavMenuText,
-                Value = sc.Id.ToString()
+                Text = sc.Key.MainNavMenuText,
+                Value = sc.Key.Id.ToString()
             })
             .ToList();
 
