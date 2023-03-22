@@ -65,7 +65,7 @@ public class ExpertInfoCmsController : Controller
     // POST: ExpertInfoCmsController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(int id, ExpertRequestDto expertDto)
+    public async Task<ActionResult> Edit(int id, ExpertInfoRequestDto expertDto)
     {
         ExpertInfo? expertInfo = await _expertRepository.GetExpertInfo(id, tracking: true);
         if (expertInfo == null)
@@ -73,8 +73,8 @@ public class ExpertInfoCmsController : Controller
             return NotFound();
         }
 
-        expertInfo.Title = expertDto.Email;
-        expertInfo.Content = expertDto.FirstName;
+        expertInfo.Title = expertDto.Title;
+        expertInfo.Content = expertDto.Content;
 
         await _expertRepository.Update(expertInfo);
 
