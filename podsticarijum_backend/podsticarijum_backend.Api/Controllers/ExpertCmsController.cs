@@ -63,20 +63,20 @@ public class ExpertCmsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(ExpertViewModel expertViewModel)
     {
-        SelectListItem? selectedSubCategory = expertViewModel.SubCategoryList.Where(x => x.Selected).FirstOrDefault();
+        SubCategory? selectedSubCategory = await _subCategoryRepository.Get(expertViewModel.SubCategoryId);
         if (selectedSubCategory == null)
         {
             return NotFound();
         }
 
-        List<Expert> expertBySubCategory = await _expertRepository.GetExpertsForSubCategory(long.Parse(selectedSubCategory.Value));
+        List<Expert> expertBySubCategory = await _expertRepository.GetExpertsForSubCategory(selectedSubCategory.Id);
 
         if (expertBySubCategory.Any())
         {
             return BadRequest();
         }
 
-        List<SubCategory> subCategoriesByName = await _subCategoryRepository.GetByNavMenuText(selectedSubCategory.Text, tracking: true);
+        List<SubCategory> subCategoriesByName = await _subCategoryRepository.GetByNavMenuText(selectedSubCategory.MainNavMenuText, tracking: true);
 
         IEnumerable<Expert> experts = subCategoriesByName
             .Select(sc =>
