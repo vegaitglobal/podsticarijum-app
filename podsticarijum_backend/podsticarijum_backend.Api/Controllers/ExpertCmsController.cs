@@ -42,7 +42,7 @@ public class ExpertCmsController : Controller
     public async Task<ActionResult> Create()
     {
         List<SubCategory> subCategories = await _subCategoryRepository.GetAll();
-        var asdf = subCategories.DistinctBy(sc => sc.MainNavMenuText);
+        var asdf = subCategories.DistinctBy(sc => sc.MainNavMenuText.Trim());
 
         var selectListItems = asdf.Select(sc => new SelectListItem()
         {
