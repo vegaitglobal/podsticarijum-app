@@ -15,7 +15,9 @@ public class CategoryRepository : ICategoryRepository
 
     public Task<Category?> Get(long id, bool tracking = false)
     {
-        var query = _podsticarijumContext.Category.Where(c => c.Id == id);
+        var query = _podsticarijumContext.Category
+            .Where(c => c.Id == id)
+            .Include(c => c.SubCategories);
         return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }
 

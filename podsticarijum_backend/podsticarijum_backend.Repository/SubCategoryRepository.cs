@@ -26,6 +26,14 @@ public class SubCategoryRepository : ISubCategoryRepository
         var query = _podsticarijumContext.SubCategory.Include(sc => sc.Category);
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
+
+    public Task<List<SubCategory>> GetByNavMenuText(string navMenuText, bool tracking = false)
+    {
+        var query = _podsticarijumContext.SubCategory
+            .Where(sc => sc.MainNavMenuText == navMenuText)
+            .Include(sc => sc.Category);
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
+    }
     
     public Task<List<SubCategory>> GetForCategory(long categoryId, bool tracking = false)
     {

@@ -45,7 +45,7 @@ public class ExpertCmsController : Controller
         List<SelectListItem> selectListItems = subCategories
             .Select(sc => new SelectListItem()
             {
-                Text = $"{sc.MainNavMenuText} [{sc.Category.NavMenuText}]",
+                Text = sc.MainNavMenuText,
                 Value = sc.Id.ToString()
             })
             .ToList();
@@ -69,21 +69,27 @@ public class ExpertCmsController : Controller
             return NotFound();
         }
 
-        List<Expert> experts = await _expertRepository.GetExpertsForSubCategory(subCategory.Id);
+        List<Expert> expertBySubCategory = await _expertRepository.GetExpertsForSubCategory(subCategory.Id);
 
-        if (experts.Any())
+        if (expertBySubCategory.Any())
         {
             return BadRequest();
         }
 
-        Expert expert = new(
-            subCategory: subCategory,
-            firstName: expertViewModel.FirstName,
-            lastName: expertViewModel.LastName,
-            email: expertViewModel.Email,
-            description: expertViewModel.Description);
 
-        await _expertRepository.Insert(expert);
+        List<SubCategory> subCategoriesByName = await _subCategoryRepository.GetByNavMenuText(subCategory.MainNavMenuText, tracking: true);
+
+        IEnumerable<Expert> experts = subCategoriesByName
+            .Select(sc =>
+                new Expert(
+                subCategory: sc,
+                firstName: expertViewModel.FirstName,
+                lastName: expertViewModel.LastName,
+                email: expertViewModel.Email,
+                description: expertViewModel.Description)
+        );
+
+        await _expertRepository.InsertMany(experts);
 
         return RedirectToAction("");
     }

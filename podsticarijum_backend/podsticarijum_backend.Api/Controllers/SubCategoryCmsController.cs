@@ -44,11 +44,11 @@ public class SubCategoryCmsController : Controller
 
         SubCategoryViewModel subCategoryViewModel = new()
         {
-            CategoryDtoList = categoryDtos.Select(c => new   SelectListItem()
-                    {
-                        Text = c.NavMenuText,
-                        Value = c.Id.ToString(),
-                    })
+            CategoryDtoList = categoryDtos.Select(c => new SelectListItem()
+            {
+                Text = c.NavMenuText,
+                Value = c.Id.ToString(),
+            })
         };
 
         return View(subCategoryViewModel);
@@ -64,6 +64,11 @@ public class SubCategoryCmsController : Controller
         var category = await _categoryRepository.Get(selectedCategoryId, tracking: true);
 
         if (category == null)
+        {
+            return BadRequest();
+        }
+
+        if (categoryAlreadyHasThatSubCategory(subCategoryViewModel, category))
         {
             return BadRequest();
         }
@@ -111,6 +116,18 @@ public class SubCategoryCmsController : Controller
             return NotFound();
         }
 
+        var category = await _categoryRepository.Get(subCategory.Category.Id);
+
+        if (category == null)
+        {
+            return BadRequest();
+        }
+
+        if (categoryAlreadyHasThatSubCategory(viewModel, category))
+        {
+            return BadRequest();
+        }
+
         subCategory.UpdateFromDto(viewModel.SubCategoryDto);
         subCategory.UpdatedAt = DateTime.UtcNow;
         await _subCategoryRepository.Update(subCategory);
@@ -154,4 +171,7 @@ public class SubCategoryCmsController : Controller
             return View();
         }
     }
+
+    private static bool categoryAlreadyHasThatSubCategory(SubCategoryViewModel subCategoryViewModel, Category category)
+        => category.SubCategories.Any(sc => sc.MainNavMenuText == subCategoryViewModel.SubCategoryDto.MainNavMenuText.Trim());
 }

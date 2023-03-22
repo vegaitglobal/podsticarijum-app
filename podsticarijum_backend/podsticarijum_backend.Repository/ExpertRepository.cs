@@ -61,4 +61,10 @@ public class ExpertRepository : IExpertRepository
         _podsticarijumContext.Remove(expert);
         await _podsticarijumContext.SaveChangesAsync();
     }
+
+    public async Task InsertMany(IEnumerable<Expert> experts)
+    {
+        _podsticarijumContext.AddRange(experts);
+        await _podsticarijumContext.SaveChangesAsync();
+    }
 }

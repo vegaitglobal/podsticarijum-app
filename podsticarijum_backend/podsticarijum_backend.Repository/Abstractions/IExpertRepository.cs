@@ -12,6 +12,8 @@ public interface IExpertRepository
 
     Task<long> Insert(Expert expert);
 
+    Task InsertMany(IEnumerable<Expert> experts);
+
     Task Update(Expert expert);
 
     Task Delete(Expert expert);
