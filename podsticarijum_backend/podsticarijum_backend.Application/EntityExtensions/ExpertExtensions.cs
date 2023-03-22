@@ -18,4 +18,14 @@ public static class ExpertExtensions
 
     public static List<ExpertDto> ToDto(this IEnumerable<Expert> experts)
         => experts.Select(e => e.ToDto()).ToList();
+
+    public static ExpertInfoDto ToDto(this ExpertInfo expert)
+        => new ExpertInfoDto(
+             id: expert.Id,
+             title: expert.Title,
+             content: expert.Content
+            );
+
+    public static List<ExpertInfoDto> ToDto(this IEnumerable<ExpertInfo> expertInfoDtos)
+        => expertInfoDtos.Select(ei => ei.ToDto()).ToList();
 }

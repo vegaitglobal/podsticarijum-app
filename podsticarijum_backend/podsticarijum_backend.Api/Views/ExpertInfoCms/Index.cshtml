@@ -1,0 +1,40 @@
+﻿@model List<podsticarijum_backend.Application.DTO.ExpertInfoDto>;
+@{
+    ViewData["Title"] = "Index";
+}
+<h3>Expert Information</h3>
+
+<p>
+    <a class="btn btn-outline-primary btn-lg" asp-action="Create">Create New</a>
+</p>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Edit&nbsp;|&nbsp;Delete</th>
+            <th>
+                Title
+            </th>
+            <th>
+                Content
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a class="link-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="link-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

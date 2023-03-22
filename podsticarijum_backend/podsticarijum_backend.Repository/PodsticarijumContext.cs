@@ -19,6 +19,8 @@ public class PodsticarijumContext : DbContext
 
     public DbSet<Expert> Expert { get; set; }
 
+    public DbSet<ExpertInfo> ExpertInfo { get; set; }
+
     public DbSet<Faq> Faq { get; set; }
 
     public DbSet<SubCategorySpecificContent> SubCategorySpecificContent { get; set; }

@@ -102,6 +102,19 @@ public class DataSeeder : IDataSeeder
             }
         }
 
+        if (_podsticarijumContext.ExpertInfo.Count() < 10)
+        {
+            for(int i = 0; i < 10; i++)
+            {
+                _podsticarijumContext.Add(
+                    new ExpertInfo(
+                        title: "Tajtl" + i.ToString(),
+                        content: "Kontent!" + i.ToString()
+                        )
+                    );
+            }
+        }
+
         if (_podsticarijumContext.Content.Where(c => c.ContentType == Domain.ContentType.MainScreen).Count() == 0)
         {
             _podsticarijumContext.Content.Add(

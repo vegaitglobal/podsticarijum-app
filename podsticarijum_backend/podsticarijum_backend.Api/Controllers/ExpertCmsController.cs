@@ -24,7 +24,7 @@ public class ExpertCmsController : Controller
         _subCategoryRepository = subCategoryRepository;
     }
 
-    // GET: ExpertCmsController
+    // GET: ExpertInfoCmsController
     public async Task<ActionResult> Index()
     {
         List<Expert> experts = await _expertRepository.GetAll();
@@ -32,13 +32,13 @@ public class ExpertCmsController : Controller
         return View(experts.ToDto());
     }
 
-    // GET: ExpertCmsController/Details/5
+    // GET: ExpertInfoCmsController/Details/5
     public ActionResult Details(int id)
     {
         return View();
     }
 
-    // GET: ExpertCmsController/Create
+    // GET: ExpertInfoCmsController/Create
     public async Task<ActionResult> Create()
     {
         List<SubCategory> subCategories = await _subCategoryRepository.GetAll();
@@ -58,7 +58,7 @@ public class ExpertCmsController : Controller
         return View(expertViewModel);
     }
 
-    // POST: ExpertCmsController/Create
+    // POST: ExpertInfoCmsController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(ExpertViewModel expertViewModel)
@@ -93,7 +93,7 @@ public class ExpertCmsController : Controller
         return RedirectToAction("");
     }
 
-    // GET: ExpertCmsController/Edit/5
+    // GET: ExpertInfoCmsController/Edit/5
     public async Task<ActionResult<ExpertDto>> Edit(int id)
     {
         Expert? expert = await _expertRepository.Get(id);
@@ -105,7 +105,7 @@ public class ExpertCmsController : Controller
         return View(expert.ToDto());
     }
 
-    // POST: ExpertCmsController/Edit/5
+    // POST: ExpertInfoCmsController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit(int id, ExpertDto expertDto)
@@ -126,7 +126,7 @@ public class ExpertCmsController : Controller
         return RedirectToAction("");
     }
 
-    // GET: ExpertCmsController/Delete/5
+    // GET: ExpertInfoCmsController/Delete/5
     public async Task<ActionResult<ExpertDto>> Delete(int id)
     {
         Expert? expert = await _expertRepository.Get(id);
@@ -138,7 +138,7 @@ public class ExpertCmsController : Controller
         return View(expert.ToDto());
     }
 
-    // POST: ExpertCmsController/Delete/5
+    // POST: ExpertInfoCmsController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Delete(int id, IFormCollection collection)
