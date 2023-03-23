@@ -39,8 +39,8 @@ public class FaqCmsController : Controller
     // GET: FaqCmsController/Create
     public async Task<ActionResult<List<SubCategoryDto>>> Create()
     {
-        List<Faq> faqs = await _faqRepository.GetAll();
-        var subCategories = faqs.Select(f => f.SubCategory);
+        List<SubCategory> subCategories = await _subCategoryRepository.GetAll();
+
         FaqViewModel faqViewModel = new()
         {
             SubCategoryDtoList = subCategories.Select(sc =>
