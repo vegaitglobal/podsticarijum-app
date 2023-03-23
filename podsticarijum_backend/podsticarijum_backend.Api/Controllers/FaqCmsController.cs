@@ -40,13 +40,15 @@ public class FaqCmsController : Controller
     public async Task<ActionResult<List<SubCategoryDto>>> Create()
     {
         List<SubCategory> subCategories = await _subCategoryRepository.GetAll();
+        subCategories = subCategories.DistinctBy(sc => sc.MainNavMenuText.Trim()).ToList();
 
         FaqViewModel faqViewModel = new()
         {
-            SubCategoryDtoList = subCategories.Select(sc =>
-                new SelectListItem() 
+            SubCategoryDtoList = subCategories
+                .Select(sc =>
+                 new SelectListItem() 
                 {
-                    Text = $"{sc.MainNavMenuText} [{sc.Category.NavMenuText}]",
+                    Text = sc.MainNavMenuText,
                     Value = sc.Id.ToString()
                 }
             )
@@ -60,19 +62,22 @@ public class FaqCmsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(FaqViewModel faqViewModel)
     {
-        SubCategory? subCategory = await _subCategoryRepository.Get(faqViewModel.SubCategoryId, tracking: true);
+        SubCategory? selectedSubCategory = await _subCategoryRepository.Get(faqViewModel.SubCategoryId, tracking: true);
 
-        if (subCategory == null)
+        if (selectedSubCategory == null)
         {
             return NotFound();
         }
 
-        Faq faq = new(
-            subCategory: subCategory,
-            question: faqViewModel.Question,
-            answer: faqViewModel.Answer);
+        List<SubCategory> subCategoriesByName = await _subCategoryRepository.GetByNavMenuText(selectedSubCategory.MainNavMenuText, tracking: true);
 
-        await _faqRepository.Insert(faq);
+        IEnumerable<Faq> faqs = subCategoriesByName
+            .Select(sc => new Faq(
+            subCategory: sc,
+            question: faqViewModel.Question,
+            answer: faqViewModel.Answer));
+
+        await _faqRepository.Insert(faqs);
 
         return RedirectToAction("");
     }
