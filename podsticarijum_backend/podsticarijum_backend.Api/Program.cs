@@ -37,7 +37,7 @@ builder.Services.AddScoped<IFaqRepository, FaqRepository>();
 
 builder.Services.AddDbContext<PodsticarijumContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb"), b => b.MigrationsAssembly("podsticarijum_backend.Repository"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb")!, b => b.MigrationsAssembly("podsticarijum_backend.Repository"));
 });
 
 
@@ -46,20 +46,20 @@ builder.Services
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.ReferenceHandler =            ReferenceHandler.IgnoreCycles;
-                }); ;
+                });
+
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -67,6 +67,8 @@ using (var scope = app.Services.CreateScope())
 {
     PodsticarijumContext db = scope.ServiceProvider.GetRequiredService<PodsticarijumContext>();
     db.Database.Migrate();
+    IDataSeeder dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
+    await dataSeeder.EnsureSuperuserSeeded();
 }
 
 if (app.Environment.IsDevelopment())

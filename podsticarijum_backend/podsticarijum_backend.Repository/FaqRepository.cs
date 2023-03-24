@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
@@ -48,6 +43,12 @@ public class FaqRepository : IFaqRepository
         _podsticarijumContext.Add(faq);
         await _podsticarijumContext.SaveChangesAsync().ConfigureAwait(false);
         return faq.Id;
+    }
+
+    public async Task Insert(IEnumerable<Faq> faqs)
+    {
+        _podsticarijumContext.AddRange(faqs);
+        await _podsticarijumContext.SaveChangesAsync().ConfigureAwait(false);
     }
 
     public async Task Update(Faq faq)

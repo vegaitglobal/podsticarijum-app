@@ -6,6 +6,7 @@ services:
     container_name: podsticarijum-api
     ports:
       - "23000:80"
+      - "23001:443"
     environment:
       - ConnectionStrings__PodsticarijumDb=Server=db;Database=podsticarijum;User Id=sa;Password=SecurePass12345;
       - ASPNETCORE_ENVIRONMENT=Production
@@ -13,12 +14,13 @@ services:
       - MailData__AppMailAddressFrom=podsticarijum@gmail.com
       - MailData__Host=smtp.gmail.com
       - MailData__Port=587
+      - DB_PASSWORD=#{DB_PASSWORD}#
     restart: always
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: podsticarijum-db
     ports:
-      - 1433
+      - "23456:1433"
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=SecurePass12345

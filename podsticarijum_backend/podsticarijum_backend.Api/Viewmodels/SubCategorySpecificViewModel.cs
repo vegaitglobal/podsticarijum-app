@@ -10,8 +10,6 @@ public class SubCategorySpecificViewModel
 
     public long SubCategoryId { get; set; }
 
-    public string PageTitle { get; set; }
-
     public string ParagraphText { get; set; }
 
     public IEnumerable<SelectListItem> ParagraphSigns { get; set; }

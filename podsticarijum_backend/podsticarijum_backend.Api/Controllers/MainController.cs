@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Application.DtoExtensions;
 using podsticarijum_backend.Application.EntityExtensions;
+using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
@@ -17,6 +18,34 @@ public class MainController : ControllerBase
     public MainController(IMainRepository mainRepository)
     {
         _mainRepository = mainRepository;
+    }
+    /// <summary>
+    /// Get all or multiple content entries. Can be filtered by contentType route param.
+    /// </summary>
+    /// <param name="contentType">MainScreen</param>
+    /// <param name="contentType">Donations</param>
+    /// <param name="contentType">AboutUs</param>
+    /// </remarks>
+    /// <param name="contentType"></param>
+    /// <returns>List<ContentDto></returns>
+    [HttpGet]
+    public async Task<ActionResult<List<ContentDto>>> GetMultiple([FromQuery] string? contentType)
+    {
+        ContentType contentTypeEnum;
+        bool enumParsed = Enum.TryParse(contentType, ignoreCase: true, out contentTypeEnum);
+
+        List<Content> contents = new();
+
+        if (enumParsed)
+        {
+            contents = await _mainRepository.GetContentByType(contentTypeEnum).ConfigureAwait(false);
+        }
+        else
+        {
+            contents = await _mainRepository.GetAll().ConfigureAwait(false);
+        }
+
+        return Ok(contents.ToDto());
     }
 
     /// <summary>
@@ -49,22 +78,16 @@ public class MainController : ControllerBase
 
         Content entity = contentDto.ToDomainModel();
 
-        try
+        List<Content> activeMainScreens = await _mainRepository.GetContentByType(entity.ContentType).ConfigureAwait(false);
+        if (activeMainScreens.Count != 0)
         {
-            List<Content> activeMainScreens = await _mainRepository.GetContentByType(contentDto.ContentType).ConfigureAwait(false);
-            if (activeMainScreens.Count != 0)
-            {
-                await _mainRepository.Update(activeMainScreens);
-            }
-
-            var insertedObjectId = await _mainRepository.Insert(entity).ConfigureAwait(false);
-
-            return Ok(entity.ToDto());
+            await _mainRepository.Update(activeMainScreens);
         }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
+
+        var insertedObjectId = await _mainRepository.Insert(entity).ConfigureAwait(false);
+        entity.Id = insertedObjectId;
+        return Ok(entity.ToDto());
+
     }
 
     /// <summary>
@@ -95,6 +118,5 @@ public class MainController : ControllerBase
 
     private static bool mainScreenDtoInvalid(ContentRequestDto contentDto)
         => contentDto == null || contentDto.Text == null;
-
 }
 

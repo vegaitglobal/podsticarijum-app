@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using podsticarijum_backend.Application.DTO;
+﻿using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Domain.Entities;
 
 namespace podsticarijum_backend.Application.DtoExtensions;
@@ -25,6 +20,8 @@ public static class SubCategoryDtoExtensions
             checkMorePageText: subCategoryDto.CheckMorePageText,
             developmentSupportingActivitiesButtonText: subCategoryDto.DevelopmentSupportingActivitiesButtonText,
             atypicalDevelopmentSignsText: subCategoryDto.AtypicalDevelopmentSignsText,
+            greenActivityPageTitle: subCategoryDto.GreenActivityPageTitle,
+            redActivityPageTitle: subCategoryDto.RedActivityPageTitle,
             active: subCategoryDto.Active);
     }
 
@@ -43,6 +40,8 @@ public static class SubCategoryDtoExtensions
             checkMorePageText: subCategoryDto.CheckMorePageText,
             developmentSupportingActivitiesButtonText: subCategoryDto.DevelopmentSupportingActivitiesButtonText,
             atypicalDevelopmentSignsText: subCategoryDto.AtypicalDevelopmentSignsText,
+            greenActivityPageTitle: subCategoryDto.GreenActivityPageTitle,
+            redActivityPageTitle: subCategoryDto.RedActivityPageTitle,
             active: subCategoryDto.Active)
         { Id = subCategoryDto.Id };
     }

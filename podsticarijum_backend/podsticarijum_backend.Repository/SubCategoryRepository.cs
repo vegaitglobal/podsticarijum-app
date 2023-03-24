@@ -26,6 +26,14 @@ public class SubCategoryRepository : ISubCategoryRepository
         var query = _podsticarijumContext.SubCategory.Include(sc => sc.Category);
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
+
+    public Task<List<SubCategory>> GetByNavMenuText(string navMenuText, bool tracking = false)
+    {
+        var query = _podsticarijumContext.SubCategory
+            .Where(sc => sc.MainNavMenuText == navMenuText)
+            .Include(sc => sc.Category);
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
+    }
     
     public Task<List<SubCategory>> GetForCategory(long categoryId, bool tracking = false)
     {
@@ -76,6 +84,12 @@ public class SubCategoryRepository : ISubCategoryRepository
         await _podsticarijumContext.SaveChangesAsync();
     }
 
+    public async Task Delete(SubCategorySpecificContent subCategorySpecificContent)
+    {
+        _podsticarijumContext.Remove(subCategorySpecificContent);
+        await _podsticarijumContext.SaveChangesAsync();
+    }
+
     public Task<List<SubCategorySpecificContent>> GetAllSubCategorySpecific(bool tracking = false)
     {
         var query = _podsticarijumContext.SubCategorySpecificContent
@@ -95,7 +109,9 @@ public class SubCategoryRepository : ISubCategoryRepository
     public Task<SubCategorySpecificContent?> GetSubCategorySpecific(long id, bool tracking = false)
     {
         var query = _podsticarijumContext.SubCategorySpecificContent
-            .Include(sc => sc.SubCategory);
+            .Where(scc => scc.Id == id)
+            .Include(scc => scc.SubCategory)
+            .Include(scc => scc.SubCategory.Category);
 
         return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }

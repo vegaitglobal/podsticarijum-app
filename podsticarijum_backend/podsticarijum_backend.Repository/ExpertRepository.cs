@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using podsticarijum_backend.Domain.Entities;
 using podsticarijum_backend.Repository.Abstractions;
 
@@ -26,6 +21,12 @@ public class ExpertRepository : IExpertRepository
         return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }
 
+    public Task<ExpertInfo?> GetExpertInfo(long expertId, bool tracking = false)
+    {
+        var query = _podsticarijumContext.ExpertInfo;
+        return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
+    }
+
     public Task<List<Expert>> GetAll(bool tracking = false)
     {
 
@@ -33,6 +34,11 @@ public class ExpertRepository : IExpertRepository
                                                 .Include(e => e.SubCategory.Category);
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
 
+    }
+    public Task<List<ExpertInfo>> GetAllExpertInfo(bool tracking = false)
+    {
+        var query = _podsticarijumContext.ExpertInfo;
+        return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
 
     public Task<List<Expert>> GetExpertsForSubCategory(long subCategoryId, bool tracking = false)
@@ -50,15 +56,39 @@ public class ExpertRepository : IExpertRepository
         return expert.Id;
     }
 
+    public async Task<long> Insert(ExpertInfo expertInfo)
+    {
+        _podsticarijumContext.Add(expertInfo);
+        await _podsticarijumContext.SaveChangesAsync();
+        return expertInfo.Id;
+    }
+
     public async Task Update(Expert expert)
     {
         _podsticarijumContext.Update(expert);
         await _podsticarijumContext.SaveChangesAsync();
     }
 
+    public async Task Update(ExpertInfo expertInfo)
+    {
+        _podsticarijumContext.Update(expertInfo);
+        await _podsticarijumContext.SaveChangesAsync();
+    }
+
     public async Task Delete(Expert expert)
     {
         _podsticarijumContext.Remove(expert);
+        await _podsticarijumContext.SaveChangesAsync();
+    }
+    public async Task Delete(ExpertInfo expertInfo)
+    {
+        _podsticarijumContext.Remove(expertInfo);
+        await _podsticarijumContext.SaveChangesAsync();
+    }
+
+    public async Task InsertMany(IEnumerable<Expert> experts)
+    {
+        _podsticarijumContext.AddRange(experts);
         await _podsticarijumContext.SaveChangesAsync();
     }
 }

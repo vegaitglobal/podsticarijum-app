@@ -19,4 +19,9 @@ public static class ExpertDtoExtensions
         { Id = expertDto.Id};
     }
 
+    public static ExpertInfo ToDomainModel(this ExpertInfoRequestDto expertInfoRequestDto)
+        => new
+        ExpertInfo(
+            title: expertInfoRequestDto.Title,
+            content: expertInfoRequestDto.Content);
 }

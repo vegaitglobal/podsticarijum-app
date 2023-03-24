@@ -3,12 +3,25 @@
 public class SubCategoryDto
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    protected SubCategoryDto()
+    public SubCategoryDto()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
     }
 
-    public SubCategoryDto(long id, CategoryDto? categoryDto, string mainNavMenuText, string mainText, string additionalText, string checkMoreButtonText, string checkMorePageTitle, string checkMorePageText, string developmentSupportingActivitiesButtonText, string atypicalDevelopmentSignsText, bool active)
+    public SubCategoryDto(
+        long id,
+        CategoryDto? categoryDto,
+        string mainNavMenuText,
+        string mainText,
+        string additionalText,
+        string checkMoreButtonText,
+        string checkMorePageTitle,
+        string checkMorePageText,
+        string developmentSupportingActivitiesButtonText,
+        string atypicalDevelopmentSignsText,
+        string greenActivityPageTitle,
+        string redActivityPageTitle,
+        bool active)
     {
         Id = id;
         CategoryDto = categoryDto;
@@ -20,6 +33,8 @@ public class SubCategoryDto
         CheckMorePageText = checkMorePageText;
         DevelopmentSupportingActivitiesButtonText = developmentSupportingActivitiesButtonText;
         AtypicalDevelopmentSignsText = atypicalDevelopmentSignsText;
+        GreenActivityPageTitle = greenActivityPageTitle;
+        RedActivityPageTitle = redActivityPageTitle;
         Active = active;
     }
 
@@ -67,6 +82,11 @@ public class SubCategoryDto
     public string DevelopmentSupportingActivitiesButtonText { get; set; }
 
     public string AtypicalDevelopmentSignsText { get; set; }
+
+    public string GreenActivityPageTitle { get; set; }
+
+    public string RedActivityPageTitle { get; set; }
+
 
     public bool Active { get; set; }
 }

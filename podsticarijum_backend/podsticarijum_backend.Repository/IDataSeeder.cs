@@ -3,4 +3,6 @@
 public interface IDataSeeder
 {
     Task EnsureInitialSeed();
+
+    Task EnsureSuperuserSeeded();
 }

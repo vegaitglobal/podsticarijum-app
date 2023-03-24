@@ -6,6 +6,7 @@ namespace podsticarijum_backend.Repository;
 public class DataSeeder : IDataSeeder
 {
     private readonly PodsticarijumContext _podsticarijumContext;
+
     public DataSeeder(PodsticarijumContext podsticarijumContext)
     {
         _podsticarijumContext = podsticarijumContext;
@@ -15,7 +16,7 @@ public class DataSeeder : IDataSeeder
     {
         if (_podsticarijumContext.Category.Count() < 5)
         {
-            for(int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 _podsticarijumContext.Category
                 .Add(
@@ -27,9 +28,9 @@ public class DataSeeder : IDataSeeder
 
         if (_podsticarijumContext.SubCategory.Count() < 25)
         {
-            foreach(Category category in _podsticarijumContext.Category)
+            foreach (Category category in _podsticarijumContext.Category)
             {
-                for(int i = 0; i < 5; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     _podsticarijumContext.SubCategory.Add(
                         new SubCategory(
@@ -43,6 +44,8 @@ public class DataSeeder : IDataSeeder
                             developmentSupportingActivitiesButtonText:
                             "supporting activities 1 2 3",
                             atypicalDevelopmentSignsText: "not so typical",
+                            greenActivityPageTitle: "green activity page title", 
+                            redActivityPageTitle: "red activity page title",
                             active: true)
                         );
                 }
@@ -51,32 +54,30 @@ public class DataSeeder : IDataSeeder
 
         if (_podsticarijumContext.SubCategorySpecificContent.Count() < 55)
         {
-            foreach(SubCategory subCategory in _podsticarijumContext.SubCategory)
+            foreach (SubCategory subCategory in _podsticarijumContext.SubCategory)
             {
                 for (int i = 0; i < 5; i++)
                 {
                     _podsticarijumContext.Add(
                         new SubCategorySpecificContent(
                         subCategory: subCategory,
-                        pageTitle: "title!!!",
                         paragraphText: "paragraph texttt",
                         paragraphSign: Domain.ParagraphSign.GreenFlag));
 
                     _podsticarijumContext.Add(
                         new SubCategorySpecificContent(
                         subCategory: subCategory,
-                        pageTitle: "title!!!",
                         paragraphText: "paragraph texttt",
                         paragraphSign: Domain.ParagraphSign.RedFlag));
                 }
             }
-        } 
+        }
 
         if (_podsticarijumContext.Faq.Count() < 50)
         {
-            foreach(SubCategory subCategory in _podsticarijumContext.SubCategory)
+            foreach (SubCategory subCategory in _podsticarijumContext.SubCategory)
             {
-                for(int i = 0; i < 6; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     _podsticarijumContext.Faq.Add(
                         new Faq(
@@ -90,7 +91,7 @@ public class DataSeeder : IDataSeeder
 
         if (_podsticarijumContext.Expert.Count() < 5)
         {
-            foreach(SubCategory subCategory in _podsticarijumContext.SubCategory)
+            foreach (SubCategory subCategory in _podsticarijumContext.SubCategory)
             {
                 _podsticarijumContext.Expert.Add(
                         new Expert(subCategory: subCategory,
@@ -98,6 +99,19 @@ public class DataSeeder : IDataSeeder
                             lastName: "Expertovic",
                             email: "validEmail@validprovider.com",
                             description: "description for expert"));
+            }
+        }
+
+        if (_podsticarijumContext.ExpertInfo.Count() < 10)
+        {
+            for(int i = 0; i < 10; i++)
+            {
+                _podsticarijumContext.Add(
+                    new ExpertInfo(
+                        title: "Tajtl" + i.ToString(),
+                        content: "Kontent!" + i.ToString()
+                        )
+                    );
             }
         }
 
@@ -122,4 +136,21 @@ public class DataSeeder : IDataSeeder
 
         await _podsticarijumContext.SaveChangesAsync();
     }
+
+    public async Task EnsureSuperuserSeeded()
+    {
+
+        if (_podsticarijumContext.User.Count() < 1)
+        {
+            _podsticarijumContext.User.Add(
+                new User()
+                {
+                    Username = "superuser",
+                    Password = Environment.GetEnvironmentVariable("DB_PASSWORD")
+                }
+                );
+            await _podsticarijumContext.SaveChangesAsync();
+        }
+    }
+
 }

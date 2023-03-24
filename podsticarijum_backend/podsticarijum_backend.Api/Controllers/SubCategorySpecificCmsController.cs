@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using podsticarijum_backend.Api.Viewmodels;
+using podsticarijum_backend.Application.DTO;
 using podsticarijum_backend.Application.EntityExtensions;
 using podsticarijum_backend.Domain;
 using podsticarijum_backend.Domain.Entities;
@@ -9,7 +10,7 @@ using podsticarijum_backend.Repository.Abstractions;
 
 namespace podsticarijum_backend.Api.Controllers;
 
-//[Authorize]
+[Authorize]
 public class SubCategorySpecificCmsController : Controller
 {
     private readonly ISubCategoryRepository _subCategoryRepository;
@@ -41,10 +42,12 @@ public class SubCategorySpecificCmsController : Controller
             SubCategoryDtoList = subCategories.Select(sc =>
                 new SelectListItem()
                 {
-                    Text = sc.MainNavMenuText,
+                    Text = sc.MainNavMenuText + " " + sc.Category.NavMenuText,
                     Value = sc.Id.ToString()
                 }),
-            ParagraphSigns = paragraphSigns.Select(ps =>
+            ParagraphSigns = paragraphSigns
+            .Where(ps => ps != ParagraphSign.Default)
+            .Select(ps =>
                 new SelectListItem()
                 {
                     Text = ps.ToString(),
@@ -72,17 +75,21 @@ public class SubCategorySpecificCmsController : Controller
 
         ParagraphSign sign = ParagraphSign.Default;
 
-        if (Enum.TryParse(viewModel.ParagraphSign, out sign))
+        bool enumParsed = Enum.TryParse(viewModel.ParagraphSign, out sign);
+        
+        if (!enumParsed || sign == ParagraphSign.Default)
         {
-            SubCategorySpecificContent content = new(
-                subCategory: subCategory,
-                pageTitle: viewModel.PageTitle,
-                paragraphText: viewModel.ParagraphText,
-                paragraphSign: sign
-                );
-
-            await _subCategoryRepository.Insert(content);
+            return BadRequest();
         }
+
+        SubCategorySpecificContent content = new(
+            subCategory: subCategory,
+            paragraphText: viewModel.ParagraphText,
+            paragraphSign: sign
+            );
+
+        await _subCategoryRepository.Insert(content);
+
 
         return RedirectToAction("");
     }
@@ -99,26 +106,27 @@ public class SubCategorySpecificCmsController : Controller
         }
 
         var paragraphSigns = Enum.GetValues<ParagraphSign>().Cast<ParagraphSign>();
-        
+
         SubCategorySpecificViewModel contentViewModel = new()
         {
             SubCategoryDtoList = subCategories.Select(sc =>
                 new SelectListItem()
                 {
-                    Text = sc.MainNavMenuText,
-                    Value = sc.Id.ToString(),
-                    Selected = sc.Id == content.SubCategory.Id
+                    Text = sc.MainNavMenuText + " [" + sc.Category.NavMenuText + "]",
+                    Value = sc.Id.ToString()
                 }),
-            ParagraphSigns = paragraphSigns.Select(ps =>
+            ParagraphSigns = paragraphSigns
+                .Where(ps => ps != ParagraphSign.Default)
+                .Select(ps =>
                 new SelectListItem()
                 {
                     Text = ps.ToString(),
-                    Value = ((int)ps).ToString(),
-                    Selected = ps == content.ParagraphSign
+                    Value = ((int)ps).ToString()
                 }
             ),
             ParagraphText = content.ParagraphText,
-            PageTitle = content.PageTitle
+            ParagraphSign = ((int)content.ParagraphSign).ToString(),
+            SubCategoryId = content.SubCategory.Id
         };
 
         return View(contentViewModel);
@@ -141,28 +149,49 @@ public class SubCategorySpecificCmsController : Controller
         {
             return BadRequest();
         }
-        return Ok();
+        content.ParagraphSign = Enum.Parse<ParagraphSign>(viewModel.ParagraphSign);
+        content.ParagraphText = viewModel.ParagraphText;
+        if (content.SubCategory.Id != viewModel.SubCategoryId)
+        {
+            SubCategory? subCategory = await _subCategoryRepository.Get(content.SubCategory.Id, tracking: true);
+            if (subCategory != null)
+            {
+                content.SubCategory = subCategory;
+            }
+        }
 
+        await _subCategoryRepository.Update(content);
+
+        return RedirectToAction("");
     }
 
     // GET: SubCategorySpecificController/Delete/5
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
-        return View();
+        SubCategorySpecificContent? content = await _subCategoryRepository.GetSubCategorySpecific(id);
+
+        if (content == null)
+        {
+            return NotFound();
+        }
+
+
+        return View(content.ToDto());
     }
 
     // POST: SubCategorySpecificController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(int id, IFormCollection collection)
+    public async Task<ActionResult> Delete(int id, IFormCollection formCollection)
     {
-        try
+        SubCategorySpecificContent? content = await _subCategoryRepository.GetSubCategorySpecific(id);
+
+        if (content == null)
         {
-            return RedirectToAction(nameof(Index));
+            return NotFound();
         }
-        catch
-        {
-            return View();
-        }
+
+        await _subCategoryRepository.Delete(content);
+        return RedirectToAction("");
     }
 }

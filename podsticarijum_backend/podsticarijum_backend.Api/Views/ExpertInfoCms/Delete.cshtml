@@ -1,4 +1,4 @@
-﻿@model podsticarijum_backend.Application.DTO.SubCategoryDto;
+﻿@model podsticarijum_backend.Application.DTO.ExpertInfoDto;
 
 @{
     ViewData["Title"] = "Delete";
@@ -6,22 +6,25 @@
 
 <a asp-action="Index">Back to List</a>
 <br />
+<h4>Delete</h4>
+
+<hr />
 
 <div>
-    <h4>Delete a Subcategory</h4>
+    <h4>Content</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-                Category
+            @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.CategoryDto!.NavMenuText)
+            @Html.DisplayFor(model => model.Title)
         </dd>
         <dt class = "col-sm-2">
-            Sub Category
+            @Html.DisplayNameFor(model => model.Content)
         </dt>
         <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.MainNavMenuText)
+            @Html.DisplayFor(model => model.Content)
         </dd>
     </dl>
 

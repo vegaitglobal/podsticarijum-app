@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using podsticarijum_backend.Repository;
 
@@ -11,9 +12,10 @@ using podsticarijum_backend.Repository;
 namespace podsticarijum_backend.Repository.Migrations
 {
     [DbContext(typeof(PodsticarijumContext))]
-    partial class PodsticarijumContextModelSnapshot : ModelSnapshot
+    [Migration("20230321104420_removedPageTitle_AddedGreenRedTitle")]
+    partial class removedPageTitle_AddedGreenRedTitle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,27 +124,6 @@ namespace podsticarijum_backend.Repository.Migrations
                     b.HasIndex("SubCategoryId");
 
                     b.ToTable("Expert");
-                });
-
-            modelBuilder.Entity("podsticarijum_backend.Domain.Entities.ExpertInfo", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ExpertInfo");
                 });
 
             modelBuilder.Entity("podsticarijum_backend.Domain.Entities.Faq", b =>

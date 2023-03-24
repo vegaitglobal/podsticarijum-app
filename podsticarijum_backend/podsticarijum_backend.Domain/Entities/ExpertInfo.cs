@@ -3,30 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using podsticarijum_backend.Domain;
 
-namespace podsticarijum_backend.Application.DTO;
+namespace podsticarijum_backend.Domain.Entities;
 
-public class ContentDto
+public class ExpertInfo
 {
-
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    public ContentDto()
+    protected ExpertInfo()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
 
     }
 
-    public ContentDto(long id, string contentType, string text)
+    public ExpertInfo(string title, string content)
     {
-        Id = id;
-        ContentType = contentType;
-        Text = text;
+        Title = title;
+        Content = content;
     }
 
     public long Id { get; set; }
 
-    public string ContentType { get; init; }
+    public string Title { get; set; }
 
-    public string Text { get; set; }
+    public string Content { get; set; }
 }

@@ -18,7 +18,7 @@ public class Expert : EntityTimestamps
     {
         SubCategory = subCategory ?? throw new ArgumentNullException(nameof(subCategory));
         FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
-        LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
+        LastName = lastName ?? string.Empty;
         Email = email ?? throw new ArgumentNullException(nameof(email));
         Description = description ?? throw new ArgumentNullException(nameof(description));
     }

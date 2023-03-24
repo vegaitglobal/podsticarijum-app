@@ -5,7 +5,7 @@ namespace podsticarijum_backend.Application.DTO;
 
 public class ContentRequestDto
 {
-    public ContentRequestDto(ContentType contentType, string text)
+    public ContentRequestDto(string contentType, string text)
     {
         ContentType = contentType;
         Text = text;
@@ -14,7 +14,7 @@ public class ContentRequestDto
     [JsonIgnore]
     public long Id { get; init; }
 
-    public ContentType ContentType { get; init; }
+    public string ContentType { get; init; }
 
     public string Text { get; set; }
 }

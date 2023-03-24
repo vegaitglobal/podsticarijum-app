@@ -9,7 +9,7 @@ using podsticarijum_backend.Repository.Abstractions;
 
 namespace podsticarijum_backend.Api.Controllers;
 
-//[Authorize]
+[Authorize]
 public class ExpertCmsController : Controller
 {
     private readonly IExpertRepository _expertRepository;
@@ -24,7 +24,7 @@ public class ExpertCmsController : Controller
         _subCategoryRepository = subCategoryRepository;
     }
 
-    // GET: ExpertCmsController
+    // GET: ExpertInfoCmsController
     public async Task<ActionResult> Index()
     {
         List<Expert> experts = await _expertRepository.GetAll();
@@ -32,23 +32,23 @@ public class ExpertCmsController : Controller
         return View(experts.ToDto());
     }
 
-    // GET: ExpertCmsController/Details/5
+    // GET: ExpertInfoCmsController/Details/5
     public ActionResult Details(int id)
     {
         return View();
     }
 
-    // GET: ExpertCmsController/Create
+    // GET: ExpertInfoCmsController/Create
     public async Task<ActionResult> Create()
     {
         List<SubCategory> subCategories = await _subCategoryRepository.GetAll();
-        List<SelectListItem> selectListItems = subCategories
-            .Select(sc => new SelectListItem()
-            {
-                Text = $"{sc.MainNavMenuText} [{sc.Category.NavMenuText}]",
-                Value = sc.Id.ToString()
-            })
-            .ToList();
+        subCategories = subCategories.DistinctBy(sc => sc.MainNavMenuText.Trim()).ToList();
+
+        var selectListItems = subCategories.Select(sc => new SelectListItem()
+        {
+            Text = sc.MainNavMenuText,
+            Value = sc.Id.ToString()
+        });
 
         ExpertViewModel expertViewModel = new()
         {
@@ -58,37 +58,42 @@ public class ExpertCmsController : Controller
         return View(expertViewModel);
     }
 
-    // POST: ExpertCmsController/Create
+    // POST: ExpertInfoCmsController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(ExpertViewModel expertViewModel)
     {
-        SubCategory? subCategory = await _subCategoryRepository.Get(expertViewModel.SubCategoryId);
-        if (subCategory == null)
+        SubCategory? selectedSubCategory = await _subCategoryRepository.Get(expertViewModel.SubCategoryId);
+        if (selectedSubCategory == null)
         {
             return NotFound();
         }
+        
+        List<Expert> expertBySubCategory = await _expertRepository.GetExpertsForSubCategory(selectedSubCategory.Id);
 
-        List<Expert> experts = await _expertRepository.GetExpertsForSubCategory(subCategory.Id);
-
-        if (experts.Any())
+        if (expertBySubCategory.Any())
         {
             return BadRequest();
         }
 
-        Expert expert = new(
-            subCategory: subCategory,
-            firstName: expertViewModel.FirstName,
-            lastName: expertViewModel.LastName,
-            email: expertViewModel.Email,
-            description: expertViewModel.Description);
+        List<SubCategory> subCategoriesByName = await _subCategoryRepository.GetByNavMenuText(selectedSubCategory.MainNavMenuText, tracking: true);
 
-        await _expertRepository.Insert(expert);
+        IEnumerable<Expert> experts = subCategoriesByName
+            .Select(sc =>
+                new Expert(
+                subCategory: sc,
+                firstName: expertViewModel.FirstName,
+                lastName: expertViewModel.LastName,
+                email: expertViewModel.Email,
+                description: expertViewModel.Description)
+        );
+
+        await _expertRepository.InsertMany(experts);
 
         return RedirectToAction("");
     }
 
-    // GET: ExpertCmsController/Edit/5
+    // GET: ExpertInfoCmsController/Edit/5
     public async Task<ActionResult<ExpertDto>> Edit(int id)
     {
         Expert? expert = await _expertRepository.Get(id);
@@ -100,7 +105,7 @@ public class ExpertCmsController : Controller
         return View(expert.ToDto());
     }
 
-    // POST: ExpertCmsController/Edit/5
+    // POST: ExpertInfoCmsController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit(int id, ExpertDto expertDto)
@@ -113,7 +118,7 @@ public class ExpertCmsController : Controller
 
         expert.Email = expertDto.Email;
         expert.FirstName = expertDto.FirstName;
-        expert.LastName = expertDto.LastName;
+        expert.LastName = expertDto.LastName ?? string.Empty;
         expert.Description = expertDto.Description;
 
         await _expertRepository.Update(expert);
@@ -121,7 +126,7 @@ public class ExpertCmsController : Controller
         return RedirectToAction("");
     }
 
-    // GET: ExpertCmsController/Delete/5
+    // GET: ExpertInfoCmsController/Delete/5
     public async Task<ActionResult<ExpertDto>> Delete(int id)
     {
         Expert? expert = await _expertRepository.Get(id);
@@ -133,7 +138,7 @@ public class ExpertCmsController : Controller
         return View(expert.ToDto());
     }
 
-    // POST: ExpertCmsController/Delete/5
+    // POST: ExpertInfoCmsController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Delete(int id, IFormCollection collection)

@@ -11,20 +11,20 @@
 <hr />
 
 
-<h4>Frequently asked questions</h4>
+<h4>Specific Content</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div class="form-group">
-                <label asp-for="@Model.PageTitle" class="control-label"></label>
-                <input asp-for="@Model.PageTitle" class="form-control" />
-                <span asp-validation-for="@Model.PageTitle" class="text-danger"></span>
+                <label class="control-label">Flag</label>
+                <select class="form-control" asp-for="@Model.SubCategoryId"
+                        asp-items="@Model.SubCategoryDtoList">
+                </select>
             </div>
-            <br />
             <div class="form-group">
                 <label asp-for="@Model.ParagraphText" class="control-label"></label>
-                <input asp-for="@Model.ParagraphText" class="form-control" />
+                <textarea rows="8" asp-for="@Model.ParagraphText" class="form-control"></textarea>
                 <span asp-validation-for="@Model.ParagraphText" class="text-danger"></span>
             </div>
             <br />
@@ -40,10 +40,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
