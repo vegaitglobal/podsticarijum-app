@@ -6,10 +6,12 @@ import 'package:app_for_family_backup/api/models/FAQModel.dart';
 import 'package:app_for_family_backup/api/models/SubcategoryModel.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import '../screens/category_details_screen/category_flags_screen.dart';
 import 'models/CategoryModel.dart';
 
 class PodsticarijumApi {
-  static const String BASE_URL = "http://10.0.2.2:23000";
+  static const String BASE_URL = "https://podsticarijum.codeforacause.rs";
   static PodsticarijumApi? _instance = null;
   PodsticarijumApi._internal();
 
@@ -48,7 +50,8 @@ class PodsticarijumApi {
 
     List<dynamic> subcategoryListJson = json.decode(response.body);
     subcategoryListJson.forEach((json) {
-      if (json["active"]) subcategoryList.add(SubcategoryModel.fromJson(json));
+      // if (json["active"]) subcategoryList.add(SubcategoryModel.fromJson(json));
+      subcategoryList.add(SubcategoryModel.fromJson(json));
     });
 
     return subcategoryList;
@@ -82,15 +85,17 @@ class PodsticarijumApi {
   }
 
   static Future<DonationsModel> getDonation() async {
-    String url = "${BASE_URL}/api/donation";
+    String url = "${BASE_URL}/api/main-screen?contentType=donations";
+    // final uri =
+    //     Uri.https(BASE_URL, "api/main-screen", {'contentType': 'donations'});
     var response = await http.get(Uri.parse(url));
-    Map<String, dynamic> donationJson = json.decode(response.body);
+    var donationJson = json.decode(response.body);
 
     return DonationsModel.fromJson(donationJson);
   }
 
   static Future<AboutUsModel> getAboutUs() async {
-    String url = "${BASE_URL}/api/aboutus";
+    String url = "${BASE_URL}/api/main-screen?contentType=aboutUs";
     var response = await http.get(Uri.parse(url));
     Map<String, dynamic> aboutusJson = json.decode(response.body);
 
@@ -119,5 +124,37 @@ class PodsticarijumApi {
     });
 
     return subcategoryList;
+  }
+
+  static Future<List<String>> getSubcategoryEmailList(int subcategoryId) async {
+    String url = "$BASE_URL/api/sub-category/$subcategoryId/email";
+    var response = await http.get(Uri.parse(url));
+    List<String> emailList = [];
+    List<dynamic> emailListJson = json.decode(response.body);
+    emailListJson.forEach((element) {
+      emailList.add(element["userMailAddress"]);
+    });
+    return emailList;
+  }
+
+  static Future<bool> sendEmail(
+      String name, String mail, String question, int subcategoryId) async {
+    EmailPayloadDto emailPayload = EmailPayloadDto(name, mail, question);
+
+    final url = "$BASE_URL/api/sub-categeory/$subcategoryId/email";
+
+    try {
+      http.Response response = await post(
+        Uri.parse('https://podsticarijum.codeforacause.rs/email'),
+        headers: {'Content-Type': 'applicatfion/json; charset=UTF-8'},
+        body: jsonEncode(emailPayload.toJson()),
+      ).timeout(
+        const Duration(seconds: 5),
+      );
+
+      return response.statusCode == 200;
+    } on Exception catch (_) {
+      return false;
+    }
   }
 }

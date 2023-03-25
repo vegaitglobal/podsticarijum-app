@@ -1,3 +1,5 @@
+import 'package:app_for_family_backup/api/podsticariju_api.dart';
+
 import '../../screens/thank_you_screen/thank_you_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -80,12 +82,13 @@ Widget centeredContainerWithFooter(
 }
 
 Widget buildDefaultCustomForm(
-  Future<bool> Function(
-    String nameAndSurname,
-    String email,
-    String question,
-  )
-      onValidFormCallback,
+  // Future<bool> Function(
+  //   String nameAndSurname,
+  //   String email,
+  //   String question,
+  // )
+  //     onValidFormCallback,
+  int subcategoryId,
   BuildContext context,
 ) {
   const double marginBottom = 15;
@@ -97,8 +100,8 @@ Widget buildDefaultCustomForm(
     submitButtonText: 'Postavi pitanje',
     onClick: () async {
       if (nameAndSurname != null && email != null && question != null) {
-        bool result =
-            await onValidFormCallback(nameAndSurname!, email!, question!);
+        bool result = await PodsticarijumApi.sendEmail(
+            nameAndSurname!, email!, question!, subcategoryId);
 
         const snackBar = SnackBar(
           content:
@@ -112,7 +115,8 @@ Widget buildDefaultCustomForm(
     },
     onValidCallback: (value) {
       if (nameAndSurname != null && email != null && question != null) {
-        onValidFormCallback(nameAndSurname!, email!, question!);
+        PodsticarijumApi.sendEmail(
+            nameAndSurname!, email!, question!, subcategoryId);
       }
     },
     children: [

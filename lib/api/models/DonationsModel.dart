@@ -3,6 +3,8 @@ class DonationsModel {
   String information;
 
   DonationsModel.fromJson(Map<String, dynamic> json)
-      : description = json['description'],
-        information = json['information'];
+      : description = "some random description",
+        information = json['text'];
+  // : description = json['description'],
+  // information = json['text'];
 }

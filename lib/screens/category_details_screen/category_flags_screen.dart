@@ -31,28 +31,28 @@ class EmailPayloadDto {
   Map<String, dynamic> toJson() => {
         'AppPackageName': 'com.example.app_for_family_backup',
         'UserMailAddress': mail,
-        'ExpertMail': 'djuro.radusinovic@vegait.rs',
-        'Body': question,
+        'subject': 'Subject placeholder',
+        'body': question,
       };
 }
 
-Future<bool> sendEmail(String name, String mail, String question) async {
-  EmailPayloadDto emailPayload = EmailPayloadDto(name, mail, question);
+// Future<bool> sendEmail(String name, String mail, String question) async {
+//   EmailPayloadDto emailPayload = EmailPayloadDto(name, mail, question);
 
-  try {
-    Response response = await post(
-      Uri.parse('https://podsticarijum.codeforacause.rs/email'),
-      headers: {'Content-Type': 'application/json; charset=UTF-8'},
-      body: jsonEncode(emailPayload.toJson()),
-    ).timeout(
-      const Duration(seconds: 5),
-    );
+//   try {
+//     Response response = await post(
+//       Uri.parse('https://podsticarijum.codeforacause.rs/email'),
+//       headers: {'Content-Type': 'application/json; charset=UTF-8'},
+//       body: jsonEncode(emailPayload.toJson()),
+//     ).timeout(
+//       const Duration(seconds: 5),
+//     );
 
-    return response.statusCode == 200;
-  } on Exception catch (_) {
-    return false;
-  }
-}
+//     return response.statusCode == 200;
+//   } on Exception catch (_) {
+//     return false;
+//   }
+// }
 
 class CategoryFlagsScreenArguments {
   // AgeGroupType ageGroupType;
@@ -148,7 +148,7 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
                   fit: BoxFit.fitWidth,
                 ),
                 const SizedBox(height: 33),
-                buildDefaultCustomForm(sendEmail, context),
+                buildDefaultCustomForm(args.subcategoryId, context),
                 const SizedBox(height: 10),
                 Align(
                   alignment: Alignment.center,

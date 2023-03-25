@@ -122,7 +122,7 @@ class _CategoryDetailsMoreScreenState extends State<CategoryDetailsMoreScreen> {
                   fit: BoxFit.fitWidth,
                 ),
                 const SizedBox(height: 33),
-                buildDefaultCustomForm(sendEmail, context),
+                buildDefaultCustomForm(args.subcategoryId, context),
                 const SizedBox(height: 10),
                 Align(
                   alignment: Alignment.center,
