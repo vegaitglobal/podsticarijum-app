@@ -12,12 +12,18 @@ public static class ContentDtoExtensions
         bool contentTypeParsed = Enum.TryParse(contentDto.ContentType, out contentTypeResult);
         if (contentTypeParsed)
         {
-            return new Content(contentTypeResult, contentDto.Text)
+            return new Content(
+                contentType: contentTypeResult,
+                text: contentDto.Text,
+                additionalText: contentDto.AdditionalText)
             {
                 Id = contentDto.Id
             };
         }
-        return new Content(contentType: ContentType.Default, contentDto.Text)
+        return new Content(
+            contentType: ContentType.Default, 
+            text: contentDto.Text,
+            additionalText: contentDto.AdditionalText)
         {
             Id = contentDto.Id
         };
@@ -30,9 +36,15 @@ public static class ContentDtoExtensions
         bool contentTypeParsed = Enum.TryParse(contentDto.ContentType, out contentTypeResult);
         if (contentTypeParsed)
         {
-            return new Content(contentTypeResult, contentDto.Text);
+            return new Content(
+                contentType: contentTypeResult, 
+                text: contentDto.Text,
+                additionalText: contentDto.AdditionalText);
         }
-        return new Content(contentType: ContentType.Default, contentDto.Text);
+        return new Content(
+            contentType: ContentType.Default, 
+            text: contentDto.Text,
+            additionalText: contentDto.AdditionalText);
         
     }
 }

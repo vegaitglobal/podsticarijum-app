@@ -15,10 +15,11 @@ public class Content : EntityTimestamps
 
     }
 
-    public Content(ContentType contentType, string text)
+    public Content(ContentType contentType, string text, string? additionalText)
     {
         ContentType = contentType;
         Text = text;
+        AdditionalText = additionalText;
     }
 
     public long Id { get; set; }
@@ -26,4 +27,6 @@ public class Content : EntityTimestamps
     public ContentType ContentType { get; init; }
 
     public string Text { get; set; }
+
+    public string? AdditionalText { get; set; }
 }

@@ -120,7 +120,8 @@ public class DataSeeder : IDataSeeder
             _podsticarijumContext.Content.Add(
                 new Content(
                     contentType: Domain.ContentType.MainScreen,
-                    text: "Content for main/initial screen"
+                    text: "Content for main/initial screen",
+                    additionalText: "additional text"
                 ));
         }
 
@@ -130,7 +131,28 @@ public class DataSeeder : IDataSeeder
             _podsticarijumContext.Content.Add(
                 new Content(
                     contentType: Domain.ContentType.Donations,
-                    text: "Content for main/initial screen"
+                    text: "Content for main/initial screen",
+                    additionalText: "additional text"
+                ));
+        }
+
+        if (_podsticarijumContext.Content.Where(c => c.ContentType == Domain.ContentType.MainScreen).Count() == 0)
+        {
+            _podsticarijumContext.Content.Add(
+                new Content(
+                    contentType: Domain.ContentType.AboutUs,
+                    text: "About us text",
+                    additionalText: "About us - unused additional text"
+                ));
+        }
+
+        if (_podsticarijumContext.Content.Where(c => c.ContentType == Domain.ContentType.MainScreen).Count() == 0)
+        {
+            _podsticarijumContext.Content.Add(
+                new Content(
+                    contentType: Domain.ContentType.Information,
+                    text: "Information texttexttext",
+                    additionalText: "Information additional text - unused"
                 ));
         }
 

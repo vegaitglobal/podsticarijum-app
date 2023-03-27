@@ -11,4 +11,6 @@ public class ContentViewModel
     public ContentType ContentType { get; set; }
 
     public string Content { get; set; } = null!;
+
+    public string? AdditionalContent { get; set; }
 }
