@@ -18,17 +18,19 @@ class AboutUsScreen extends StatefulWidget {
 }
 
 class _AboutUsScreenState extends State<AboutUsScreen> {
-  String description = "";
+  String? description = null;
 
   void getDescription() async {
     var response = await PodsticarijumApi.getMainScreenContent("AboutUs");
     setState(() {
-      if (response != null) description = response.text;
+      description = response?.text ?? "";
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (description == null) getDescription();
+
     return SafeArea(
       child: Scaffold(
         appBar: const NewAppBar(),
