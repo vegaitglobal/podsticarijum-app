@@ -56,10 +56,10 @@ public class MainCmsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(ContentViewModel contentViewModel)
     {
-
-        if (await alreadyExistingMainContent(contentViewModel)
-            || await alreadyExistingAboutUs(contentViewModel)
-            )
+        var contents = await _mainRepository.GetAll();
+        var contentTypes = Enum.GetValues(typeof(ContentType)).Cast<ContentType>();
+        if (!containsOneEach(contents, contentTypes))
+            
         {
             return BadRequest();
         }
@@ -74,37 +74,24 @@ public class MainCmsController : Controller
         return RedirectToAction("");
     }
 
-    private async Task<bool> alreadyExistingMainContent(ContentViewModel contentViewModel)
+    private bool containsOneEach(
+        IEnumerable<Content> contents,
+        IEnumerable<ContentType> contentTypes)
     {
-        if (contentViewModel.ContentType == ContentType.MainScreen)
-        {
-            List<Content> existingMainContent =
-            await _mainRepository.GetContentByType(contentViewModel.ContentType);
+        var groupings = contents
+            .Where(c => contentTypes.Contains(c.ContentType))
+            .GroupBy(c => c.ContentType);
 
-            if (existingMainContent.Any())
+        foreach(var grouping in groupings)
+        {
+            if (grouping.Count() > 1)
             {
-                return true;
+                return false;
             }
         }
-
-        return false;
+        return true;
     }
 
-    private async Task<bool> alreadyExistingAboutUs(ContentViewModel contentViewModel)
-    {
-        if (contentViewModel.ContentType == ContentType.AboutUs)
-        {
-            List<Content> existingMainContent =
-            await _mainRepository.GetContentByType(contentViewModel.ContentType);
-
-            if (existingMainContent.Any())
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     // GET: MainCmsController/Edit/5
     public async Task<ActionResult<ContentDto>> Edit(int id)

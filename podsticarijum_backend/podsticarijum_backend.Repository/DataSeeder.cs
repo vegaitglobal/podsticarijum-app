@@ -136,6 +136,26 @@ public class DataSeeder : IDataSeeder
                 ));
         }
 
+        if (_podsticarijumContext.Content.Where(c => c.ContentType == Domain.ContentType.MainScreen).Count() == 0)
+        {
+            _podsticarijumContext.Content.Add(
+                new Content(
+                    contentType: Domain.ContentType.AboutUs,
+                    text: "About us text",
+                    additionalText: "About us - unused additional text"
+                ));
+        }
+
+        if (_podsticarijumContext.Content.Where(c => c.ContentType == Domain.ContentType.MainScreen).Count() == 0)
+        {
+            _podsticarijumContext.Content.Add(
+                new Content(
+                    contentType: Domain.ContentType.Information,
+                    text: "Information texttexttext",
+                    additionalText: "Information additional text - unused"
+                ));
+        }
+
         await _podsticarijumContext.SaveChangesAsync();
     }
 
