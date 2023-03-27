@@ -29,6 +29,12 @@
             </div>
             <br />
             <div class="form-group">
+                <label asp-for="AdditionalContent" class="control-label"></label>
+                <textarea rows="6" asp-for="AdditionalContent" class="form-control"> </textarea>
+                <span asp-validation-for="AdditionalContent" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary btn-lg" />
             </div>
         </form>

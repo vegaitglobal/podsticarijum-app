@@ -1,14 +1,14 @@
 ﻿using System.Text.Json.Serialization;
-using podsticarijum_backend.Domain;
 
 namespace podsticarijum_backend.Application.DTO;
 
 public class ContentRequestDto
 {
-    public ContentRequestDto(string contentType, string text)
+    public ContentRequestDto(string contentType, string text, string? additionalText)
     {
         ContentType = contentType;
         Text = text;
+        AdditionalText = additionalText;
     }
 
     [JsonIgnore]
@@ -17,4 +17,6 @@ public class ContentRequestDto
     public string ContentType { get; init; }
 
     public string Text { get; set; }
+
+    public string? AdditionalText { get; set; }
 }

@@ -66,7 +66,8 @@ public class MainCmsController : Controller
 
         var content = new Content(
             contentType: contentViewModel.ContentType,
-            text: contentViewModel.Content);
+            text: contentViewModel.Content,
+            additionalText: contentViewModel.AdditionalContent);
 
         await _mainRepository.Insert(content);
 
@@ -133,6 +134,7 @@ public class MainCmsController : Controller
         }
 
         content.Text = contentDto.Text;
+        content.AdditionalText = contentDto.AdditionalText;
         content.UpdatedAt = DateTime.UtcNow;
         await _mainRepository.Update(content);
 

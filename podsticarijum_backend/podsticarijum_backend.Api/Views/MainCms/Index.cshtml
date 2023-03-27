@@ -24,10 +24,13 @@
         <tr>
             <th>Edit&nbsp;|&nbsp;Delete</th>
             <th>
-                Content Type
+                Content Type*
             </th>
             <th>
-                Content Text
+                Content Text*
+            </th>
+            <th>
+                Additional Text
             </th>
         </tr>
     </thead>
@@ -45,6 +48,9 @@
                 <td style="word-break:break-word;">
                     @Html.DisplayFor(modelItem => item.Text)
                 </td>
+                    <td style="word-break:break-word;">
+                    @Html.DisplayFor(modelItem => item.AdditionalText)
+                    </td>
             </tr>
         }
     </tbody>

@@ -120,7 +120,8 @@ public class DataSeeder : IDataSeeder
             _podsticarijumContext.Content.Add(
                 new Content(
                     contentType: Domain.ContentType.MainScreen,
-                    text: "Content for main/initial screen"
+                    text: "Content for main/initial screen",
+                    additionalText: "additional text"
                 ));
         }
 
@@ -130,7 +131,8 @@ public class DataSeeder : IDataSeeder
             _podsticarijumContext.Content.Add(
                 new Content(
                     contentType: Domain.ContentType.Donations,
-                    text: "Content for main/initial screen"
+                    text: "Content for main/initial screen",
+                    additionalText: "additional text"
                 ));
         }
 
