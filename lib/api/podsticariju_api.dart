@@ -3,6 +3,7 @@ import 'package:app_for_family_backup/api/models/AboutUsModel.dart';
 import 'package:app_for_family_backup/api/models/DonationsModel.dart';
 import 'package:app_for_family_backup/api/models/ExpertModel.dart';
 import 'package:app_for_family_backup/api/models/FAQModel.dart';
+import 'package:app_for_family_backup/api/models/MainScreenModel.dart';
 import 'package:app_for_family_backup/api/models/SubcategoryModel.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -100,6 +101,33 @@ class PodsticarijumApi {
     Map<String, dynamic> aboutusJson = json.decode(response.body);
 
     return AboutUsModel.fromJson(aboutusJson);
+  }
+
+  static Future<MainScreenModel?> getMainScreenContent(
+      String contentType) async {
+    String url = "${BASE_URL}/api/main-screen";
+    var response = await http.get(Uri.parse(url));
+    List<dynamic> mainScreenModelListJson = json.decode(response.body);
+
+    MainScreenModel? result = null;
+    // List<MainScreenModel> mainScreenModelLIst = [];
+    // var response = await http.get(Uri.parse(url));
+    // List<dynamic> expertListJson = json.decode(response.body);
+    mainScreenModelListJson.forEach((elementJson) {
+      MainScreenModel data = MainScreenModel.fromJson(elementJson);
+      if (data.contentType == contentType) result = data;
+    });
+
+    return result;
+    // mainScreenModelListJson.forEach((json) {
+    //   // expertList.add(ExpertModel.fromJson(json));
+    //   MainScreenModel data = MainScreenModel.fromJson(json);
+    //   return data;
+    // });
+
+    // return expertList;
+
+    // return MainScreenModel.fromJson(aboutusJson);
   }
 
   static Future<List<FAQModel>> getFaqList(int subcategoryId) async {

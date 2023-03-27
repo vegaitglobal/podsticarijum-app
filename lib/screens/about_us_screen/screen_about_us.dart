@@ -21,9 +21,9 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
   String description = "";
 
   void getDescription() async {
-    var response = await PodsticarijumApi.getAboutUs();
+    var response = await PodsticarijumApi.getMainScreenContent("AboutUs");
     setState(() {
-      description = response.description;
+      if (response != null) description = response.text;
     });
   }
 

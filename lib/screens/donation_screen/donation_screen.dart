@@ -31,12 +31,14 @@ class _DonationScreenState extends State<DonationScreen> {
   DonationUiModel? donationUiModel = null;
 
   void getDonationUiModel() async {
-    var response = await PodsticarijumApi.getDonation();
+    var response = await PodsticarijumApi.getMainScreenContent("Donations");
     setState(() {
-      donationUiModel = DonationUiModel(
-        response.description,
-        response.information,
-      );
+      if (response != null) {
+        donationUiModel = DonationUiModel(
+          response.text,
+          response.additionalText ?? "",
+        );
+      }
     });
   }
 
@@ -50,7 +52,7 @@ class _DonationScreenState extends State<DonationScreen> {
         children: [
           buildTitle(context, "Donacije"),
           const SizedBox(height: 68),
-          InfoSectionWidget(content: donationUiModel?.information ?? ""),
+          InfoSectionWidget(content: donationUiModel?.intro ?? ""),
           InfoSectionWidget(
             title: 'Informacije',
             content: donationUiModel?.information ?? "",
