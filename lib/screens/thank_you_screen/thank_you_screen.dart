@@ -7,9 +7,12 @@ import '../splash_screen/splash_screen.dart';
 
 class ThankYouScreen extends StatelessWidget {
   static const String route = "/go_back_with_message";
+  final String text;
 
   const ThankYouScreen({
     Key? key,
+    this.text =
+        'Hvala na postavljenom pitanju, na vašu e-mail adresu će uskoro stići odgovor!',
   }) : super(key: key);
 
   @override
@@ -22,7 +25,7 @@ class ThankYouScreen extends StatelessWidget {
           context,
           Text(
             overflow: TextOverflow.ellipsis,
-            'Hvala na postavljenom pitanju, na vašu e-mail adresu će uskoro stići odgovor!',
+            text,
             style: Theme.of(context).textTheme.headline5,
             textAlign: TextAlign.center,
             maxLines: 5,

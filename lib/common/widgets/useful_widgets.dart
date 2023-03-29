@@ -148,3 +148,20 @@ Widget buildDefaultCustomForm(
     ],
   );
 }
+
+Widget buildLoadingWidget() {
+  return Container(
+    alignment: Alignment.center,
+    child: const CircularProgressIndicator(
+      strokeWidth: 5,
+      valueColor:
+          AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 157, 57, 175)),
+    ),
+  );
+}
+
+Widget buildErrorScreen() {
+  return const ThankYouScreen(
+      text:
+          "Nažalost, pojavila se greška pri komunikaciji sa serverom. Molimo Vas provjerite Vašu internet konekciju");
+}

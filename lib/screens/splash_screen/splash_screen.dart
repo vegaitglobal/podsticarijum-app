@@ -1,3 +1,4 @@
+import 'package:app_for_family_backup/api/podsticariju_api.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/widgets/custom_outline_button.dart';
@@ -5,16 +6,21 @@ import '../../common/widgets/default_header.dart';
 import '../../common/widgets/useful_widgets.dart';
 import '../categories_screen/categories_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   SplashScreen({Key? key}) : super(key: key);
 
   static const String route = "/splash ";
-  static const String info =
-      '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqui';
   static const Duration _navDelayDuration = Duration(seconds: 2);
 
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  String? text = null;
+
   final Future<bool> _navFuture = Future.delayed(
-    _navDelayDuration,
+    SplashScreen._navDelayDuration,
     () => true,
   );
 
@@ -27,7 +33,7 @@ class SplashScreen extends StatelessWidget {
         buildFooterWidget(context),
       );
 
-  Widget buildSucceederScreen(BuildContext context) => Column(
+  Widget buildSucceederScreen(BuildContext context, String content) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           buildLogoWidget(
@@ -37,7 +43,7 @@ class SplashScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 44),
             child: Text(
-              info,
+              content,
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
@@ -54,15 +60,24 @@ class SplashScreen extends StatelessWidget {
         ],
       );
 
+  void getText() async {
+    var response = await PodsticarijumApi.getMainScreenContent("MainScreen");
+    setState(() {
+      text = response?.text.substring(0, 250);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (text == null) getText();
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: FutureBuilder(
         future: _navFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return buildSucceederScreen(context);
+            return buildSucceederScreen(context, text ?? "");
           } else {
             return buildInitialScreen(context);
           }

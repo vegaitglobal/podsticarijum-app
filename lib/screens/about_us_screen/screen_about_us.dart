@@ -40,7 +40,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
             buildTitle(context, 'O NAMA'),
             const SizedBox(height: 68),
             Text(
-              description,
+              description ?? "",
               style: Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(height: 35)

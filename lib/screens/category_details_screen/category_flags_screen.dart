@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_for_family_backup/api/models/SubcategoryModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -85,8 +86,6 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
   void getCategoryFlags(int subcategoryId, FlagType flagType) async {
     var subcategory = await PodsticarijumApi.getSubcategory(subcategoryId);
 
-    print("00<99 building ...");
-
     setState(() {
       if (subcategory != null) {
         List<String> flagList;
@@ -102,7 +101,8 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
           subcategory.categoryName,
           flagList,
         );
-      }
+      } else
+        categoryFlagsUiModel = CategoryFlagsUiModel("", []);
     });
   }
 
@@ -111,8 +111,9 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
     final args = ModalRoute.of(context)!.settings.arguments
         as CategoryFlagsScreenArguments;
 
-    if (categoryFlagsUiModel == null)
+    if (categoryFlagsUiModel == null) {
       getCategoryFlags(args.subcategoryId, args.flagType);
+    }
 
     return SafeArea(
       child: Scaffold(

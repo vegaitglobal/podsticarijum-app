@@ -31,14 +31,14 @@ class SubCategoriesScreen extends StatefulWidget {
 }
 
 class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
-  List<SubcategoryModel> subcategoryList = List.empty();
+  List<SubcategoryModel>? subcategoryList = null;
 
   void getSubcategoryNameList(int categoryId) async {
-    var result =
+    List<SubcategoryModel>? result =
         await PodsticarijumApi.getSubcategoryListByCategoryId(categoryId);
 
     setState(() {
-      subcategoryList = result;
+      subcategoryList = result ?? [];
     });
   }
 
@@ -48,7 +48,9 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
         .settings
         .arguments as SubCategoriesScreenArguments;
 
-    getSubcategoryNameList(args.categoryId);
+    if (subcategoryList == null) {
+      getSubcategoryNameList(args.categoryId);
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -61,13 +63,14 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ...subcategoryList.map(
-                      (subcategory) => _getColumnElement(
-                        context,
-                        subcategory.name,
-                        subcategory.id,
-                      ),
-                    )
+                    ...subcategoryList?.map(
+                          (subcategory) => _getColumnElement(
+                            context,
+                            subcategory.name,
+                            subcategory.id,
+                          ),
+                        ) ??
+                        []
                   ]),
             ),
           ),

@@ -16,5 +16,16 @@ class SubcategoryModel {
         categoryName = json['categoryDto']['navMenuText'],
         active = json['active'] as bool,
         description = json['mainText'],
-        detailedDescription = json['additionalText'];
+        detailedDescription = json['additionalText'] {
+    var positiveSignsJson =
+        json['developmentSupportingActivitiesButtonText'] as String;
+    var negativeSignsJson = json['atypicalDevelopmentSignsText'] as String;
+
+    positiveSignsJson.split('\n').forEach((element) {
+      positiveSigns.add(element);
+    });
+    negativeSignsJson.split('\n').forEach((element) {
+      negativeSigns.add(element);
+    });
+  }
 }
