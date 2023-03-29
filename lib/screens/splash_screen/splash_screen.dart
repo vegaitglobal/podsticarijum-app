@@ -7,7 +7,7 @@ import '../../common/widgets/useful_widgets.dart';
 import '../categories_screen/categories_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   static const String route = "/splash ";
   static const Duration _navDelayDuration = Duration(seconds: 2);
@@ -18,6 +18,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String? text = null;
+  bool isError = false;
 
   final Future<bool> _navFuture = Future.delayed(
     SplashScreen._navDelayDuration,
@@ -33,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
         buildFooterWidget(context),
       );
 
-  Widget buildSucceederScreen(BuildContext context, String content) => Column(
+  Widget buildSucceederScreen(BuildContext context, String? content) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           buildLogoWidget(
@@ -42,10 +43,12 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 44),
-            child: Text(
-              content,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
+            child: content != null
+                ? Text(
+                    content,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  )
+                : buildLoadingWidget(context),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -61,7 +64,12 @@ class _SplashScreenState extends State<SplashScreen> {
       );
 
   void getText() async {
-    var response = await PodsticarijumApi.getMainScreenContent("MainScreen");
+    var response = await PodsticarijumApi.getMainScreenContent("MainScreen")
+        .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+      });
+    });
     setState(() {
       text = response?.text.substring(0, 250);
     });
@@ -69,15 +77,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (text == null) getText();
+    if (text == null && !isError) getText();
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: FutureBuilder(
         future: _navFuture,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return buildSucceederScreen(context, text ?? "");
+          if (isError) {
+            return buildErrorScreen();
+          } else if (snapshot.hasData) {
+            return buildSucceederScreen(context, text);
           } else {
             return buildInitialScreen(context);
           }

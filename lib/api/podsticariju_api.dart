@@ -30,10 +30,8 @@ class PodsticarijumApi {
 
     final response = await http.get(
       Uri.parse(url),
-      // headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
     if (response.statusCode != 200) return categoryList;
-    // print("RESPONSE - $response");
     List<dynamic> categoryListJson = json.decode(response.body);
     categoryListJson.forEach((value) {
       categoryList.add(CategoryModel.fromJson(value as Map<String, dynamic>));
@@ -51,7 +49,6 @@ class PodsticarijumApi {
 
     List<dynamic> subcategoryListJson = json.decode(response.body);
     subcategoryListJson.forEach((json) {
-      // if (json["active"]) subcategoryList.add(SubcategoryModel.fromJson(json));
       subcategoryList.add(SubcategoryModel.fromJson(json));
     });
 
@@ -110,24 +107,12 @@ class PodsticarijumApi {
     List<dynamic> mainScreenModelListJson = json.decode(response.body);
 
     MainScreenModel? result = null;
-    // List<MainScreenModel> mainScreenModelLIst = [];
-    // var response = await http.get(Uri.parse(url));
-    // List<dynamic> expertListJson = json.decode(response.body);
     mainScreenModelListJson.forEach((elementJson) {
       MainScreenModel data = MainScreenModel.fromJson(elementJson);
       if (data.contentType == contentType) result = data;
     });
 
     return result;
-    // mainScreenModelListJson.forEach((json) {
-    //   // expertList.add(ExpertModel.fromJson(json));
-    //   MainScreenModel data = MainScreenModel.fromJson(json);
-    //   return data;
-    // });
-
-    // return expertList;
-
-    // return MainScreenModel.fromJson(aboutusJson);
   }
 
   static Future<List<FAQModel>> getFaqList(int subcategoryId) async {

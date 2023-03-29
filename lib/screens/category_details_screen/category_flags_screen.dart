@@ -37,27 +37,7 @@ class EmailPayloadDto {
       };
 }
 
-// Future<bool> sendEmail(String name, String mail, String question) async {
-//   EmailPayloadDto emailPayload = EmailPayloadDto(name, mail, question);
-
-//   try {
-//     Response response = await post(
-//       Uri.parse('https://podsticarijum.codeforacause.rs/email'),
-//       headers: {'Content-Type': 'application/json; charset=UTF-8'},
-//       body: jsonEncode(emailPayload.toJson()),
-//     ).timeout(
-//       const Duration(seconds: 5),
-//     );
-
-//     return response.statusCode == 200;
-//   } on Exception catch (_) {
-//     return false;
-//   }
-// }
-
 class CategoryFlagsScreenArguments {
-  // AgeGroupType ageGroupType;
-  // DevelopmentAspectType developmentAspectType;
   int subcategoryId;
   FlagType flagType;
 
@@ -79,12 +59,17 @@ class CategoryFlagsScreen extends StatefulWidget {
 }
 
 class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
-  List<String> flagList = [];
-
+  bool isError = false;
   CategoryFlagsUiModel? categoryFlagsUiModel = null;
 
   void getCategoryFlags(int subcategoryId, FlagType flagType) async {
-    var subcategory = await PodsticarijumApi.getSubcategory(subcategoryId);
+    var subcategory = await PodsticarijumApi.getSubcategory(subcategoryId)
+        .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+        return null;
+      });
+    });
 
     setState(() {
       if (subcategory != null) {
@@ -101,8 +86,7 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
           subcategory.categoryName,
           flagList,
         );
-      } else
-        categoryFlagsUiModel = CategoryFlagsUiModel("", []);
+      }
     });
   }
 
@@ -111,67 +95,73 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
     final args = ModalRoute.of(context)!.settings.arguments
         as CategoryFlagsScreenArguments;
 
-    if (categoryFlagsUiModel == null) {
+    if (categoryFlagsUiModel == null && !isError) {
       getCategoryFlags(args.subcategoryId, args.flagType);
     }
 
     return SafeArea(
       child: Scaffold(
-        appBar: const NewAppBar(),
-        backgroundColor: Colors.white,
-        body: DefaultContainer(
-          scale: 0.71,
-          leftOffset: -50,
+          appBar: const NewAppBar(),
+          backgroundColor: Colors.white,
+          body: isError
+              ? buildErrorScreen()
+              : categoryFlagsUiModel == null
+                  ? buildLoadingWidget(context)
+                  : _buildContent(args.subcategoryId, args.flagType)),
+    );
+  }
+
+  Widget _buildContent(int subcategoryId, FlagType flagType) {
+    return DefaultContainer(
+      scale: 0.71,
+      leftOffset: -50,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildSubtitle(
-                  context,
-                  categoryFlagsUiModel?.categoryName ?? "",
-                  // args.ageGroupType.title,
-                ),
-                buildTitle(
-                  context,
-                  args.flagType == FlagType.green
-                      ? "Podsticarijum igre i aktivnosti, stimulativne za razvoj vaše bebe i deteta."
-                      : 'Znakovi odstupanja od neurotipičnog razvoja',
-                ),
-                const SizedBox(height: 100),
-                ...?categoryFlagsUiModel?.flagList.map(
-                  (paragraph) =>
-                      _buildParagraph(context, args.flagType, paragraph),
-                ),
-                const SizedBox(height: 33),
-                Image.asset(
-                  'images/separator.png',
-                  width: double.infinity,
-                  fit: BoxFit.fitWidth,
-                ),
-                const SizedBox(height: 33),
-                buildDefaultCustomForm(args.subcategoryId, context),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.center,
-                  child: TextButton(
-                    child: Text(
-                      style: Theme.of(context).textTheme.headline4,
-                      "Vrati se na početnu stranu",
-                    ),
-                    onPressed: () {
-                      Navigator.popUntil(
-                        context,
-                        ModalRoute.withName(CategoriesScreen.route),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 10),
-              ],
+            buildSubtitle(
+              context,
+              categoryFlagsUiModel?.categoryName ?? "",
+              // args.ageGroupType.title,
             ),
+            buildTitle(
+              context,
+              flagType == FlagType.green
+                  ? "Stimulativne igre i aktivnosti za razvoj vaše bebe i deteta."
+                  : 'Znakovi odstupanja od neurotipičnog razvoja',
+            ),
+            const SizedBox(height: 100),
+            ...?categoryFlagsUiModel?.flagList.map(
+              (paragraph) => _buildParagraph(context, flagType, paragraph),
+            ),
+            const SizedBox(height: 33),
+            Image.asset(
+              'images/separator.png',
+              width: double.infinity,
+              fit: BoxFit.fitWidth,
+            ),
+            const SizedBox(height: 33),
+            buildDefaultCustomForm(subcategoryId, context),
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.center,
+              child: TextButton(
+                child: Text(
+                  style: Theme.of(context).textTheme.headline4,
+                  "Vrati se na početnu stranu",
+                ),
+                onPressed: () {
+                  Navigator.popUntil(
+                    context,
+                    ModalRoute.withName(CategoriesScreen.route),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
           ],
         ),
-      ),
+      ],
     );
   }
 

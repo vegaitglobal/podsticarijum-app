@@ -1,3 +1,4 @@
+import 'package:app_for_family_backup/common/widgets/useful_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../api/podsticariju_api.dart';
@@ -30,9 +31,17 @@ class FaqAnswersScreen extends StatefulWidget {
 
 class _FaqAnswersScreenState extends State<FaqAnswersScreen> {
   FaqUiModel? faqUiModel = null;
+  bool isError = false;
 
   void getFaqCategoryUiModel(int subcategoryId) async {
-    var responseFaqModelList = await PodsticarijumApi.getFaqList(subcategoryId);
+    var responseFaqModelList = await PodsticarijumApi.getFaqList(subcategoryId)
+        .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+        return null;
+      });
+    });
+
     var responseSubcategory =
         await PodsticarijumApi.getSubcategory(subcategoryId);
 
@@ -54,28 +63,36 @@ class _FaqAnswersScreenState extends State<FaqAnswersScreen> {
     final args =
         ModalRoute.of(context)!.settings.arguments as FaqAnswersScreenArguments;
 
-    if (faqUiModel == null) getFaqCategoryUiModel(args.subcategoryId);
+    if (faqUiModel == null && !isError)
+      getFaqCategoryUiModel(args.subcategoryId);
 
     return Scaffold(
-      appBar: const NewAppBar(),
-      body: DefaultContainer(
-        scale: 0.79,
-        leftOffset: -30,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildSubtitle(context, "Najčešća pitanja"),
-              buildTitle(
-                context,
-                faqUiModel?.subcategoryName ?? "",
-              ),
-              const SizedBox(height: 35),
-              ..._buildQuestinoAnswerContent(faqUiModel?.questionAndAnswers)
-            ],
-          ),
-        ],
-      ),
+        appBar: const NewAppBar(),
+        body: isError
+            ? buildErrorScreen()
+            : faqUiModel == null
+                ? buildLoadingWidget(context)
+                : _buildContent());
+  }
+
+  Widget _buildContent() {
+    return DefaultContainer(
+      scale: 0.79,
+      leftOffset: -30,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildSubtitle(context, "Najčešća pitanja"),
+            buildTitle(
+              context,
+              faqUiModel?.subcategoryName ?? "",
+            ),
+            const SizedBox(height: 35),
+            ..._buildQuestinoAnswerContent(faqUiModel?.questionAndAnswers)
+          ],
+        ),
+      ],
     );
   }
 

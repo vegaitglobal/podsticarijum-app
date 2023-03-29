@@ -149,9 +149,10 @@ Widget buildDefaultCustomForm(
   );
 }
 
-Widget buildLoadingWidget() {
+Widget buildLoadingWidget(BuildContext context) {
   return Container(
     alignment: Alignment.center,
+    color: Theme.of(context).primaryColor,
     child: const CircularProgressIndicator(
       strokeWidth: 5,
       valueColor:

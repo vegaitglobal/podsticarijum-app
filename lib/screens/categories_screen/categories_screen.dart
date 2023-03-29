@@ -1,5 +1,6 @@
 import 'package:app_for_family_backup/api/models/CategoryModel.dart';
 import 'package:app_for_family_backup/api/podsticariju_api.dart';
+import 'package:app_for_family_backup/common/widgets/useful_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/enums/age_group_type.dart';
@@ -19,11 +20,17 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  List<CategoryModel> categoryList = List.empty();
+  List<CategoryModel>? categoryList = null;
+  bool isError = false;
 
   void getCategoryNames() async {
     List<CategoryModel> categoryNamesResponse =
-        await PodsticarijumApi.getCategoryList();
+        await PodsticarijumApi.getCategoryList()
+            .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+      });
+    });
     print("00>99 - $categoryList");
     setState(() {
       categoryList = categoryNamesResponse;
@@ -46,36 +53,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 21),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: getCategoryButtons(categoryList)
-              // [
-              //   ...getCategoryButtons(categoryNames),
-              //   ...[
-              //     CustomOutlineButton(
-              //         text: AgeGroupType.first.title,
-              //         onClick: () {
-              //           _navigate(AgeGroupType.first, context);
-              //         }),
-              //     const SizedBox(height: CategoriesScreen._padding),
-              //     CustomOutlineButton(
-              //         text: AgeGroupType.second.title,
-              //         onClick: () {
-              //           _navigate(AgeGroupType.second, context);
-              //         }),
-              //     const SizedBox(height: CategoriesScreen._padding),
-              //     CustomOutlineButton(
-              //         text: AgeGroupType.third.title,
-              //         onClick: () {
-              //           _navigate(AgeGroupType.third, context);
-              //         }),
-              //     const SizedBox(height: CategoriesScreen._padding),
-              //     CustomOutlineButton(
-              //         text: AgeGroupType.fourth.title,
-              //         onClick: () {
-              //           _navigate(AgeGroupType.fourth, context);
-              //         }),
-              //   ],
-              // ]
-              ),
+              children: getCategoryButtons(categoryList)),
         ),
       ),
     );
@@ -89,15 +67,20 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     );
   }
 
-  List<Widget> getCategoryButtons(List<CategoryModel> categoryList) {
+  List<Widget> getCategoryButtons(List<CategoryModel>? categoryList) {
+    if (isError) return [buildErrorScreen()];
+    if (categoryList == null && !isError)
+      return [buildLoadingWidget(context)]; // loading if not fetched
+
+    //otherwise categoryList is fetched and its content needs to change to proper models
     List<Widget> widgetList = [];
 
-    if (categoryList.isNotEmpty) {
+    if (categoryList != null && categoryList.isNotEmpty) {
       widgetList.add(buildCustomOutlineButton(
           categoryList[0].categoryName, categoryList[0].id));
     }
 
-    categoryList.skip(1).forEach((category) {
+    categoryList?.skip(1).forEach((category) {
       widgetList.add(const SizedBox(height: CategoriesScreen._padding));
       widgetList
           .add(buildCustomOutlineButton(category.categoryName, category.id));

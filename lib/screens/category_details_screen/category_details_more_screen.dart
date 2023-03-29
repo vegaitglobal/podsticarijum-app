@@ -38,21 +38,19 @@ class CategoryDetailsMoreScreen extends StatefulWidget {
 }
 
 class _CategoryDetailsMoreScreenState extends State<CategoryDetailsMoreScreen> {
-  //  data
-  // final List<String> paragraphList = [
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-  //   'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum!',
-  // ];
-  CategoryDetailsMoreUiModel categoryDetailsMoreUiModel =
-      CategoryDetailsMoreUiModel("", "", []);
-
+  CategoryDetailsMoreUiModel? categoryDetailsMoreUiModel = null;
+  bool isError = false;
   void getCategoryDetailsMoreUiModel(int subcategoryId) async {
-    var subcategory = await PodsticarijumApi.getSubcategory(subcategoryId);
+    var subcategory = await PodsticarijumApi.getSubcategory(subcategoryId)
+        .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+        return null;
+      });
+    });
 
     setState(() {
-      if (subcategory != null) {
+      if (subcategory != null && !isError) {
         categoryDetailsMoreUiModel = CategoryDetailsMoreUiModel(
           subcategory.categoryName,
           subcategory.name,
@@ -71,78 +69,83 @@ class _CategoryDetailsMoreScreenState extends State<CategoryDetailsMoreScreen> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: const NewAppBar(),
-        backgroundColor: Colors.white,
-        body: DefaultContainer(
-          scale: 0.79,
-          leftOffset: -50,
+          appBar: const NewAppBar(),
+          backgroundColor: Colors.white,
+          body: isError
+              ? buildErrorScreen()
+              : categoryDetailsMoreUiModel == null
+                  ? buildLoadingWidget(context)
+                  : _buildContent(
+                      categoryDetailsMoreUiModel!, args.subcategoryId)),
+    );
+  }
+
+  Widget _buildContent(CategoryDetailsMoreUiModel categoryDetailsMoreUiModel,
+      int subcategoryId) {
+    return DefaultContainer(
+      scale: 0.79,
+      leftOffset: -50,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildSubtitle(context, categoryDetailsMoreUiModel.subtitle),
-                buildTitle(context, categoryDetailsMoreUiModel.title),
-                const SizedBox(height: 100),
-                ...categoryDetailsMoreUiModel.paragraphList.map(
-                  (paragraph) => _buildParagraph(paragraph, context),
-                ),
-                CustomOutlineButton(
-                  text: "Podsticajne razvojne aktivnosti",
-                  onClick: () => Navigator.pushNamed(
-                    context,
-                    CategoryFlagsScreen.route,
-                    arguments: CategoryFlagsScreenArguments(
-                      // args.ageGroupType,
-                      // args.developmentAspectType,
-                      args.subcategoryId,
-                      FlagType.green,
-                    ),
-                  ),
-                  isYellow: true,
-                ),
-                const SizedBox(height: 33),
-                CustomOutlineButton(
-                  text: "Znaci odstupanja",
-                  onClick: () => Navigator.pushNamed(
-                    context,
-                    CategoryFlagsScreen.route,
-                    arguments: CategoryFlagsScreenArguments(
-                      // args.ageGroupType,
-                      // args.developmentAspectType,
-                      args.subcategoryId,
-                      FlagType.red,
-                    ),
-                  ),
-                  isYellow: true,
-                ),
-                const SizedBox(height: 33),
-                Image.asset(
-                  'images/separator.png',
-                  width: double.infinity,
-                  fit: BoxFit.fitWidth,
-                ),
-                const SizedBox(height: 33),
-                buildDefaultCustomForm(args.subcategoryId, context),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.center,
-                  child: TextButton(
-                    onPressed: () => Navigator.popUntil(
-                      context,
-                      ModalRoute.withName(CategoriesScreen.route),
-                    ),
-                    child: Text(
-                      style: Theme.of(context).textTheme.headline4,
-                      "Vrati se na početnu stranu",
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-              ],
+            buildSubtitle(context, categoryDetailsMoreUiModel.subtitle),
+            buildTitle(context, categoryDetailsMoreUiModel.title),
+            const SizedBox(height: 100),
+            ...categoryDetailsMoreUiModel.paragraphList.map(
+              (paragraph) => _buildParagraph(paragraph, context),
             ),
+            CustomOutlineButton(
+              text: "Podsticajne razvojne aktivnosti",
+              onClick: () => Navigator.pushNamed(
+                context,
+                CategoryFlagsScreen.route,
+                arguments: CategoryFlagsScreenArguments(
+                  subcategoryId,
+                  FlagType.green,
+                ),
+              ),
+              isYellow: true,
+            ),
+            const SizedBox(height: 33),
+            CustomOutlineButton(
+              text: "Znaci odstupanja",
+              onClick: () => Navigator.pushNamed(
+                context,
+                CategoryFlagsScreen.route,
+                arguments: CategoryFlagsScreenArguments(
+                  subcategoryId,
+                  FlagType.red,
+                ),
+              ),
+              isYellow: true,
+            ),
+            const SizedBox(height: 33),
+            Image.asset(
+              'images/separator.png',
+              width: double.infinity,
+              fit: BoxFit.fitWidth,
+            ),
+            const SizedBox(height: 33),
+            buildDefaultCustomForm(subcategoryId, context),
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.center,
+              child: TextButton(
+                onPressed: () => Navigator.popUntil(
+                  context,
+                  ModalRoute.withName(CategoriesScreen.route),
+                ),
+                child: Text(
+                  style: Theme.of(context).textTheme.headline4,
+                  "Vrati se na početnu stranu",
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
           ],
         ),
-      ),
+      ],
     );
   }
 

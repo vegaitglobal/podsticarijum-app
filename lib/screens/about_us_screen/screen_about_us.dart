@@ -1,4 +1,5 @@
 import 'package:app_for_family_backup/api/podsticariju_api.dart';
+import 'package:app_for_family_backup/common/widgets/useful_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/widgets/app_bar/new_app_bar.dart';
@@ -19,9 +20,16 @@ class AboutUsScreen extends StatefulWidget {
 
 class _AboutUsScreenState extends State<AboutUsScreen> {
   String? description = null;
+  bool isError = false;
 
   void getDescription() async {
-    var response = await PodsticarijumApi.getMainScreenContent("AboutUs");
+    var response = await PodsticarijumApi.getMainScreenContent("AboutUs")
+        .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+        return null;
+      });
+    });
     setState(() {
       description = response?.text ?? "";
     });
@@ -29,24 +37,31 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (description == null) getDescription();
+    if (description == null && !isError) getDescription();
 
     return SafeArea(
       child: Scaffold(
-        appBar: const NewAppBar(),
-        body: DefaultContainer(
-          children: [
-            const SizedBox(height: 20),
-            buildTitle(context, 'O NAMA'),
-            const SizedBox(height: 68),
-            Text(
-              description ?? "",
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            const SizedBox(height: 35)
-          ],
+          appBar: const NewAppBar(),
+          body: isError
+              ? buildErrorScreen()
+              : description == null
+                  ? buildLoadingWidget(context)
+                  : _buildContent()),
+    );
+  }
+
+  Widget _buildContent() {
+    return DefaultContainer(
+      children: [
+        const SizedBox(height: 20),
+        buildTitle(context, 'O NAMA'),
+        const SizedBox(height: 68),
+        Text(
+          description ?? "",
+          style: Theme.of(context).textTheme.bodyText1,
         ),
-      ),
+        const SizedBox(height: 35)
+      ],
     );
   }
 }

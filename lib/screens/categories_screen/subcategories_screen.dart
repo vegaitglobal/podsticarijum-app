@@ -1,4 +1,5 @@
 import 'package:app_for_family_backup/api/models/SubcategoryModel.dart';
+import 'package:app_for_family_backup/common/widgets/useful_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../api/podsticariju_api.dart';
@@ -32,10 +33,17 @@ class SubCategoriesScreen extends StatefulWidget {
 
 class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
   List<SubcategoryModel>? subcategoryList = null;
+  bool isError = false;
 
   void getSubcategoryNameList(int categoryId) async {
     List<SubcategoryModel>? result =
-        await PodsticarijumApi.getSubcategoryListByCategoryId(categoryId);
+        await PodsticarijumApi.getSubcategoryListByCategoryId(categoryId)
+            .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+        return null;
+      });
+    });
 
     setState(() {
       subcategoryList = result ?? [];
@@ -48,7 +56,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
         .settings
         .arguments as SubCategoriesScreenArguments;
 
-    if (subcategoryList == null) {
+    if (subcategoryList == null && !isError) {
       getSubcategoryNameList(args.categoryId);
     }
 
@@ -62,16 +70,18 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
             child: SingleChildScrollView(
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ...subcategoryList?.map(
-                          (subcategory) => _getColumnElement(
-                            context,
-                            subcategory.name,
-                            subcategory.id,
-                          ),
-                        ) ??
-                        []
-                  ]),
+                  children: !isError
+                      ? [
+                          ...subcategoryList?.map(
+                                (subcategory) => _getColumnElement(
+                                  context,
+                                  subcategory.name,
+                                  subcategory.id,
+                                ),
+                              ) ??
+                              [buildLoadingWidget(context)]
+                        ]
+                      : [buildErrorScreen()]),
             ),
           ),
         ),

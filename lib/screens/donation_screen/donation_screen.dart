@@ -1,4 +1,5 @@
 import 'package:app_for_family_backup/api/podsticariju_api.dart';
+import 'package:app_for_family_backup/common/widgets/useful_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/widgets/app_bar/new_app_bar.dart';
@@ -29,9 +30,16 @@ class DonationScreen extends StatefulWidget {
 
 class _DonationScreenState extends State<DonationScreen> {
   DonationUiModel? donationUiModel = null;
+  bool isError = false;
 
   void getDonationUiModel() async {
-    var response = await PodsticarijumApi.getMainScreenContent("Donations");
+    var response = await PodsticarijumApi.getMainScreenContent("Donations")
+        .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+        return null;
+      });
+    });
     setState(() {
       if (response != null) {
         donationUiModel = DonationUiModel(
@@ -44,23 +52,30 @@ class _DonationScreenState extends State<DonationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (donationUiModel == null) getDonationUiModel();
+    if (donationUiModel == null && !isError) getDonationUiModel();
 
     return Scaffold(
-      appBar: const NewAppBar(),
-      body: DefaultContainer(
-        children: [
-          buildTitle(context, "Donacije"),
-          const SizedBox(height: 68),
-          InfoSectionWidget(content: donationUiModel?.intro ?? ""),
-          InfoSectionWidget(
-            title: 'Informacije',
-            content: donationUiModel?.information ?? "",
-            hasBorder: false,
-          ),
-          const SizedBox(height: 18),
-        ],
-      ),
+        appBar: const NewAppBar(),
+        body: isError
+            ? buildErrorScreen()
+            : donationUiModel == null
+                ? buildLoadingWidget(context)
+                : _buildContent());
+  }
+
+  Widget _buildContent() {
+    return DefaultContainer(
+      children: [
+        buildTitle(context, "Donacije"),
+        const SizedBox(height: 68),
+        InfoSectionWidget(content: donationUiModel?.intro ?? ""),
+        InfoSectionWidget(
+          title: 'Informacije',
+          content: donationUiModel?.information ?? "",
+          hasBorder: false,
+        ),
+        const SizedBox(height: 18),
+      ],
     );
   }
 }
