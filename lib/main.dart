@@ -38,10 +38,10 @@ class FamilyBackupApp extends StatelessWidget {
       initialRoute: SplashScreen.route,
       routes: {
         DebugScreen.route: (context) => const DebugScreen(),
-        SplashScreen.route: (context) => SplashScreen(),
-        CategoriesScreen.route: (context) => CategoriesScreen(),
+        SplashScreen.route: (context) => const SplashScreen(),
+        CategoriesScreen.route: (context) => const CategoriesScreen(),
         SubCategoriesScreen.route: (context) => const SubCategoriesScreen(),
-        CategoryIntroScreen.route: (context) => CategoryIntroScreen(),
+        CategoryIntroScreen.route: (context) => const CategoryIntroScreen(),
         CategoryDetailsScreen.route: (context) => const CategoryDetailsScreen(),
         CategoryDetailsMoreScreen.route: (context) =>
             CategoryDetailsMoreScreen(),

@@ -1,3 +1,4 @@
+import 'package:app_for_family_backup/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/enums/app_bar_type.dart';
@@ -42,6 +43,8 @@ class _MenuScreenState extends State<MenuScreen> {
         return DonationScreen.route;
       case 4:
         return FaqCategoriesScreen.route;
+      case 5:
+        return SplashScreen.route;
       default:
         return null;
     }
@@ -77,6 +80,12 @@ class _MenuScreenState extends State<MenuScreen> {
               MenuItemWidget(
                 id: 4,
                 title: 'Najčešće postavljena pitanja',
+                selectedItemId: selectedItemId,
+                onSelected: onMenuSelected,
+              ),
+              MenuItemWidget(
+                id: 5,
+                title: 'Početna strana',
                 selectedItemId: selectedItemId,
                 onSelected: onMenuSelected,
               ),

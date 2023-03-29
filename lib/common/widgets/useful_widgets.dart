@@ -163,6 +163,8 @@ Widget buildLoadingWidget(BuildContext context) {
 
 Widget buildErrorScreen() {
   return const ThankYouScreen(
-      text:
-          "Nažalost, pojavila se greška pri komunikaciji sa serverom. Molimo Vas provjerite Vašu internet konekciju");
+    text:
+        "Nažalost, pojavila se greška pri komunikaciji sa serverom. Molimo Vas provjerite Vašu internet konekciju",
+    isMenuVisible: false,
+  );
 }

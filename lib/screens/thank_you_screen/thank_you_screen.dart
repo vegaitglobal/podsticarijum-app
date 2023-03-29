@@ -8,18 +8,20 @@ import '../splash_screen/splash_screen.dart';
 class ThankYouScreen extends StatelessWidget {
   static const String route = "/go_back_with_message";
   final String text;
+  final bool isMenuVisible;
 
-  const ThankYouScreen({
-    Key? key,
-    this.text =
-        'Hvala na postavljenom pitanju, na vašu e-mail adresu će uskoro stići odgovor!',
-  }) : super(key: key);
+  const ThankYouScreen(
+      {Key? key,
+      this.text =
+          'Hvala na postavljenom pitanju, na vašu e-mail adresu će uskoro stići odgovor!',
+      this.isMenuVisible = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: const NewAppBar(),
+      appBar: isMenuVisible ? const NewAppBar() : null,
       body: centeredContainerWithFooter(
         buildLogoWidget(
           context,
