@@ -8,9 +8,9 @@ services:
       - "23000:80"
       - "23001:443"
     environment:
-      - ConnectionStrings__PodsticarijumDb=Server=db;Database=podsticarijum;User Id=sa;Password=#{DB_PASSWORD}#;
+      - ConnectionStrings__PodsticarijumDb=Server=db;Database=podsticarijum;User Id=sa;Password=SecurePass12345;
       - ASPNETCORE_ENVIRONMENT=Production
-      - MailData__Password=#{MAIL_DATA_PASSWORD}#
+      - MailData__Password=uiydwxfnhxjqpdzf
       - MailData__AppMailAddressFrom=podsticarijum@gmail.com
       - MailData__Host=smtp.gmail.com
       - MailData__Port=587
@@ -23,8 +23,7 @@ services:
       - "23456:1433"
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=#{DB_PASSWORD}#
+      - MSSQL_SA_PASSWORD=SecurePass12345
     volumes:
       - ".:/app:rw"
     restart: always
-

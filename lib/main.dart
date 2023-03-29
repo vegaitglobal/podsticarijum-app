@@ -38,10 +38,10 @@ class FamilyBackupApp extends StatelessWidget {
       initialRoute: SplashScreen.route,
       routes: {
         DebugScreen.route: (context) => const DebugScreen(),
-        SplashScreen.route: (context) => SplashScreen(),
+        SplashScreen.route: (context) => const SplashScreen(),
         CategoriesScreen.route: (context) => const CategoriesScreen(),
         SubCategoriesScreen.route: (context) => const SubCategoriesScreen(),
-        CategoryIntroScreen.route: (context) => CategoryIntroScreen(),
+        CategoryIntroScreen.route: (context) => const CategoryIntroScreen(),
         CategoryDetailsScreen.route: (context) => const CategoryDetailsScreen(),
         CategoryDetailsMoreScreen.route: (context) =>
             CategoryDetailsMoreScreen(),
@@ -51,18 +51,7 @@ class FamilyBackupApp extends StatelessWidget {
         ExpertsScreen.route: (context) => const ExpertsScreen(),
         DonationScreen.route: (context) => const DonationScreen(),
         FaqCategoriesScreen.route: (context) => const FaqCategoriesScreen(),
-        FaqAnswersScreen.route: (context) => FaqAnswersScreen(
-              const {
-                "neko pitanje": "neki odgovor",
-                "neko pitanje 2": "neki odgovor 2",
-                "neko pitanje 3": "neki odgovor 3",
-                "PITANJE ALLOO": "neki odgovor",
-                "neko pitanje 5": "neki odgovor",
-                "neko pitanje 6": "neki odgovor",
-                "neko pitanje 7": "neki odgovor",
-              },
-              "Motorički razvoj",
-            ),
+        FaqAnswersScreen.route: (context) => FaqAnswersScreen(),
         ThankYouScreen.route: (context) => const ThankYouScreen()
       },
     );

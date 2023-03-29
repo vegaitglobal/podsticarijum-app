@@ -1,3 +1,5 @@
+import 'package:app_for_family_backup/api/podsticariju_api.dart';
+import 'package:app_for_family_backup/common/widgets/useful_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/widgets/app_bar/new_app_bar.dart';
@@ -5,7 +7,17 @@ import '../../common/widgets/info_section_widget.dart';
 import '../../common/widgets/default_container.dart';
 import '../../common/widgets/default_header.dart';
 
-class DonationScreen extends StatelessWidget {
+class DonationUiModel {
+  String intro;
+  String information;
+
+  DonationUiModel(
+    this.intro,
+    this.information,
+  );
+}
+
+class DonationScreen extends StatefulWidget {
   static const String route = '/clothing_donation';
   static const String loremIpsum =
       '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqui "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ';
@@ -13,22 +25,57 @@ class DonationScreen extends StatelessWidget {
   const DonationScreen({super.key});
 
   @override
+  State<DonationScreen> createState() => _DonationScreenState();
+}
+
+class _DonationScreenState extends State<DonationScreen> {
+  DonationUiModel? donationUiModel = null;
+  bool isError = false;
+
+  void getDonationUiModel() async {
+    var response = await PodsticarijumApi.getMainScreenContent("Donations")
+        .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+        return null;
+      });
+    });
+    setState(() {
+      if (response != null) {
+        donationUiModel = DonationUiModel(
+          response.text,
+          response.additionalText ?? "",
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (donationUiModel == null && !isError) getDonationUiModel();
+
     return Scaffold(
-      appBar: const NewAppBar(),
-      body: DefaultContainer(
-        children: [
-          buildTitle(context, "Donacije"),
-          const SizedBox(height: 68),
-          const InfoSectionWidget(content: loremIpsum),
-          const InfoSectionWidget(
-            title: 'Informacije',
-            content: loremIpsum,
-            hasBorder: false,
-          ),
-          const SizedBox(height: 18),
-        ],
-      ),
+        appBar: const NewAppBar(),
+        body: isError
+            ? buildErrorScreen()
+            : donationUiModel == null
+                ? buildLoadingWidget(context)
+                : _buildContent());
+  }
+
+  Widget _buildContent() {
+    return DefaultContainer(
+      children: [
+        buildTitle(context, "Donacije"),
+        const SizedBox(height: 68),
+        InfoSectionWidget(content: donationUiModel?.intro ?? ""),
+        InfoSectionWidget(
+          title: 'Informacije',
+          content: donationUiModel?.information ?? "",
+          hasBorder: false,
+        ),
+        const SizedBox(height: 18),
+      ],
     );
   }
 }

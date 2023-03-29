@@ -38,8 +38,12 @@ class DebugScreen extends StatelessWidget {
                   Navigator.pushNamed(
                     context,
                     CategoryFlagsScreen.route,
-                    arguments: CategoryFlagsScreenArguments(AgeGroupType.first,
-                        DevelopmentAspectType.cognitive, FlagType.green),
+                    arguments: CategoryFlagsScreenArguments(
+                      // AgeGroupType.first,
+                      //   DevelopmentAspectType.cognitive,
+                      0,
+                      FlagType.green,
+                    ),
                   );
                 }),
             CustomOutlineButton(
