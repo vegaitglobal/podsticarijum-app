@@ -25,6 +25,8 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=SecurePass12345
     volumes:
-      - ".:/app:rw"
+      # First do this on the server:
+      # mkdir data && sudo chown 10001 data
+      - "./data:/var/opt/mssql:rw"
     restart: always
 
