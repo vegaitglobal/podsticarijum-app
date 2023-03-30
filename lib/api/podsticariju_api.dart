@@ -37,6 +37,9 @@ class PodsticarijumApi {
       categoryList.add(CategoryModel.fromJson(value as Map<String, dynamic>));
     });
 
+    if (categoryList.isEmpty == null) {
+      return Future.error("Parsing error occured");
+    }
     return categoryList;
   }
 
@@ -52,6 +55,9 @@ class PodsticarijumApi {
       subcategoryList.add(SubcategoryModel.fromJson(json));
     });
 
+    if (subcategoryList.isEmpty == null) {
+      return Future.error("Parsing error occured");
+    }
     return subcategoryList;
   }
 
@@ -78,7 +84,9 @@ class PodsticarijumApi {
     expertListJson.forEach((json) {
       expertList.add(ExpertModel.fromJson(json));
     });
-
+    if (expertList.isEmpty == null) {
+      return Future.error("Parsing error occured");
+    }
     return expertList;
   }
 
@@ -111,7 +119,9 @@ class PodsticarijumApi {
       MainScreenModel data = MainScreenModel.fromJson(elementJson);
       if (data.contentType == contentType) result = data;
     });
-
+    if (result == null) {
+      return Future.error("Parsing error occured");
+    }
     return result;
   }
 
@@ -123,7 +133,9 @@ class PodsticarijumApi {
     faqList.forEach((element) {
       faqModelList.add(FAQModel.fromJson(element));
     });
-
+    if (faqModelList.isEmpty == null) {
+      return Future.error("Parsing error occured");
+    }
     return faqModelList;
   }
 
@@ -136,6 +148,9 @@ class PodsticarijumApi {
       subcategoryList.add(SubcategoryModel.fromJson(element));
     });
 
+    if (subcategoryList.isEmpty == null) {
+      return Future.error("Parsing error occured");
+    }
     return subcategoryList;
   }
 
@@ -147,6 +162,10 @@ class PodsticarijumApi {
     emailListJson.forEach((element) {
       emailList.add(element["userMailAddress"]);
     });
+
+    if (emailList.isEmpty == null) {
+      return Future.error("Parsing error occured");
+    }
     return emailList;
   }
 
