@@ -123,11 +123,6 @@ public class SubCategoryCmsController : Controller
             return BadRequest();
         }
 
-        if (categoryAlreadyHasThatSubCategory(viewModel, category))
-        {
-            return BadRequest();
-        }
-
         subCategory.UpdateFromDto(viewModel.SubCategoryDto);
         subCategory.UpdatedAt = DateTime.UtcNow;
         await _subCategoryRepository.Update(subCategory);
