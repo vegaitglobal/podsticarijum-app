@@ -153,7 +153,7 @@ public class SubCategorySpecificCmsController : Controller
         content.ParagraphText = viewModel.ParagraphText;
         if (content.SubCategory.Id != viewModel.SubCategoryId)
         {
-            SubCategory? subCategory = await _subCategoryRepository.Get(content.SubCategory.Id, tracking: true);
+            SubCategory? subCategory = await _subCategoryRepository.Get(viewModel.SubCategoryId, tracking: true);
             if (subCategory != null)
             {
                 content.SubCategory = subCategory;
