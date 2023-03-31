@@ -1,39 +1,61 @@
+import 'package:app_for_family_backup/common/widgets/useful_widgets.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/enums/development_ascpect_type.dart';
+import '../../api/podsticariju_api.dart';
 import '../../common/widgets/app_bar/new_app_bar.dart';
 import '../../common/widgets/default_header.dart';
 import '../../common/widgets/info_section_widget.dart';
 import '../../common/widgets/default_container.dart';
 
-class FaqAnswersScreenArguments {
-  DevelopmentAspectType type;
-  FaqAnswersScreenArguments(this.type);
+class FaqUiModel {
+  String subcategoryName;
+  Map<String, String> questionAndAnswers;
+
+  FaqUiModel(
+    this.subcategoryName,
+    this.questionAndAnswers,
+  );
 }
 
-class FaqAnswersScreen extends StatelessWidget {
+class FaqAnswersScreenArguments {
+  int subcategoryId;
+  FaqAnswersScreenArguments(this.subcategoryId);
+}
+
+class FaqAnswersScreen extends StatefulWidget {
   static const String route = '/screen_frequent_question';
-  final Map<String, String> questionAndAnswers;
-  final String categoryName;
-  final List<Widget> questionAndAnswersWidgetList = [];
 
-  FaqAnswersScreen(this.questionAndAnswers, this.categoryName, {super.key}) {
-    for (int i = 0; i < questionAndAnswers.length - 1; ++i) {
-      String question = questionAndAnswers.keys.elementAt(i);
-      String answer = questionAndAnswers.values.elementAt(i);
-      questionAndAnswersWidgetList.add(_questionAnswerWidget(question, answer));
-    }
+  @override
+  State<FaqAnswersScreen> createState() => _FaqAnswersScreenState();
+}
 
-    questionAndAnswersWidgetList.add(
-      Padding(
-        padding: const EdgeInsets.only(bottom: 30.0),
-        child: _questionAnswerWidget(
-          questionAndAnswers.keys.last,
-          questionAndAnswers.values.last,
-          hasBorder: false,
-        ),
-      ),
-    );
+class _FaqAnswersScreenState extends State<FaqAnswersScreen> {
+  FaqUiModel? faqUiModel = null;
+  bool isError = false;
+
+  void getFaqCategoryUiModel(int subcategoryId) async {
+    var responseFaqModelList = await PodsticarijumApi.getFaqList(subcategoryId)
+        .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+        return null;
+      });
+    });
+
+    var responseSubcategory =
+        await PodsticarijumApi.getSubcategory(subcategoryId);
+
+    var questionAnswerMap = {
+      for (var faqModel in responseFaqModelList)
+        faqModel.question: faqModel.answer
+    };
+
+    setState(() {
+      faqUiModel = FaqUiModel(
+        responseSubcategory?.name ?? "",
+        questionAnswerMap,
+      );
+    });
   }
 
   @override
@@ -41,26 +63,36 @@ class FaqAnswersScreen extends StatelessWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as FaqAnswersScreenArguments;
 
+    if (faqUiModel == null && !isError)
+      getFaqCategoryUiModel(args.subcategoryId);
+
     return Scaffold(
-      appBar: const NewAppBar(),
-      body: DefaultContainer(
-        scale: 0.79,
-        leftOffset: -30,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildSubtitle(context, "Najčešća pitanja"),
-              buildTitle(
-                context,
-                args.type.title,
-              ),
-              const SizedBox(height: 35),
-              ...questionAndAnswersWidgetList
-            ],
-          ),
-        ],
-      ),
+        appBar: const NewAppBar(),
+        body: isError
+            ? buildErrorScreen()
+            : faqUiModel == null
+                ? buildLoadingWidget(context)
+                : _buildContent());
+  }
+
+  Widget _buildContent() {
+    return DefaultContainer(
+      scale: 0.79,
+      leftOffset: -30,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildSubtitle(context, "Najčešća pitanja"),
+            buildTitle(
+              context,
+              faqUiModel?.subcategoryName ?? "",
+            ),
+            const SizedBox(height: 35),
+            ..._buildQuestinoAnswerContent(faqUiModel?.questionAndAnswers)
+          ],
+        ),
+      ],
     );
   }
 
@@ -80,5 +112,30 @@ class FaqAnswersScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  List<Widget> _buildQuestinoAnswerContent(
+      Map<String, String>? questionAndAnswers) {
+    if (questionAndAnswers == null) return [const Text("No questions")];
+
+    final List<Widget> questionAndAnswersWidgetList = [];
+    for (int i = 0; i < questionAndAnswers.length - 1; ++i) {
+      String question = questionAndAnswers.keys.elementAt(i);
+      String answer = questionAndAnswers.values.elementAt(i);
+      questionAndAnswersWidgetList.add(_questionAnswerWidget(question, answer));
+    }
+
+    questionAndAnswersWidgetList.add(
+      Padding(
+        padding: const EdgeInsets.only(bottom: 30.0),
+        child: _questionAnswerWidget(
+          questionAndAnswers.keys.last,
+          questionAndAnswers.values.last,
+          hasBorder: false,
+        ),
+      ),
+    );
+
+    return questionAndAnswersWidgetList;
   }
 }

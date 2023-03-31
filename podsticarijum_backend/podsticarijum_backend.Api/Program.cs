@@ -37,7 +37,9 @@ builder.Services.AddScoped<IFaqRepository, FaqRepository>();
 
 builder.Services.AddDbContext<PodsticarijumContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PodsticarijumDb")!, b => b.MigrationsAssembly("podsticarijum_backend.Repository"));
+    options.UseSqlServer(
+           builder.Configuration.GetConnectionString("PodsticarijumDb")!, 
+           b => b.MigrationsAssembly("podsticarijum_backend.Repository"));
 });
 
 
