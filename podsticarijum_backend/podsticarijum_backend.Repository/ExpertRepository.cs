@@ -23,7 +23,7 @@ public class ExpertRepository : IExpertRepository
 
     public Task<ExpertInfo?> GetExpertInfo(long expertId, bool tracking = false)
     {
-        var query = _podsticarijumContext.ExpertInfo;
+        var query = _podsticarijumContext.ExpertInfo.Where(ei => ei.Id == expertId);
         return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }
 
