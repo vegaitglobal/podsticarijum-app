@@ -83,7 +83,11 @@ public class SubCategoryController : ControllerBase
                 return BadRequest("Experts not found.");
             }
 
-            await _mailService.sendEmail(ToMailAddress: experts[0].Email, subject: emailDto.Subject, body: emailDto.Body);
+            var body = emailDto.Body + "\n " +
+                "Korisnik podsticarijuma: " +
+                emailDto.UserMailAddress;
+            
+            await _mailService.sendEmail(ToMailAddress: experts[0].Email, subject: emailDto.Subject, body: body);
             return Ok();
         }
         catch (Exception ex)

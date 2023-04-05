@@ -48,6 +48,7 @@ public class SubCategoryRepository : ISubCategoryRepository
     {
         var query = _podsticarijumContext.SubCategorySpecificContent
             .Include(sc => sc.SubCategory)
+            .ThenInclude(sc => sc.Category)
             .Where(sc => sc.SubCategory.Id == subCategoryId);
 
         if (paragraphSign != ParagraphSign.Default)
@@ -94,7 +95,7 @@ public class SubCategoryRepository : ISubCategoryRepository
     {
         var query = _podsticarijumContext.SubCategorySpecificContent
             .Include(sc => sc.SubCategory)
-            .Include(sc => sc.SubCategory.Category);
+            .ThenInclude(sc => sc.Category);
 
         return tracking ? query.ToListAsync() : query.AsNoTracking().ToListAsync();
     }
@@ -111,7 +112,7 @@ public class SubCategoryRepository : ISubCategoryRepository
         var query = _podsticarijumContext.SubCategorySpecificContent
             .Where(scc => scc.Id == id)
             .Include(scc => scc.SubCategory)
-            .Include(scc => scc.SubCategory.Category);
+            .ThenInclude(sc => sc.Category);
 
         return tracking ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync();
     }
