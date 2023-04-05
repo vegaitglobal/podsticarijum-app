@@ -30,9 +30,9 @@ class EmailPayloadDto {
   EmailPayloadDto(this.nameSurname, this.mail, this.question);
 
   Map<String, dynamic> toJson() => {
-        'AppPackageName': 'com.example.app_for_family_backup',
-        'UserMailAddress': mail,
-        'subject': 'Subject placeholder',
+        'appPackageName': 'com.example.app_for_family_backup',
+        'userMailAddress': mail,
+        'subject': 'Novo pitanje od: $mail',
         'body': question,
       };
 }
@@ -71,17 +71,25 @@ class _CategoryFlagsScreenState extends State<CategoryFlagsScreen> {
       });
     });
 
+    var flagList = await PodsticarijumApi.getSubcategorySpecificContent(
+            subcategoryId, flagType)
+        .catchError((Object e, StackTrace stackTrace) {
+      setState(() {
+        isError = true;
+        return null;
+      });
+    });
+
     setState(() {
       if (subcategory != null) {
-        List<String> flagList;
-        switch (flagType) {
-          case FlagType.green:
-            flagList = subcategory.positiveSigns;
-            break;
-          case FlagType.red:
-            flagList = subcategory.negativeSigns;
-            break;
-        }
+        // switch (flagType) {
+        //   case FlagType.green:
+        //     // flagList = subcategory.positiveSigns;
+        //     break;
+        //   case FlagType.red:
+        //     // flagList = subcategory.negativeSigns;
+        //     break;
+        // }
         categoryFlagsUiModel = CategoryFlagsUiModel(
           subcategory.categoryName,
           flagList,
