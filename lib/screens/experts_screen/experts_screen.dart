@@ -35,7 +35,7 @@ class _ExpertsScreenState extends State<ExpertsScreen> {
   bool isError = false;
 
   void getExpertList() async {
-    var response = await PodsticarijumApi.getExperts()
+    var response = await PodsticarijumApi.getExpertInfoList()
         .catchError((Object e, StackTrace stackTrace) {
       setState(() {
         isError = true;
@@ -44,8 +44,7 @@ class _ExpertsScreenState extends State<ExpertsScreen> {
     });
     List<ExpertHolder> expertList = [];
     response.forEach((element) {
-      expertList.add(ExpertHolder(
-          "${element.firstName} ${element.lastName}", element.description));
+      expertList.add(ExpertHolder(element.name, element.description));
     });
     setState(() {
       expertUiModel = ExpertUiModel(expertList);
