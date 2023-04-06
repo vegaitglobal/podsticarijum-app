@@ -1,3 +1,4 @@
+import 'package:app_for_family_backup/screens/categories_screen/categories_screen.dart';
 import 'package:app_for_family_backup/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,14 @@ class _MenuScreenState extends State<MenuScreen> {
     await Future.delayed(const Duration(milliseconds: _navigationDelayMillis));
     final String? routeName = getNavRoute();
     if (routeName != null) {
-      Navigator.popAndPushNamed(context, routeName);
+      if (routeName == SplashScreen.route) {
+        Navigator.popUntil(
+          context,
+          ModalRoute.withName(CategoriesScreen.route),
+        );
+      } else {
+        Navigator.popAndPushNamed(context, routeName);
+      }
     }
   }
 
