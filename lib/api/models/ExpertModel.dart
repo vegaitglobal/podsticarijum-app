@@ -10,3 +10,12 @@ class ExpertModel {
         lastName = json['lastName'],
         description = json['description'];
 }
+
+class ExpertInfoModel {
+  String name;
+  String description;
+
+  ExpertInfoModel.fromJson(Map<String, dynamic> json)
+      : name = json['title'],
+        description = json['content'];
+}

@@ -5,6 +5,7 @@ import 'package:app_for_family_backup/api/models/ExpertModel.dart';
 import 'package:app_for_family_backup/api/models/FAQModel.dart';
 import 'package:app_for_family_backup/api/models/MainScreenModel.dart';
 import 'package:app_for_family_backup/api/models/SubcategoryModel.dart';
+import 'package:app_for_family_backup/common/enums/flag_type.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -68,6 +69,24 @@ class PodsticarijumApi {
     return SubcategoryModel.fromJson(json.decode(response.body));
   }
 
+  static Future<List<String>> getSubcategorySpecificContent(
+      int subcategoryId, FlagType flagType) async {
+    String url =
+        "${BASE_URL}/api/sub-category/$subcategoryId/SubCategorySpecificContent?paragraphSign=${flagType.value}";
+    var response = await http.get(Uri.parse(url));
+
+    List<String> flagList = [];
+    List<dynamic> specificContentList = json.decode(response.body);
+    specificContentList.forEach((element) {
+      flagList.add(element['paragraphText']);
+    });
+
+    if (flagList.isEmpty) {
+      return Future.error("Parsing error occured");
+    }
+    return flagList;
+  }
+
   static Future<SubcategoryModel?> getSubcategoryWithCategoryId(
       int categoryId, int subcategoryId) async {
     var subcategoryList = await getSubcategoryListByCategoryId(categoryId);
@@ -84,7 +103,21 @@ class PodsticarijumApi {
     expertListJson.forEach((json) {
       expertList.add(ExpertModel.fromJson(json));
     });
-    if (expertList.isEmpty == null) {
+    if (expertList.isEmpty) {
+      return Future.error("Parsing error occured");
+    }
+    return expertList;
+  }
+
+  static Future<List<ExpertInfoModel>> getExpertInfoList() async {
+    String url = "${BASE_URL}/api/ExpertInfo";
+    List<ExpertInfoModel> expertList = [];
+    var response = await http.get(Uri.parse(url));
+    List<dynamic> expertListJson = json.decode(response.body);
+    expertListJson.forEach((json) {
+      expertList.add(ExpertInfoModel.fromJson(json));
+    });
+    if (expertList.isEmpty) {
       return Future.error("Parsing error occured");
     }
     return expertList;
@@ -145,13 +178,26 @@ class PodsticarijumApi {
     List<SubcategoryModel> subcategoryList = [];
     List<dynamic> subcategoryListJson = json.decode(response.body);
     subcategoryListJson.forEach((element) {
-      subcategoryList.add(SubcategoryModel.fromJson(element));
+      var subcategoryModel = SubcategoryModel.fromJson(element);
+      if (!_containsElementWithSameName(
+          subcategoryModel.name, subcategoryList)) {
+        subcategoryList.add(subcategoryModel);
+      }
     });
 
     if (subcategoryList.isEmpty == null) {
       return Future.error("Parsing error occured");
     }
+
     return subcategoryList;
+  }
+
+  static bool _containsElementWithSameName(
+      String name, List<SubcategoryModel> subcategoryList) {
+    for (int i = 0; i < subcategoryList.length; ++i) {
+      if (subcategoryList[i].name == name) return true;
+    }
+    return false;
   }
 
   static Future<List<String>> getSubcategoryEmailList(int subcategoryId) async {
@@ -173,15 +219,15 @@ class PodsticarijumApi {
       String name, String mail, String question, int subcategoryId) async {
     EmailPayloadDto emailPayload = EmailPayloadDto(name, mail, question);
 
-    final url = "$BASE_URL/api/sub-categeory/$subcategoryId/email";
-
+    final url = "$BASE_URL/api/sub-category/$subcategoryId/email";
+    var requestBody = jsonEncode(emailPayload.toJson());
     try {
       http.Response response = await post(
-        Uri.parse('https://podsticarijum.codeforacause.rs/email'),
-        headers: {'Content-Type': 'applicatfion/json; charset=UTF-8'},
-        body: jsonEncode(emailPayload.toJson()),
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: requestBody,
       ).timeout(
-        const Duration(seconds: 5),
+        const Duration(seconds: 2),
       );
 
       return response.statusCode == 200;

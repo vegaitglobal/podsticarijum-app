@@ -7,8 +7,8 @@ class SubcategoryModel {
   String mainSubtitle = "";
   List<String> mainBulletpointList = [];
   String detailedDescription;
-  List<String> positiveSigns = [];
-  List<String> negativeSigns = [];
+  String positiveSignsText;
+  String negativeSignsText;
 
   SubcategoryModel.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int,
@@ -16,16 +16,7 @@ class SubcategoryModel {
         categoryName = json['categoryDto']['navMenuText'],
         active = json['active'] as bool,
         description = json['mainText'],
-        detailedDescription = json['additionalText'] {
-    var positiveSignsJson =
-        json['developmentSupportingActivitiesButtonText'] as String;
-    var negativeSignsJson = json['atypicalDevelopmentSignsText'] as String;
-
-    positiveSignsJson.split('\n').forEach((element) {
-      positiveSigns.add(element);
-    });
-    negativeSignsJson.split('\n').forEach((element) {
-      negativeSigns.add(element);
-    });
-  }
+        detailedDescription = json['additionalText'],
+        positiveSignsText = json['developmentSupportingActivitiesButtonText'],
+        negativeSignsText = json['atypicalDevelopmentSignsText'];
 }

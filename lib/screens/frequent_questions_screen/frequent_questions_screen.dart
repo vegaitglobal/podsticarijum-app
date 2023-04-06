@@ -125,16 +125,18 @@ class _FaqAnswersScreenState extends State<FaqAnswersScreen> {
       questionAndAnswersWidgetList.add(_questionAnswerWidget(question, answer));
     }
 
-    questionAndAnswersWidgetList.add(
-      Padding(
-        padding: const EdgeInsets.only(bottom: 30.0),
-        child: _questionAnswerWidget(
-          questionAndAnswers.keys.last,
-          questionAndAnswers.values.last,
-          hasBorder: false,
+    if (questionAndAnswers.length > 2) {
+      questionAndAnswersWidgetList.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 30.0),
+          child: _questionAnswerWidget(
+            questionAndAnswers.keys.last,
+            questionAndAnswers.values.last,
+            hasBorder: false,
+          ),
         ),
-      ),
-    );
+      );
+    }
 
     return questionAndAnswersWidgetList;
   }
