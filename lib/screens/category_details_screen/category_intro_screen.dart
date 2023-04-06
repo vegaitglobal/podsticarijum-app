@@ -1,7 +1,5 @@
 import 'package:app_for_family_backup/common/widgets/useful_widgets.dart';
 import 'package:flutter/material.dart';
-
-import '../../api/models/SubcategoryModel.dart';
 import '../../api/podsticariju_api.dart';
 import '../../common/widgets/app_bar/new_app_bar.dart';
 import '../../common/widgets/custom_outline_button.dart';
@@ -168,21 +166,24 @@ class _CategoryIntroScreenState extends State<CategoryIntroScreen> {
   }
 
   Widget _textWithIcon(String text, BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(width: 20), //shared padding
-        const ImageIcon(
-          AssetImage('images/bulletpoint.png'),
-          size: 12,
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            text,
-            style: Theme.of(context).textTheme.bodyText1,
+    return Padding(
+      padding: const EdgeInsets.only(right: 25),
+      child: Row(
+        children: [
+          const SizedBox(width: 20), //shared padding
+          const ImageIcon(
+            AssetImage('images/bulletpoint.png'),
+            size: 12,
           ),
-        ),
-      ],
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
